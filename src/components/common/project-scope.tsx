@@ -40,7 +40,7 @@ export function ProjectScope({ children }: { children: React.ReactNode }) {
         title={`No artefacts migrated for ${project.shortName}`}
         description={`${project.code} is still maintained in the legacy requirements repository. Its documentation set will be migrated into the workspace during the ${project.release} release window.`}
         action={
-          <Button variant="outline" size="sm" onClick={() => openProject(ACTIVE_PROJECT_ID)}>
+              <Button variant="outline" size="sm" onClick={() => openProject(ACTIVE_PROJECT_ID)}>
             Open {migrated?.shortName ?? "the migrated project"} instead
           </Button>
         }

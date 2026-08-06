@@ -54,7 +54,8 @@ export function PortfolioView() {
   const open = React.useCallback(
     (projectId: string) => {
       openProject(projectId);
-      router.push("/dashboard");
+      // Land on the analysis process, not the dashboard — it explains the work.
+      router.push("/journey");
     },
     [openProject, router],
   );

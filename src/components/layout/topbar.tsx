@@ -40,7 +40,7 @@ import { ProjectSelector } from "@/components/layout/project-selector";
 const CURRENT_USER = {
   name: "Saadaoui Abdessalem",
   role: "Lead Business Analyst",
-  email: "abdessalem.saadaoui@retail-bank.example",
+  email: "abdessalemsaa@gmail.com",
   department: "Payments Change Delivery",
 };
 
@@ -55,7 +55,7 @@ export function Topbar() {
     const trail: BreadcrumbItem[] = [{ label: "Projects", href: "/" }];
 
     if (isProjectOpen && section?.scope === "project") {
-      trail.push({ label: project.shortName, href: "/dashboard" });
+      trail.push({ label: project.shortName, href: "/journey" });
       if (section.id !== "workspace") trail.push({ label: section.label });
     }
 

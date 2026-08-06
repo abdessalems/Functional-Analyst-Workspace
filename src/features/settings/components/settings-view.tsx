@@ -130,7 +130,7 @@ export function SettingsView() {
           >
             <div className="grid gap-4 sm:grid-cols-2">
               <Field label="Full name" value="Saadaoui Abdessalem" />
-              <Field label="Email" value="abdessalem.saadaoui@retail-bank.example" />
+              <Field label="Email" value="abdessalemsaa@gmail.com" />
               <Field label="Department" value="Payments Change Delivery" />
               <Field label="Line manager" value="Marcus Delacroix" />
             </div>

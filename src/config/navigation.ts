@@ -12,6 +12,7 @@ import {
   LayoutDashboard,
   ListChecks,
   Network,
+  Route,
   ScrollText,
   Settings,
   ShieldCheck,
@@ -70,6 +71,12 @@ export const navigationSections: NavSection[] = [
     label: "Workspace",
     scope: "project",
     items: [
+      {
+        label: "Analysis Process",
+        href: "/journey",
+        icon: Route,
+        description: "The seven stages of the analysis lifecycle and what each one produced",
+      },
       {
         label: "Dashboard",
         href: "/dashboard",
