@@ -40,7 +40,7 @@ export const activityFeed: ActivityEntry[] = [
   },
   {
     id: "ACT-LOG-005",
-    actor: "Amelia Fontaine",
+    actor: "Saadaoui Abdessalem",
     action: "approved",
     target: "FS-005 Scheme Messaging & Status Management",
     targetHref: "/functional-specification#FS-005",

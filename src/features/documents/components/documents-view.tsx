@@ -128,7 +128,7 @@ export function DocumentsView() {
         description="Controlled document register for the release. Every artefact carries its version, owner, classification and the requirements it evidences."
         meta={[
           { label: "Documents", value: documents.length },
-          { label: "Register owner", value: "Amelia Fontaine" },
+          { label: "Register owner", value: "Saadaoui Abdessalem" },
           { label: "Retention", value: "10 years" },
         ]}
         actions={

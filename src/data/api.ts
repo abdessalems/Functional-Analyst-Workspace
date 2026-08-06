@@ -51,7 +51,7 @@ const initiatePaymentResponse = `{
 }`;
 
 const initiatePaymentRejected = `{
-  "type": "https://api.northbridge-bank.com/problems/limit-exceeded",
+  "type": "https://api.retail-bank.example/problems/limit-exceeded",
   "title": "Daily instant payment limit exceeded",
   "status": 422,
   "code": "IPH-LIM-002",
@@ -334,7 +334,7 @@ export const apiServices: ApiService[] = [
   {
     id: "SVC-001",
     name: "Instant Payments API",
-    basePath: "https://api.northbridge-bank.com/payments/instant/v2",
+    basePath: "https://api.retail-bank.example/payments/instant/v2",
     version: "2.3.0",
     description:
       "Synchronous initiation, status enquiry and recall of SEPA Instant Credit Transfers for the bank's digital and servicing channels.",
@@ -345,7 +345,7 @@ export const apiServices: ApiService[] = [
   {
     id: "SVC-002",
     name: "Payment Services Support API",
-    basePath: "https://api.northbridge-bank.com/payment-services/v1",
+    basePath: "https://api.retail-bank.example/payment-services/v1",
     version: "1.4.0",
     description:
       "Supporting capabilities consumed during payment capture: beneficiary verification, reachability and customer limit enquiry.",

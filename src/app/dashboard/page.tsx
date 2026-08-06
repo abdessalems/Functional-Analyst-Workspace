@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
 
 import { ProjectScope } from "@/components/common/project-scope";
-import { OverviewView } from "@/features/overview/components/overview-view";
+import { DashboardView } from "@/features/dashboard/components/dashboard-view";
 
 export const metadata: Metadata = {
-  title: "Overview",
+  title: "Dashboard",
 };
 
-export default function OverviewPage() {
+export default function DashboardPage() {
   return (
     <ProjectScope>
-      <OverviewView />
+      <DashboardView />
     </ProjectScope>
   );
 }

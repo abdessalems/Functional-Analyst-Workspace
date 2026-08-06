@@ -96,7 +96,7 @@ export function ActorsView() {
         meta={[
           { label: "Actors", value: actors.length },
           { label: "Model", value: "UML-001 Use Case" },
-          { label: "Owner", value: "Amelia Fontaine" },
+          { label: "Owner", value: "Saadaoui Abdessalem" },
         ]}
         actions={
           <>

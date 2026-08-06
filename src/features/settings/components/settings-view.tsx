@@ -97,7 +97,7 @@ export function SettingsView() {
         title="Settings"
         description="Workspace preferences for your account. Changes apply to your session only and do not affect other members of the delivery team."
         meta={[
-          { label: "Signed in as", value: "Amelia Fontaine" },
+          { label: "Signed in as", value: "Saadaoui Abdessalem" },
           { label: "Role", value: "Lead Business Analyst" },
           { label: "Workspace", value: "v2.3.0" },
         ]}
@@ -129,8 +129,8 @@ export function SettingsView() {
             icon={UserRound}
           >
             <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Full name" value="Amelia Fontaine" />
-              <Field label="Email" value="amelia.fontaine@northbridge-bank.com" />
+              <Field label="Full name" value="Saadaoui Abdessalem" />
+              <Field label="Email" value="abdessalem.saadaoui@retail-bank.example" />
               <Field label="Department" value="Payments Change Delivery" />
               <Field label="Line manager" value="Marcus Delacroix" />
             </div>

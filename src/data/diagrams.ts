@@ -12,7 +12,7 @@ export const diagrams: Diagram[] = [
     description:
       "Actors and use cases in scope for release 2.3, including the servicing and back-office capabilities introduced alongside the customer journey.",
     version: "2.3",
-    author: "Amelia Fontaine",
+    author: "Saadaoui Abdessalem",
     lastUpdated: "2025-04-30",
     relatedRequirements: ["REQ-001", "REQ-010", "REQ-012", "REQ-013"],
     source: `@startuml IPH-UseCase
@@ -160,7 +160,7 @@ cloud "TIPS / ESMIG" as TIPS
     description:
       "Decision logic applied between request intake and scheme submission, including the compensating release path.",
     version: "2.3",
-    author: "Amelia Fontaine",
+    author: "Saadaoui Abdessalem",
     lastUpdated: "2025-05-06",
     relatedRequirements: ["REQ-002", "REQ-004", "REQ-005", "REQ-011"],
     source: `@startuml IPH-Activity

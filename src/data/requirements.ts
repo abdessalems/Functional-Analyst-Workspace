@@ -13,7 +13,7 @@ export const requirements: Requirement[] = [
     status: "Implemented",
     category: "Payment Initiation",
     moscow: "Must",
-    owner: "Amelia Fontaine",
+    owner: "Saadaoui Abdessalem",
     lastUpdated: "2025-05-16",
     version: "2.3",
     acceptanceCriteria: [
@@ -205,7 +205,7 @@ export const requirements: Requirement[] = [
     status: "Implemented",
     category: "Recall & Exceptions",
     moscow: "Must",
-    owner: "Amelia Fontaine",
+    owner: "Saadaoui Abdessalem",
     lastUpdated: "2025-04-11",
     version: "2.3",
     acceptanceCriteria: [
@@ -265,7 +265,7 @@ export const requirements: Requirement[] = [
     status: "Implemented",
     category: "Validation & Screening",
     moscow: "Must",
-    owner: "Amelia Fontaine",
+    owner: "Saadaoui Abdessalem",
     lastUpdated: "2025-02-19",
     version: "2.3",
     acceptanceCriteria: [
@@ -318,7 +318,7 @@ export const requirements: Requirement[] = [
     status: "Implemented",
     category: "Limits & Controls",
     moscow: "Must",
-    owner: "Amelia Fontaine",
+    owner: "Saadaoui Abdessalem",
     lastUpdated: "2025-01-30",
     version: "2.3",
     acceptanceCriteria: [

@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 
-import { DashboardView } from "@/features/dashboard/components/dashboard-view";
+import { PortfolioView } from "@/features/projects/components/portfolio-view";
 
 export const metadata: Metadata = {
-  title: "Dashboard",
+  title: "Projects",
 };
 
-export default function DashboardPage() {
-  return <DashboardView />;
+/** Landing page — the portfolio of projects the analyst owns. */
+export default function PortfolioPage() {
+  return <PortfolioView />;
 }

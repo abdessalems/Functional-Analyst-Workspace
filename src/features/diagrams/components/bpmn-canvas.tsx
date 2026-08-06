@@ -138,7 +138,7 @@ export function BpmnCanvas({ flow }: { flow: ProcessFlow }) {
         fontWeight={600}
         fill="hsl(var(--foreground))"
       >
-        Northbridge Bank — Instant Payments
+        Retail Bank — Instant Payments
       </text>
 
       {/* Lanes */}

@@ -17,7 +17,7 @@ import {
 import { StatusBadge } from "@/components/common/status-badge";
 
 export function ProjectSelector() {
-  const { projects, project, selectProject } = useWorkspace();
+  const { projects, project, openProject } = useWorkspace();
 
   return (
     <DropdownMenu>
@@ -42,7 +42,7 @@ export function ProjectSelector() {
         {projects.map((item) => (
           <DropdownMenuItem
             key={item.id}
-            onSelect={() => selectProject(item.id)}
+            onSelect={() => openProject(item.id)}
             className="items-start gap-2.5 py-2"
           >
             <Check

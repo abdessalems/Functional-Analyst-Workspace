@@ -38,26 +38,30 @@ import { GlobalSearch } from "@/components/layout/global-search";
 import { ProjectSelector } from "@/components/layout/project-selector";
 
 const CURRENT_USER = {
-  name: "Amelia Fontaine",
+  name: "Saadaoui Abdessalem",
   role: "Lead Business Analyst",
-  email: "amelia.fontaine@northbridge-bank.com",
+  email: "abdessalem.saadaoui@retail-bank.example",
   department: "Payments Change Delivery",
 };
 
 export function Topbar() {
   const pathname = usePathname();
-  const { project } = useWorkspace();
+  const { project, isProjectOpen } = useWorkspace();
   const [mobileNavOpen, setMobileNavOpen] = React.useState(false);
 
   const breadcrumbs = React.useMemo<BreadcrumbItem[]>(() => {
     const item = findNavItem(pathname);
     const section = findNavSection(pathname);
-    const trail: BreadcrumbItem[] = [{ label: project.shortName, href: "/overview" }];
+    const trail: BreadcrumbItem[] = [{ label: "Projects", href: "/" }];
 
-    if (section && section.id !== "workspace") trail.push({ label: section.label });
-    trail.push({ label: item?.label ?? "Dashboard", href: pathname });
+    if (isProjectOpen && section?.scope === "project") {
+      trail.push({ label: project.shortName, href: "/dashboard" });
+      if (section.id !== "workspace") trail.push({ label: section.label });
+    }
+
+    if (item && item.href !== "/") trail.push({ label: item.label, href: pathname });
     return trail;
-  }, [pathname, project.shortName]);
+  }, [pathname, project.shortName, isProjectOpen]);
 
   const unread = notifications.filter((notification) => !notification.read).length;
 
@@ -84,8 +88,12 @@ export function Topbar() {
       </Sheet>
 
       <div className="hidden min-w-0 flex-1 items-center gap-3 md:flex">
-        <ProjectSelector />
-        <span className="h-5 w-px shrink-0 bg-border" aria-hidden />
+        {isProjectOpen && (
+          <>
+            <ProjectSelector />
+            <span className="h-5 w-px shrink-0 bg-border" aria-hidden />
+          </>
+        )}
         <Breadcrumb items={breadcrumbs} className="hidden xl:block" />
       </div>
 

@@ -3,22 +3,57 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ChevronLeft } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { navigationSections } from "@/config/navigation";
+import { useWorkspace } from "@/components/providers/workspace-provider";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { StatusBadge } from "@/components/common/status-badge";
 
 interface SidebarNavProps {
   collapsed?: boolean;
   onNavigate?: () => void;
 }
 
+/**
+ * Project-scoped navigation. Only portfolio-level entries are shown until an
+ * analyst opens a project; from then on the sidebar belongs to that project.
+ */
 export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
   const pathname = usePathname();
+  const { project, isProjectOpen, closeProject } = useWorkspace();
+
+  const sections = navigationSections.filter(
+    (section) => section.scope === "portfolio" || isProjectOpen,
+  );
 
   return (
     <nav aria-label="Workspace sections" className="flex flex-col gap-5 px-3 pb-6">
-      {navigationSections.map((section) => (
+      {isProjectOpen && !collapsed && (
+        <div className="space-y-2 rounded-lg border border-border bg-surface-muted p-3">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+            Current project
+          </p>
+          <p className="text-[13px] font-semibold leading-snug">{project.shortName}</p>
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span className="font-mono text-[10px] text-muted-foreground">{project.code}</span>
+            <StatusBadge status={project.status} />
+          </div>
+          <Link
+            href="/"
+            onClick={() => {
+              closeProject();
+              onNavigate?.();
+            }}
+            className="inline-flex items-center gap-1 text-[11px] font-medium text-primary underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <ChevronLeft className="size-3" /> All projects
+          </Link>
+        </div>
+      )}
+
+      {sections.map((section) => (
         <div key={section.id} className="flex flex-col gap-1">
           {collapsed ? (
             <div className="mx-2 my-1 h-px bg-border" role="presentation" />
@@ -36,7 +71,10 @@ export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
               <Link
                 key={item.href}
                 href={item.href}
-                onClick={onNavigate}
+                onClick={() => {
+                  if (item.href === "/") closeProject();
+                  onNavigate?.();
+                }}
                 aria-current={isActive ? "page" : undefined}
                 className={cn(
                   "group relative flex items-center gap-2.5 rounded-md px-2 py-1.5 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",

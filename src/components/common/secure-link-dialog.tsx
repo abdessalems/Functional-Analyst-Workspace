@@ -62,7 +62,7 @@ export function SecureLinkDialog({ resourceName, resourcePath, trigger }: Secure
     [audience, expiry],
   );
 
-  const link = `https://workspace.northbridge-bank.com/s/${token}${resourcePath}`;
+  const link = `https://workspace.saadaoui.it.com/s/${token}${resourcePath}`;
   const selectedAudience = AUDIENCES.find((item) => item.value === audience);
 
   return (

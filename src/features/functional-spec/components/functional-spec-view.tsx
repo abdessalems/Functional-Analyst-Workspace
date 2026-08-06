@@ -116,7 +116,7 @@ export function FunctionalSpecView() {
           { label: "Document", value: "FS v2.3" },
           { label: "Status", value: "Approved" },
           { label: "Sections", value: functionalSpecSections.length },
-          { label: "Author", value: "Amelia Fontaine" },
+          { label: "Author", value: "Saadaoui Abdessalem" },
         ]}
         actions={
           <>

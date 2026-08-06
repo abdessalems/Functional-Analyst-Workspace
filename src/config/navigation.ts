@@ -32,6 +32,11 @@ export interface NavItem {
 export interface NavSection {
   id: string;
   label: string;
+  /**
+   * `portfolio` sections are always visible; `project` sections appear only
+   * once an analyst has entered a project from the landing page.
+   */
+  scope: "portfolio" | "project";
   items: NavItem[];
 }
 
@@ -41,27 +46,42 @@ export interface NavSection {
  */
 export const navigationSections: NavSection[] = [
   {
-    id: "workspace",
-    label: "Workspace",
+    id: "portfolio",
+    label: "Portfolio",
+    scope: "portfolio",
     items: [
       {
-        label: "Dashboard",
+        label: "All Projects",
         href: "/",
-        icon: LayoutDashboard,
-        description: "Delivery status, artefact counts and recent workspace activity",
-      },
-      {
-        label: "Projects",
-        href: "/projects",
         icon: FolderKanban,
         description: "Portfolio register of banking change initiatives",
         badge: "6",
+      },
+      {
+        label: "Settings",
+        href: "/settings",
+        icon: Settings,
+        description: "Workspace preferences, appearance and integrations",
+      },
+    ],
+  },
+  {
+    id: "workspace",
+    label: "Workspace",
+    scope: "project",
+    items: [
+      {
+        label: "Dashboard",
+        href: "/dashboard",
+        icon: LayoutDashboard,
+        description: "Delivery status, artefact counts and recent workspace activity",
       },
     ],
   },
   {
     id: "analysis",
     label: "Analysis",
+    scope: "project",
     items: [
       {
         label: "Overview",
@@ -102,6 +122,7 @@ export const navigationSections: NavSection[] = [
   {
     id: "design",
     label: "Design & Modelling",
+    scope: "project",
     items: [
       {
         label: "Process Flow",
@@ -134,6 +155,7 @@ export const navigationSections: NavSection[] = [
   {
     id: "build",
     label: "Build & Validation",
+    scope: "project",
     items: [
       {
         label: "Swagger API",
@@ -161,6 +183,7 @@ export const navigationSections: NavSection[] = [
   {
     id: "governance",
     label: "Governance",
+    scope: "project",
     items: [
       {
         label: "Documents",
@@ -174,12 +197,6 @@ export const navigationSections: NavSection[] = [
         href: "/traceability",
         icon: Table2,
         description: "Requirement to rule, design, API, data, test and document chain",
-      },
-      {
-        label: "Settings",
-        href: "/settings",
-        icon: Settings,
-        description: "Workspace preferences, appearance and integrations",
       },
     ],
   },

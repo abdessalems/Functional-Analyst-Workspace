@@ -173,7 +173,7 @@ export const bpmnModels: BpmnModel[] = [
     description:
       "Collaboration diagram covering the customer, channel, hub, financial crime controls and the scheme gateway, with the compensating release path for unconfirmed reservations.",
     version: "2.3",
-    author: "Amelia Fontaine",
+    author: "Saadaoui Abdessalem",
     lastUpdated: "2025-05-14",
     notation: "BPMN 2.0",
     processFlowId: "PF-001",

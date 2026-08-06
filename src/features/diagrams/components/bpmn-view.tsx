@@ -111,9 +111,9 @@ function buildBpmnXml(processId: string, processName: string, tasks: string[]): 
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   id="Definitions_${processId}"
-                  targetNamespace="http://northbridge-bank.com/bpmn/payments">
+                  targetNamespace="http://retail-bank.example/bpmn/payments">
   <bpmn:collaboration id="Collaboration_${processId}">
-    <bpmn:participant id="Participant_Bank" name="Northbridge Bank — Instant Payments" processRef="${processId}" />
+    <bpmn:participant id="Participant_Bank" name="Retail Bank — Instant Payments" processRef="${processId}" />
   </bpmn:collaboration>
   <bpmn:process id="${processId}" name="${escapeXml(processName)}" isExecutable="true">
 ${elements}

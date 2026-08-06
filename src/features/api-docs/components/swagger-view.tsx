@@ -218,7 +218,7 @@ function buildOpenApiDocument() {
       version: "2.3.0",
       description:
         "Synchronous SEPA Instant Credit Transfer initiation, status enquiry, recall and supporting services.",
-      contact: { name: "Payments Change Delivery", email: "payments-change@northbridge-bank.com" },
+      contact: { name: "Payments Change Delivery", email: "payments-change@retail-bank.example" },
     },
     servers: apiServices.map((service) => ({ url: service.basePath, description: service.name })),
     paths,
@@ -228,7 +228,7 @@ function buildOpenApiDocument() {
           type: "oauth2",
           flows: {
             clientCredentials: {
-              tokenUrl: "https://api.northbridge-bank.com/oauth2/token",
+              tokenUrl: "https://api.retail-bank.example/oauth2/token",
               scopes: {
                 "payments:initiate": "Initiate instant payments",
                 "payments:read": "Read payment status",

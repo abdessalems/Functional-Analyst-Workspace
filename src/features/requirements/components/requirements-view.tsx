@@ -85,7 +85,7 @@ export function RequirementsView() {
         meta={[
           { label: "Baseline", value: "v2.3" },
           { label: "Signed off", value: "08 Nov 2024" },
-          { label: "Owner", value: "Amelia Fontaine" },
+          { label: "Owner", value: "Saadaoui Abdessalem" },
         ]}
         actions={
           <>
