@@ -1,0 +1,149 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* System font stacks keep the app self-contained — no external font fetch. */
+    --font-sans: "Segoe UI Variable Text", "Segoe UI", -apple-system, BlinkMacSystemFont,
+      "Helvetica Neue", Arial, sans-serif;
+    --font-mono: "Cascadia Mono", "Cascadia Code", Consolas, "SF Mono", "Liberation Mono", monospace;
+
+    --background: 210 30% 97%;
+    --foreground: 215 28% 17%;
+
+    --surface: 0 0% 100%;
+    --surface-muted: 210 33% 98%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 215 28% 17%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 28% 17%;
+
+    --primary: 214 82% 40%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 213 33% 95%;
+    --secondary-foreground: 215 25% 27%;
+
+    --muted: 214 32% 95%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 213 45% 94%;
+    --accent-foreground: 214 82% 33%;
+
+    --destructive: 0 72% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 25% 89%;
+    --input: 214 25% 89%;
+    --ring: 214 82% 45%;
+
+    --radius: 0.625rem;
+  }
+
+  .dark {
+    --background: 217 33% 10%;
+    --foreground: 213 31% 91%;
+
+    --surface: 217 30% 13%;
+    --surface-muted: 217 30% 15%;
+
+    --card: 217 30% 13%;
+    --card-foreground: 213 31% 91%;
+
+    --popover: 217 30% 14%;
+    --popover-foreground: 213 31% 91%;
+
+    --primary: 210 90% 62%;
+    --primary-foreground: 217 40% 10%;
+
+    --secondary: 217 25% 20%;
+    --secondary-foreground: 213 31% 91%;
+
+    --muted: 217 25% 19%;
+    --muted-foreground: 215 18% 65%;
+
+    --accent: 217 30% 22%;
+    --accent-foreground: 210 90% 74%;
+
+    --destructive: 0 62% 52%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 217 22% 22%;
+    --input: 217 22% 24%;
+    --ring: 210 90% 58%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Enterprise apps are keyboard-first: never remove the focus ring. */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+}
+
+@layer components {
+  .app-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
+  }
+
+  .app-scrollbar::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  .app-scrollbar::-webkit-scrollbar-thumb {
+    @apply rounded-full border-[3px] border-solid border-transparent bg-border bg-clip-content;
+  }
+
+  .app-scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/40 bg-clip-content;
+  }
+
+  /* Skip link used by the app shell for keyboard navigation. */
+  .skip-link {
+    @apply absolute left-3 top-3 z-50 -translate-y-20 rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition-transform focus-visible:translate-y-0;
+  }
+}
+
+/* ---- Syntax highlighting tokens (SQL / JSON / PlantUML viewers) ---- */
+.tok-keyword {
+  @apply font-semibold text-[#0550ae] dark:text-[#79b8ff];
+}
+.tok-string {
+  @apply text-[#0a7c42] dark:text-[#7ee787];
+}
+.tok-number {
+  @apply text-[#a5460f] dark:text-[#ffab70];
+}
+.tok-comment {
+  @apply italic text-muted-foreground;
+}
+.tok-function {
+  @apply text-[#6f42c1] dark:text-[#d2a8ff];
+}
+.tok-operator {
+  @apply text-[#8250df] dark:text-[#c792ea];
+}
+.tok-key {
+  @apply text-[#0550ae] dark:text-[#79b8ff];
+}
+.tok-boolean {
+  @apply text-[#a5460f] dark:text-[#ffab70];
+}
