@@ -23,6 +23,13 @@ const nextConfig = {
         output: "export",
         trailingSlash: true,
         images: { unoptimized: true },
+        /*
+         * Keep the export out of `.next`. The dev server and the static export
+         * produce different artefacts for the same routes, so sharing one
+         * build directory leaves whichever ran last with a half-overwritten
+         * cache — which surfaces as "Cannot find module './261.js'".
+         */
+        distDir: ".next-export",
       }
     : {}),
   ...(basePath ? { basePath, assetPrefix: basePath } : {}),
