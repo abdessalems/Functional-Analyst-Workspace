@@ -5,6 +5,7 @@ import * as React from "react";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { readSetting, writeSetting } from "@/lib/safe-storage";
 
 const STORAGE_KEY = "baw.sidebar-collapsed";
 
@@ -12,12 +13,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [collapsed, setCollapsed] = React.useState(false);
 
   React.useEffect(() => {
-    setCollapsed(window.localStorage.getItem(STORAGE_KEY) === "true");
+    setCollapsed(readSetting(STORAGE_KEY) === "true");
   }, []);
 
   const toggle = React.useCallback(() => {
     setCollapsed((current) => {
-      window.localStorage.setItem(STORAGE_KEY, String(!current));
+      writeSetting(STORAGE_KEY, String(!current));
       return !current;
     });
   }, []);

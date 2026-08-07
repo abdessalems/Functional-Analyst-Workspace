@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
+import { PlainLanguageNote } from "@/components/common/reading-nav";
 
 interface PageHeaderProps {
   title: string;
@@ -22,6 +23,8 @@ export function PageHeader({ title, description, meta, actions, className }: Pag
           {description && (
             <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">{description}</p>
           )}
+          {/* Renders only for pages that are part of the reading path. */}
+          <PlainLanguageNote className="mt-3 max-w-3xl" />
         </div>
         {actions && <div className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div>}
       </div>

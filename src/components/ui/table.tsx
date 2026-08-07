@@ -2,12 +2,27 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
+/**
+ * On a narrow screen a wide table becomes a stack: each row is a card and each
+ * cell is labelled with its column heading, taken from `data-label`. Reading a
+ * six-column table by dragging it sideways on a phone is unusable, so below
+ * `md` the table stops being a grid.
+ */
 const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableElement>>(
   ({ className, ...props }, ref) => (
-    <div className="app-scrollbar w-full overflow-x-auto">
+    <div className="app-scrollbar w-full md:overflow-x-auto">
       <table
         ref={ref}
-        className={cn("w-full caption-bottom border-collapse text-sm", className)}
+        className={cn(
+          "w-full caption-bottom border-collapse text-sm",
+          "max-md:block",
+          "max-md:[&_thead]:hidden",
+          "max-md:[&_tbody]:block",
+          "max-md:[&_tr]:mb-3 max-md:[&_tr]:block max-md:[&_tr]:rounded-lg max-md:[&_tr]:border max-md:[&_tr]:border-border max-md:[&_tr]:p-3",
+          "max-md:[&_td]:flex max-md:[&_td]:justify-between max-md:[&_td]:gap-4 max-md:[&_td]:px-0 max-md:[&_td]:py-1.5 max-md:[&_td]:text-left",
+          "max-md:[&_td]:before:shrink-0 max-md:[&_td]:before:text-[11px] max-md:[&_td]:before:font-semibold max-md:[&_td]:before:uppercase max-md:[&_td]:before:tracking-wide max-md:[&_td]:before:text-muted-foreground max-md:[&_td]:before:content-[attr(data-label)]",
+          className,
+        )}
         {...props}
       />
     </div>

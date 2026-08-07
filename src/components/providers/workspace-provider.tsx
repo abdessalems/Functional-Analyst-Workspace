@@ -5,6 +5,7 @@ import * as React from "react";
 import type { Project } from "@/lib/types";
 import { ACTIVE_PROJECT_ID, projects } from "@/data/projects";
 import { hasProjectBundle } from "@/data/workspaces";
+import { readSetting, writeSetting } from "@/lib/safe-storage";
 
 const PROJECT_KEY = "baw.selected-project";
 const OPEN_KEY = "baw.project-open";
@@ -32,30 +33,30 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
 
   // Restore the analyst's last context after hydration to keep SSR output stable.
   React.useEffect(() => {
-    const storedProject = window.localStorage.getItem(PROJECT_KEY);
+    const storedProject = readSetting(PROJECT_KEY);
     if (storedProject && projects.some((project) => project.id === storedProject)) {
       setProjectId(storedProject);
     }
-    setIsProjectOpen(window.localStorage.getItem(OPEN_KEY) === "true");
+    setIsProjectOpen(readSetting(OPEN_KEY) === "true");
   }, []);
 
   const selectProject = React.useCallback((next: string) => {
     setProjectId(next);
-    window.localStorage.setItem(PROJECT_KEY, next);
+    writeSetting(PROJECT_KEY, next);
   }, []);
 
   const openProject = React.useCallback(
     (next: string) => {
       selectProject(next);
       setIsProjectOpen(true);
-      window.localStorage.setItem(OPEN_KEY, "true");
+      writeSetting(OPEN_KEY, "true");
     },
     [selectProject],
   );
 
   const closeProject = React.useCallback(() => {
     setIsProjectOpen(false);
-    window.localStorage.setItem(OPEN_KEY, "false");
+    writeSetting(OPEN_KEY, "false");
   }, []);
 
   const value = React.useMemo<WorkspaceContextValue>(() => {

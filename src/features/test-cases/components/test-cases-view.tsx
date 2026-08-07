@@ -229,10 +229,10 @@ export function TestCasesView() {
                   )}
                   onClick={() => setSelected(testCase)}
                 >
-                  <TableCell className="font-mono text-[12px] font-medium text-primary">
+                  <TableCell data-label="Test" className="font-mono text-[12px] font-medium text-primary">
                     {testCase.id}
                   </TableCell>
-                  <TableCell>
+                  <TableCell data-label="Scenario" className="max-md:flex-col max-md:items-start">
                     <p className="text-[13px] font-medium leading-snug">{testCase.scenario}</p>
                     <p className="mt-1 text-xs text-muted-foreground">
                       {testCase.suite} · {testCase.type}
@@ -243,7 +243,7 @@ export function TestCasesView() {
                       </Badge>
                     )}
                   </TableCell>
-                  <TableCell>
+                  <TableCell data-label="Preconditions" className="max-md:flex-col max-md:items-start">
                     <ul className="space-y-1 text-xs text-muted-foreground">
                       {testCase.preconditions.map((precondition) => (
                         <li key={precondition} className="flex gap-1.5">
@@ -253,19 +253,19 @@ export function TestCasesView() {
                       ))}
                     </ul>
                   </TableCell>
-                  <TableCell className="text-center tabular-nums">
+                  <TableCell data-label="Steps" className="text-center tabular-nums max-md:text-left">
                     <Badge variant="neutral">{testCase.steps.length}</Badge>
                   </TableCell>
-                  <TableCell className="text-[13px] leading-relaxed">
+                  <TableCell data-label="Expected" className="text-[13px] leading-relaxed max-md:flex-col max-md:items-start">
                     {testCase.expectedResult}
                   </TableCell>
-                  <TableCell>
+                  <TableCell data-label="Status">
                     <StatusBadge status={testCase.status} />
                   </TableCell>
-                  <TableCell>
+                  <TableCell data-label="Priority">
                     <PriorityBadge priority={testCase.priority} />
                   </TableCell>
-                  <TableCell onClick={(event) => event.stopPropagation()}>
+                  <TableCell data-label="Requirement" onClick={(event) => event.stopPropagation()}>
                     <ArtifactLink id={testCase.linkedRequirement} />
                   </TableCell>
                 </TableRow>

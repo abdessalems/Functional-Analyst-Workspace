@@ -8,6 +8,7 @@ import { useWorkspace } from "@/components/providers/workspace-provider";
 import { ACTIVE_PROJECT_ID, getProjectById } from "@/data/projects";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/common/states";
+import { ReadingNav } from "@/components/common/reading-nav";
 
 /**
  * Guards every project-scoped page. A page is only meaningful once an analyst
@@ -48,5 +49,12 @@ export function ProjectScope({ children }: { children: React.ReactNode }) {
     );
   }
 
-  return <>{children}</>;
+  // Every project page ends with the next step, so the whole analysis can be
+  // read straight through without using the sidebar.
+  return (
+    <div className="space-y-8">
+      {children}
+      <ReadingNav />
+    </div>
+  );
 }

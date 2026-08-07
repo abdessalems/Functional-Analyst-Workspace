@@ -200,23 +200,23 @@ export function BusinessRulesView() {
                   )}
                   onClick={() => setSelected(rule)}
                 >
-                  <TableCell className="font-mono text-[12px] font-medium text-primary">
+                  <TableCell data-label="Rule" className="font-mono text-[12px] font-medium text-primary">
                     {rule.id}
                   </TableCell>
-                  <TableCell>
+                  <TableCell data-label="Description" className="max-md:flex-col max-md:items-start">
                     <p className="text-[13px] leading-relaxed">{rule.description}</p>
                     <p className="mt-1.5 font-mono text-[11px] text-muted-foreground line-clamp-1">
                       {rule.logic}
                     </p>
                   </TableCell>
-                  <TableCell>
+                  <TableCell data-label="Priority">
                     <PriorityBadge priority={rule.priority} />
                   </TableCell>
-                  <TableCell className="text-[13px] text-muted-foreground">{rule.source}</TableCell>
-                  <TableCell>
+                  <TableCell data-label="Source" className="text-[13px] text-muted-foreground">{rule.source}</TableCell>
+                  <TableCell data-label="Status">
                     <StatusBadge status={rule.status} />
                   </TableCell>
-                  <TableCell onClick={(event) => event.stopPropagation()}>
+                  <TableCell data-label="Requirements" onClick={(event) => event.stopPropagation()}>
                     <ArtifactLinkList ids={rule.impactedRequirements} />
                   </TableCell>
                 </TableRow>
