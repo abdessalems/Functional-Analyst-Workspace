@@ -203,19 +203,10 @@ export function JourneyView() {
   const { project } = useWorkspace();
   const counts = useProjectCounts();
 
-  // Only show stages this project actually produced something for.
-  const phases = React.useMemo(
-    () =>
-      PHASES.map((phase) => ({
-        ...phase,
-        deliverables: phase.deliverables.filter(
-          (deliverable) => !deliverable.countKey || counts[deliverable.countKey] > 0,
-        ),
-      }))
-        .filter((phase) => phase.deliverables.length > 0)
-        .map((phase, index) => ({ ...phase, step: index + 1 })),
-    [counts],
-  );
+  // Every stage of the lifecycle is shown for every project. A stage the
+  // project has not reached yet is marked rather than hidden — the process is
+  // the story, and the gaps are part of it.
+  const phases = PHASES;
 
   return (
     <div className="space-y-6">
@@ -280,9 +271,14 @@ export function JourneyView() {
                           <span className="min-w-0 flex-1 truncate text-[13px] font-semibold">
                             {deliverable.label}
                           </span>
-                          {deliverable.countKey && (
-                            <Badge variant="neutral">{counts[deliverable.countKey]}</Badge>
-                          )}
+                          {deliverable.countKey &&
+                            (counts[deliverable.countKey] > 0 ? (
+                              <Badge variant="neutral">{counts[deliverable.countKey]}</Badge>
+                            ) : (
+                              <Badge variant="outline" className="font-normal">
+                                Not yet
+                              </Badge>
+                            ))}
                         </div>
                         <p className="flex-1 text-[13px] leading-relaxed text-muted-foreground">
                           {deliverable.produced}

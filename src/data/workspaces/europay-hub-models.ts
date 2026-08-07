@@ -111,13 +111,49 @@ end note
 skinparam classAttributeIconSize 0
 hide empty members
 
-enum Role { ADMIN \\n MERCHANT }
-enum MerchantStatus { ACTIVE \\n SUSPENDED }
-enum ApiKeyStatus { ACTIVE \\n REVOKED }
-enum OrderStatus { CREATED \\n PAID \\n CANCELLED \\n EXPIRED }
-enum PaymentMethod { WERO \\n BANCONTACT \\n VISA \\n MASTERCARD \\n SEPA_INSTANT \\n PAYPAL \\n APPLE_PAY }
-enum PaymentStatus { CREATED \\n PENDING \\n AUTHORIZED \\n SUCCESS \\n FAILED \\n EXPIRED \\n CANCELLED \\n REFUNDED \\n SETTLED }
-enum WebhookStatus { PENDING \\n DELIVERED \\n FAILED }
+enum Role {
+  ADMIN
+  MERCHANT
+}
+enum MerchantStatus {
+  ACTIVE
+  SUSPENDED
+}
+enum ApiKeyStatus {
+  ACTIVE
+  REVOKED
+}
+enum OrderStatus {
+  CREATED
+  PAID
+  CANCELLED
+  EXPIRED
+}
+enum PaymentMethod {
+  WERO
+  BANCONTACT
+  VISA
+  MASTERCARD
+  SEPA_INSTANT
+  PAYPAL
+  APPLE_PAY
+}
+enum PaymentStatus {
+  CREATED
+  PENDING
+  AUTHORIZED
+  SUCCESS
+  FAILED
+  EXPIRED
+  CANCELLED
+  REFUNDED
+  SETTLED
+}
+enum WebhookStatus {
+  PENDING
+  DELIVERED
+  FAILED
+}
 
 class Money <<value object>> {
   - amountMinor : long

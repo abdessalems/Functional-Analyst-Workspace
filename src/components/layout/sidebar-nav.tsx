@@ -26,14 +26,12 @@ export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
   const { project, isProjectOpen, closeProject } = useWorkspace();
   const counts = useProjectCounts();
 
-  // Show a page only when the active project actually has something on it.
-  const sections = navigationSections
-    .filter((section) => section.scope === "portfolio" || isProjectOpen)
-    .map((section) => ({
-      ...section,
-      items: section.items.filter((item) => !item.countKey || counts[item.countKey] > 0),
-    }))
-    .filter((section) => section.items.length > 0);
+  // The same navigation on every project: the analysis lifecycle is the point,
+  // so a stage a project has not reached stays visible and shows its own empty
+  // state rather than disappearing from the menu.
+  const sections = navigationSections.filter(
+    (section) => section.scope === "portfolio" || isProjectOpen,
+  );
 
   return (
     <nav aria-label="Workspace sections" className="flex flex-col gap-5 px-3 pb-6">
@@ -73,7 +71,8 @@ export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
           {section.items.map((item) => {
             const isActive = pathname === item.href;
             const Icon = item.icon;
-            const chip = item.countKey ? String(counts[item.countKey]) : item.badge;
+            const count = item.countKey ? counts[item.countKey] : undefined;
+            const chip = count !== undefined ? (count > 0 ? String(count) : undefined) : item.badge;
 
             const link = (
               <Link
