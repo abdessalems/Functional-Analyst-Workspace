@@ -2,7 +2,6 @@
 
 import * as React from "react";
 
-import type { DiagramType } from "@/lib/types";
 
 /**
  * Rendered previews of the PlantUML models. The `.puml` source in
@@ -615,15 +614,25 @@ function StateDiagram() {
   );
 }
 
-const RENDERERS: Record<DiagramType, () => React.JSX.Element> = {
-  "Use Case": UseCaseDiagram,
-  Sequence: SequenceDiagram,
-  Component: ComponentDiagram,
-  Activity: ActivityDiagram,
-  State: StateDiagram,
+/**
+ * Previews are keyed to the individual model they depict, not to its type —
+ * a "Sequence" diagram in one project must never render another project's
+ * sequence diagram. A model with no entry here shows its PlantUML source only.
+ */
+const RENDERERS: Record<string, () => React.JSX.Element> = {
+  "iph-use-case": UseCaseDiagram,
+  "iph-sequence": SequenceDiagram,
+  "iph-component": ComponentDiagram,
+  "iph-activity": ActivityDiagram,
+  "iph-state": StateDiagram,
 };
 
-export function UmlPreview({ type }: { type: DiagramType }) {
-  const Renderer = RENDERERS[type];
+export function hasUmlPreview(previewKey?: string): boolean {
+  return Boolean(previewKey && previewKey in RENDERERS);
+}
+
+export function UmlPreview({ previewKey }: { previewKey?: string }) {
+  const Renderer = previewKey ? RENDERERS[previewKey] : undefined;
+  if (!Renderer) return null;
   return <Renderer />;
 }

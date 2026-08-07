@@ -512,7 +512,7 @@ export const projects: Project[] = [
       documents: 10,
       testCases: 39,
       actors: 6,
-      diagrams: 0,
+      diagrams: 8,
     },
     startDate: "2025-11-10",
     targetDate: "2026-04-06",

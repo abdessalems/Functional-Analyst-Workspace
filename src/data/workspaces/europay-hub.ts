@@ -3,6 +3,7 @@ import type { ProjectDataBundle } from "@/data/workspaces/types";
 import { EMPTY_BUNDLE } from "@/data/workspaces/types";
 import { europayApiServices } from "@/data/workspaces/europay-hub-api";
 import { europayTestCases } from "@/data/workspaces/europay-hub-tests";
+import { europayDiagrams, europayFunctionalSpec } from "@/data/workspaces/europay-hub-models";
 
 /**
  * EuroPay Hub — European merchant payment platform.
@@ -707,6 +708,8 @@ export const europayHubBundle: ProjectDataBundle = {
   requirements,
   businessRules,
   actors,
+  functionalSpecSections: europayFunctionalSpec,
+  diagrams: europayDiagrams,
   apiServices: europayApiServices,
   testCases: europayTestCases,
   documents,

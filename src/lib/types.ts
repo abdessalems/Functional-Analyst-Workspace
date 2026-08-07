@@ -31,7 +31,15 @@ export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 export type DocumentFormat = "PDF" | "Word" | "Excel" | "Swagger" | "BPMN" | "PlantUML";
 
-export type DiagramType = "Use Case" | "Sequence" | "Component" | "Activity" | "State";
+export type DiagramType =
+  | "Use Case"
+  | "Sequence"
+  | "Component"
+  | "Activity"
+  | "State"
+  | "Class"
+  | "ER"
+  | "BPMN";
 
 /** Every artefact carries a stable business key (e.g. `BR-014`) used for traceability. */
 export interface Artifact {
@@ -240,7 +248,14 @@ export interface Diagram {
   title: string;
   type: DiagramType;
   description: string;
+  /** PlantUML source — the authoritative artefact. */
   source: string;
+  /**
+   * Identifies a hand-drawn SVG preview for this specific model. Omit it and
+   * the workspace shows the PlantUML source alone, rather than rendering some
+   * other project's diagram.
+   */
+  previewKey?: string;
   version: string;
   author: string;
   lastUpdated: string;

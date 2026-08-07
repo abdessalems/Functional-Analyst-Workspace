@@ -7,6 +7,7 @@ import type { Diagram, Wireframe } from "@/lib/types";
 export const diagrams: Diagram[] = [
   {
     id: "UML-001",
+    previewKey: "iph-use-case",
     title: "Instant Payment — Use Case Model",
     type: "Use Case",
     description:
@@ -56,6 +57,7 @@ UC5 ..> UC7 : <<include>>
   },
   {
     id: "UML-002",
+    previewKey: "iph-sequence",
     title: "Outbound Payment — Sequence Diagram",
     type: "Sequence",
     description:
@@ -97,6 +99,7 @@ deactivate IPH
   },
   {
     id: "UML-003",
+    previewKey: "iph-component",
     title: "Instant Payments Hub — Component Diagram",
     type: "Component",
     description:
@@ -155,6 +158,7 @@ cloud "TIPS / ESMIG" as TIPS
   },
   {
     id: "UML-004",
+    previewKey: "iph-activity",
     title: "Payment Validation — Activity Diagram",
     type: "Activity",
     description:
@@ -210,6 +214,7 @@ endif
   },
   {
     id: "UML-005",
+    previewKey: "iph-state",
     title: "Payment Lifecycle — State Machine",
     type: "State",
     description:

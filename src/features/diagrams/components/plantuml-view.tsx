@@ -6,6 +6,7 @@ import { Code2, Download, GitBranch, Maximize2 } from "lucide-react";
 import type { Diagram } from "@/lib/types";
 import { cn, formatDate, matchesQuery } from "@/lib/utils";
 import { useProjectData } from "@/hooks/use-project-data";
+import { useWorkspace } from "@/components/providers/workspace-provider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -20,7 +21,7 @@ import { NoResultsState } from "@/components/common/states";
 import { useArtifactFilters } from "@/hooks/use-artifact-filters";
 import { useHighlight } from "@/hooks/use-highlight";
 import { useDownload } from "@/hooks/use-download";
-import { UmlPreview } from "@/features/diagrams/components/uml-previews";
+import { hasUmlPreview, UmlPreview } from "@/features/diagrams/components/uml-previews";
 
 const INITIAL_FILTERS = { type: "all" };
 
@@ -28,6 +29,7 @@ export function PlantUmlView() {
   const { highlight, marker } = useHighlight();
   const download = useDownload();
   const { diagrams } = useProjectData();
+  const { project } = useWorkspace();
   const [fullscreen, setFullscreen] = React.useState<Diagram | null>(null);
 
   const predicate = React.useCallback(
@@ -49,11 +51,11 @@ export function PlantUmlView() {
       {marker}
       <PageHeader
         title="PlantUML"
-        description="UML models maintained as PlantUML source and version-controlled alongside the specification. Each card shows the rendered model, the source and the requirements it supports."
+        description="UML models kept as PlantUML source alongside the specification. Each card shows the source, and a rendered preview where one is maintained."
         meta={[
           { label: "Models", value: diagrams.length },
-          { label: "Baseline", value: "v2.3" },
-          { label: "Owner", value: "Enterprise Architecture" },
+          { label: "Baseline", value: `v${project.version}` },
+          { label: "Owner", value: project.owner.name },
         ]}
         actions={
           <>
@@ -63,13 +65,13 @@ export function PlantUmlView() {
               onClick={() =>
                 download(
                   diagrams.map((diagram) => diagram.source).join("\n\n"),
-                  "iph-uml-models-v2.3.puml",
+                  `${project.code.toLowerCase()}-uml-models.puml`,
                 )
               }
             >
               <Download /> Export all .puml
             </Button>
-            <SecureLinkDialog resourceName="UML model set v2.3" resourcePath="/plantuml" />
+            <SecureLinkDialog resourceName={`${project.shortName} — UML model set`} resourcePath="/plantuml" />
           </>
         }
       />
@@ -83,7 +85,7 @@ export function PlantUmlView() {
             key: "type",
             label: "Type",
             value: filters.type,
-            options: ["Use Case", "Sequence", "Component", "Activity", "State"],
+            options: ["Use Case", "Sequence", "Component", "Activity", "State", "Class", "ER", "BPMN"],
           },
         ]}
         onFilterChange={setFilter}
@@ -139,29 +141,38 @@ export function PlantUmlView() {
                   >
                     <Download /> .puml
                   </Button>
-                  <Button variant="outline" size="sm" onClick={() => setFullscreen(diagram)}>
-                    <Maximize2 /> Full screen
-                  </Button>
+                  {hasUmlPreview(diagram.previewKey) && (
+                    <Button variant="outline" size="sm" onClick={() => setFullscreen(diagram)}>
+                      <Maximize2 /> Full screen
+                    </Button>
+                  )}
                 </div>
               </div>
 
-              <Tabs defaultValue="preview" className="p-5">
+              <Tabs
+                defaultValue={hasUmlPreview(diagram.previewKey) ? "preview" : "source"}
+                className="p-5"
+              >
                 <TabsList>
-                  <TabsTrigger value="preview">
-                    <GitBranch /> Preview
-                  </TabsTrigger>
+                  {hasUmlPreview(diagram.previewKey) && (
+                    <TabsTrigger value="preview">
+                      <GitBranch /> Preview
+                    </TabsTrigger>
+                  )}
                   <TabsTrigger value="source">
                     <Code2 /> PlantUML source
                   </TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="preview">
-                  <div className="app-scrollbar overflow-auto rounded-lg border border-border bg-surface-muted p-5">
-                    <div className="w-fit min-w-full">
-                      <UmlPreview type={diagram.type} />
+                {hasUmlPreview(diagram.previewKey) && (
+                  <TabsContent value="preview">
+                    <div className="app-scrollbar overflow-auto rounded-lg border border-border bg-surface-muted p-5">
+                      <div className="w-fit min-w-full">
+                        <UmlPreview previewKey={diagram.previewKey} />
+                      </div>
                     </div>
-                  </div>
-                </TabsContent>
+                  </TabsContent>
+                )}
 
                 <TabsContent value="source">
                   <CodeBlock
@@ -189,7 +200,7 @@ export function PlantUmlView() {
               </DialogHeader>
               <div className="app-scrollbar flex-1 overflow-auto bg-surface-muted p-8">
                 <div className="mx-auto w-fit">
-                  <UmlPreview type={fullscreen.type} />
+                  <UmlPreview previewKey={fullscreen.previewKey} />
                 </div>
               </div>
             </>
