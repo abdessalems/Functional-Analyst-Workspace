@@ -1,6 +1,8 @@
-import type { Actor, BusinessRule, Requirement } from "@/lib/types";
+import type { Actor, BusinessRule, Requirement, WorkspaceDocument } from "@/lib/types";
 import type { ProjectDataBundle } from "@/data/workspaces/types";
 import { EMPTY_BUNDLE } from "@/data/workspaces/types";
+import { europayApiServices } from "@/data/workspaces/europay-hub-api";
+import { europayTestCases } from "@/data/workspaces/europay-hub-tests";
 
 /**
  * EuroPay Hub — European merchant payment platform.
@@ -11,8 +13,7 @@ import { EMPTY_BUNDLE } from "@/data/workspaces/types";
  * Business objectives (BO-1…6), functional requirements (FR-1…12) and the
  * headline business rules (BR-001…008) are taken from `01-business-requirements.md`
  * as written. The deeper artefact sets — API contracts, use cases, acceptance
- * criteria and the 70-case test catalogue — live in the same folder and are
- * transcribed progressively.
+ * criteria and the test catalogue — are transcribed from the same folder.
  */
 
 const requirements: Requirement[] = [
@@ -45,8 +46,8 @@ const requirements: Requirement[] = [
       },
     ],
     relatedDocuments: ["DOC-EP-01", "DOC-EP-03"],
-    relatedApis: [],
-    relatedTestCases: ["TC-EP-001"],
+    relatedApis: ["API-EP-01", "API-EP-02", "API-EP-03"],
+    relatedTestCases: ["TC-EP-001", "TC-EP-002", "TC-EP-003", "TC-EP-004", "TC-EP-005", "TC-EP-006", "TC-EP-007", "TC-EP-008"],
     relatedRules: ["BR-EP-008"],
   },
   {
@@ -72,8 +73,8 @@ const requirements: Requirement[] = [
       },
     ],
     relatedDocuments: ["DOC-EP-01", "DOC-EP-03"],
-    relatedApis: [],
-    relatedTestCases: ["TC-EP-010"],
+    relatedApis: ["API-EP-04", "API-EP-05", "API-EP-06"],
+    relatedTestCases: ["TC-EP-010", "TC-EP-011", "TC-EP-012", "TC-EP-013"],
     relatedRules: ["BR-EP-001"],
   },
   {
@@ -99,8 +100,8 @@ const requirements: Requirement[] = [
       },
     ],
     relatedDocuments: ["DOC-EP-01", "DOC-EP-02"],
-    relatedApis: [],
-    relatedTestCases: [],
+    relatedApis: ["API-EP-07", "API-EP-08", "API-EP-09", "API-EP-10", "API-EP-11", "API-EP-12", "API-EP-13"],
+    relatedTestCases: ["TC-EP-020", "TC-EP-021", "TC-EP-022", "TC-EP-023", "TC-EP-024", "TC-EP-025"],
     relatedRules: ["BR-EP-006", "BR-EP-007"],
   },
   {
@@ -126,8 +127,8 @@ const requirements: Requirement[] = [
       },
     ],
     relatedDocuments: ["DOC-EP-01", "DOC-EP-02"],
-    relatedApis: [],
-    relatedTestCases: [],
+    relatedApis: ["API-EP-14", "API-EP-15", "API-EP-16"],
+    relatedTestCases: ["TC-EP-030", "TC-EP-031", "TC-EP-032", "TC-EP-033", "TC-EP-041"],
     relatedRules: ["BR-EP-001", "BR-EP-006", "BR-EP-007"],
   },
   {
@@ -153,8 +154,8 @@ const requirements: Requirement[] = [
       },
     ],
     relatedDocuments: ["DOC-EP-01", "DOC-EP-02"],
-    relatedApis: [],
-    relatedTestCases: [],
+    relatedApis: ["API-EP-17"],
+    relatedTestCases: ["TC-EP-036", "TC-EP-037"],
     relatedRules: ["BR-EP-003", "BR-EP-004"],
   },
   {
@@ -180,8 +181,8 @@ const requirements: Requirement[] = [
       },
     ],
     relatedDocuments: ["DOC-EP-01", "DOC-EP-02"],
-    relatedApis: [],
-    relatedTestCases: [],
+    relatedApis: ["API-EP-14"],
+    relatedTestCases: ["TC-EP-034", "TC-EP-035"],
     relatedRules: ["BR-EP-002"],
   },
   {
@@ -207,8 +208,8 @@ const requirements: Requirement[] = [
       },
     ],
     relatedDocuments: ["DOC-EP-01", "DOC-EP-02"],
-    relatedApis: [],
-    relatedTestCases: [],
+    relatedApis: ["API-EP-19"],
+    relatedTestCases: ["TC-EP-038", "TC-EP-039"],
     relatedRules: ["BR-EP-003"],
   },
   {
@@ -234,8 +235,8 @@ const requirements: Requirement[] = [
       },
     ],
     relatedDocuments: ["DOC-EP-01", "DOC-EP-02"],
-    relatedApis: [],
-    relatedTestCases: [],
+    relatedApis: ["API-EP-18", "API-EP-20"],
+    relatedTestCases: ["TC-EP-040"],
     relatedRules: ["BR-EP-004"],
   },
   {
@@ -261,8 +262,8 @@ const requirements: Requirement[] = [
       },
     ],
     relatedDocuments: ["DOC-EP-01", "DOC-EP-02"],
-    relatedApis: [],
-    relatedTestCases: [],
+    relatedApis: ["API-EP-21", "API-EP-22", "API-EP-23"],
+    relatedTestCases: ["TC-EP-050", "TC-EP-051", "TC-EP-052"],
     relatedRules: ["BR-EP-005"],
   },
   {
@@ -288,8 +289,8 @@ const requirements: Requirement[] = [
       },
     ],
     relatedDocuments: ["DOC-EP-01", "DOC-EP-02"],
-    relatedApis: [],
-    relatedTestCases: [],
+    relatedApis: ["API-EP-24"],
+    relatedTestCases: ["TC-EP-053"],
     relatedRules: ["BR-EP-005"],
   },
   {
@@ -315,8 +316,8 @@ const requirements: Requirement[] = [
       },
     ],
     relatedDocuments: ["DOC-EP-01", "DOC-EP-02"],
-    relatedApis: [],
-    relatedTestCases: [],
+    relatedApis: ["API-EP-26"],
+    relatedTestCases: ["TC-EP-060", "TC-EP-061", "TC-EP-063"],
     relatedRules: ["BR-EP-008"],
   },
   {
@@ -342,8 +343,8 @@ const requirements: Requirement[] = [
       },
     ],
     relatedDocuments: ["DOC-EP-01"],
-    relatedApis: [],
-    relatedTestCases: [],
+    relatedApis: ["API-EP-25"],
+    relatedTestCases: ["TC-EP-062"],
     relatedRules: ["BR-EP-008"],
   },
 ];
@@ -551,12 +552,164 @@ const actors: Actor[] = [
   },
 ];
 
+/** Controlled document set — the analysis artefacts version-controlled with the code. */
+const documents: WorkspaceDocument[] = [
+  {
+    id: "DOC-EP-01",
+    name: "Business Requirements (BRD)",
+    format: "PDF",
+    description:
+      "Why the platform exists, scope, stakeholders and the twelve high-level functional requirements, with the non-functional requirements per category.",
+    category: "Requirements",
+    version: "1.0",
+    author: "Saadaoui Abdessalem",
+    lastUpdated: "2026-02-18",
+    size: "5.4 KB",
+    status: "Approved",
+    confidentiality: "Internal",
+    relatedRequirements: ["FR-1", "FR-2", "FR-3", "FR-4", "FR-5", "FR-6"],
+  },
+  {
+    id: "DOC-EP-02",
+    name: "Functional Specification",
+    format: "Word",
+    description: "Detailed behaviour per module, from identity through to the audit trail.",
+    category: "Specification",
+    version: "1.0",
+    author: "Saadaoui Abdessalem",
+    lastUpdated: "2026-02-18",
+    size: "2.7 KB",
+    status: "Approved",
+    confidentiality: "Internal",
+    relatedRequirements: ["FR-4", "FR-5", "FR-7", "FR-8", "FR-9", "FR-10"],
+  },
+  {
+    id: "DOC-EP-03",
+    name: "Business Rules Catalogue",
+    format: "Excel",
+    description:
+      "Numbered, testable rules (BR-001 onward) spanning identity, API keys, orders, payments, lifecycle, webhooks and audit.",
+    category: "Rules",
+    version: "1.0",
+    author: "Saadaoui Abdessalem",
+    lastUpdated: "2026-02-18",
+    size: "6.1 KB",
+    status: "Approved",
+    confidentiality: "Internal",
+    relatedRequirements: ["FR-1", "FR-2", "FR-3", "FR-6", "FR-11"],
+  },
+  {
+    id: "DOC-EP-04",
+    name: "User Stories & Use Cases",
+    format: "Word",
+    description: "Actor-goal stories with use-case detail, one set per delivery phase.",
+    category: "Analysis",
+    version: "1.0",
+    author: "Saadaoui Abdessalem",
+    lastUpdated: "2026-02-18",
+    size: "8.8 KB",
+    status: "Approved",
+    confidentiality: "Internal",
+    relatedRequirements: ["FR-1", "FR-3", "FR-4"],
+  },
+  {
+    id: "DOC-EP-05",
+    name: "Acceptance Criteria",
+    format: "Word",
+    description: "Given/When/Then criteria per user story, referenced directly by the test cases.",
+    category: "Quality",
+    version: "1.0",
+    author: "Saadaoui Abdessalem",
+    lastUpdated: "2026-02-18",
+    size: "6.9 KB",
+    status: "Approved",
+    confidentiality: "Internal",
+    relatedRequirements: ["FR-1", "FR-4", "FR-6", "FR-7"],
+  },
+  {
+    id: "DOC-EP-06",
+    name: "API Contracts",
+    format: "Swagger",
+    description:
+      "Request and response schemas with error codes for all 27 endpoints across auth, merchants, orders, customers, payments, webhooks, dashboard and audit.",
+    category: "Interface",
+    version: "1.0",
+    author: "Saadaoui Abdessalem",
+    lastUpdated: "2026-02-18",
+    size: "7.1 KB",
+    status: "Approved",
+    confidentiality: "Internal",
+    relatedRequirements: ["FR-2", "FR-3", "FR-4", "FR-7", "FR-9", "FR-12"],
+  },
+  {
+    id: "DOC-EP-07",
+    name: "Test Cases",
+    format: "Excel",
+    description:
+      "TC-001 onward, each traced to an acceptance criterion, a business rule and the automated test class that proves it.",
+    category: "Quality",
+    version: "1.0",
+    author: "Saadaoui Abdessalem",
+    lastUpdated: "2026-02-18",
+    size: "6.3 KB",
+    status: "Approved",
+    confidentiality: "Internal",
+    relatedRequirements: ["FR-1", "FR-4", "FR-6", "FR-9", "FR-11"],
+  },
+  {
+    id: "DOC-EP-08",
+    name: "Risk Analysis",
+    format: "PDF",
+    description: "Risks with likelihood, impact and mitigation.",
+    category: "Governance",
+    version: "1.0",
+    author: "Saadaoui Abdessalem",
+    lastUpdated: "2026-02-18",
+    size: "1.8 KB",
+    status: "Approved",
+    confidentiality: "Internal",
+    relatedRequirements: ["FR-6", "FR-10"],
+  },
+  {
+    id: "DOC-EP-09",
+    name: "Glossary — Ubiquitous Language",
+    format: "PDF",
+    description:
+      "Shared vocabulary that drives the domain-driven naming used throughout the codebase.",
+    category: "Analysis",
+    version: "1.0",
+    author: "Saadaoui Abdessalem",
+    lastUpdated: "2026-02-18",
+    size: "2.9 KB",
+    status: "Approved",
+    confidentiality: "Internal",
+    relatedRequirements: ["FR-3", "FR-5"],
+  },
+  {
+    id: "DOC-EP-10",
+    name: "Release Notes",
+    format: "Word",
+    description: "Per-milestone changelog across the six delivery phases.",
+    category: "Governance",
+    version: "1.0",
+    author: "Saadaoui Abdessalem",
+    lastUpdated: "2026-02-18",
+    size: "1.6 KB",
+    status: "Approved",
+    confidentiality: "Internal",
+    relatedRequirements: ["FR-12"],
+  },
+];
+
 export const europayHubBundle: ProjectDataBundle = {
   ...EMPTY_BUNDLE,
   projectId: "PRJ-EPH-001",
   requirements,
   businessRules,
   actors,
+  apiServices: europayApiServices,
+  testCases: europayTestCases,
+  documents,
   databaseObjectsByRequirement: {
     "FR-1": ["merchants", "users"],
     "FR-2": ["api_keys"],

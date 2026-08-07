@@ -508,9 +508,9 @@ export const projects: Project[] = [
     metrics: {
       requirements: 12,
       businessRules: 8,
-      apis: 0,
-      documents: 0,
-      testCases: 0,
+      apis: 26,
+      documents: 10,
+      testCases: 39,
       actors: 6,
       diagrams: 0,
     },
