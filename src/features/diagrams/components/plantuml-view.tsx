@@ -188,7 +188,7 @@ export function PlantUmlView() {
       )}
 
       <Dialog open={fullscreen !== null} onOpenChange={(open) => !open && setFullscreen(null)}>
-        <DialogContent className="h-[92vh] max-w-[96vw]">
+        <DialogContent className="h-[92dvh] max-w-[96vw]">
           {fullscreen && (
             <>
               <DialogHeader>

@@ -119,7 +119,7 @@ export function DiagramViewer({
       </div>
 
       <Dialog open={fullscreen} onOpenChange={setFullscreen}>
-        <DialogContent className="h-[92vh] max-w-[96vw]">
+        <DialogContent className="h-[92dvh] max-w-[96vw]">
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
           </DialogHeader>

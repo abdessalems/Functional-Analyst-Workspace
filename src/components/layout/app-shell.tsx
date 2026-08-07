@@ -27,14 +27,24 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <a href="#main-content" className="skip-link">
         Skip to main content
       </a>
-      <div className="flex h-screen overflow-hidden bg-background">
+      {/*
+        `100dvh` rather than `100vh`: on a phone the browser chrome makes 100vh
+        taller than the visible area, so with `overflow-hidden` the bottom of
+        the app becomes unreachable.
+      */}
+      <div className="flex h-[100dvh] overflow-hidden bg-background">
         <Sidebar collapsed={collapsed} onToggle={toggle} />
-        <div className="flex min-w-0 flex-1 flex-col">
+        {/*
+          `min-h-0` and `min-w-0` are load-bearing: a flex item defaults to
+          min-height auto, so without them the scroll container below refuses
+          to shrink and its content is clipped instead of scrolling.
+        */}
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col">
           <Topbar />
           <main
             id="main-content"
             tabIndex={-1}
-            className="app-scrollbar flex-1 overflow-y-auto focus-visible:outline-none"
+            className="app-scrollbar min-h-0 flex-1 overflow-y-auto overflow-x-hidden focus-visible:outline-none"
           >
             {/* A single wash of brand colour behind the top of the page. */}
             <div className="brand-wash">

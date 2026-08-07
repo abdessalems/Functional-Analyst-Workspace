@@ -158,7 +158,7 @@ export function WireframesView() {
       )}
 
       <Dialog open={selected !== null} onOpenChange={(open) => !open && setSelected(null)}>
-        <DialogContent className="h-[92vh] max-w-[96vw]">
+        <DialogContent className="h-[92dvh] max-w-[96vw]">
           {selected && (
             <>
               <DialogHeader>
