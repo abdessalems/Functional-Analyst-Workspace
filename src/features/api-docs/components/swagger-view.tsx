@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { FilterBar } from "@/components/common/filter-bar";
 import { PageHeader } from "@/components/common/page-header";
+import { OnThisPage } from "@/components/common/on-this-page";
 import { SecureLinkDialog } from "@/components/common/secure-link-dialog";
 import { StatusBadge } from "@/components/common/status-badge";
 import { NoResultsState } from "@/components/common/states";
@@ -113,13 +114,14 @@ export function SwaggerView() {
       {results.length === 0 ? (
         <NoResultsState query={query} onReset={reset} />
       ) : (
+        <div className="grid gap-6 xl:grid-cols-[1fr_15rem]">
         <div className="space-y-6">
           {apiServices.map((service) => {
             const endpoints = service.endpoints.filter((endpoint) => visibleIds.has(endpoint.id));
             if (endpoints.length === 0) return null;
 
             return (
-              <Card key={service.id} className="overflow-hidden">
+              <Card key={service.id} id={service.id} className="scroll-mt-24 overflow-hidden">
                 <div className="space-y-3 border-b border-border bg-surface-muted p-5">
                   <div className="flex flex-wrap items-center gap-2">
                     <FileCode2 className="size-4 text-primary" />
@@ -158,6 +160,16 @@ export function SwaggerView() {
               </Card>
             );
           })}
+        </div>
+        <OnThisPage
+          targets={apiServices
+            .filter((service) => service.endpoints.some((endpoint) => visibleIds.has(endpoint.id)))
+            .map((service) => ({
+              id: service.id,
+              label: service.name,
+              count: service.endpoints.filter((endpoint) => visibleIds.has(endpoint.id)).length,
+            }))}
+        />
         </div>
       )}
 

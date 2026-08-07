@@ -39,19 +39,17 @@ export function RequirementCard({
       )}
     >
       <div className="space-y-3 p-5">
+        {/*
+          Three signals, not six. ID, status and priority are what a reader
+          scans by; category, MoSCoW and version are reference detail and now
+          live in the expanded view where they are actually read.
+        */}
         <div className="flex flex-wrap items-center gap-2">
           <Badge variant="outline" className="font-mono">
             {requirement.id}
           </Badge>
           <StatusBadge status={requirement.status} />
           <PriorityBadge priority={requirement.priority} />
-          <Badge variant="neutral">{requirement.category}</Badge>
-          <Badge variant="outline" className="font-normal">
-            MoSCoW · {requirement.moscow}
-          </Badge>
-          <span className="ml-auto text-xs text-muted-foreground">
-            v{requirement.version} · updated {formatDate(requirement.lastUpdated)}
-          </span>
         </div>
 
         <h3 className="text-[15px] font-semibold leading-snug tracking-tight">
@@ -104,6 +102,16 @@ export function RequirementCard({
           <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down">
             <div className="space-y-4 pt-4">
               <Separator />
+
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge variant="neutral">{requirement.category}</Badge>
+                <Badge variant="outline" className="font-normal">
+                  MoSCoW · {requirement.moscow}
+                </Badge>
+                <span className="text-xs text-muted-foreground">
+                  v{requirement.version} · updated {formatDate(requirement.lastUpdated)}
+                </span>
+              </div>
 
               <div className="space-y-2.5">
                 <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">

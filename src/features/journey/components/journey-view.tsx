@@ -29,6 +29,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { PageHeader } from "@/components/common/page-header";
+import { IdLegend } from "@/components/common/id-legend";
 
 interface Deliverable {
   label: string;
@@ -228,6 +229,8 @@ export function JourneyView() {
           — not a description of it.
         </p>
       </Card>
+
+      <IdLegend />
 
       <ol className="space-y-4">
         {phases.map((phase, index) => (

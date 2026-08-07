@@ -33,6 +33,7 @@ import {
 import { ArtifactLinkList } from "@/components/common/artifact-link";
 import { FilterBar } from "@/components/common/filter-bar";
 import { PageHeader } from "@/components/common/page-header";
+import { OnThisPage } from "@/components/common/on-this-page";
 import { SecureLinkDialog } from "@/components/common/secure-link-dialog";
 import { NoResultsState } from "@/components/common/states";
 import { useArtifactFilters } from "@/hooks/use-artifact-filters";
@@ -165,6 +166,7 @@ export function FunctionalSpecView() {
       {results.length === 0 ? (
         <NoResultsState query={query} onReset={reset} />
       ) : (
+        <div className="grid gap-6 xl:grid-cols-[1fr_15rem]">
         <Card className="overflow-hidden">
           <Accordion
             type="multiple"
@@ -194,6 +196,14 @@ export function FunctionalSpecView() {
             ))}
           </Accordion>
         </Card>
+        <OnThisPage
+          targets={results.map((section) => ({
+            id: section.id,
+            label: section.title,
+            count: section.validations.length + section.errors.length,
+          }))}
+        />
+        </div>
       )}
     </div>
   );

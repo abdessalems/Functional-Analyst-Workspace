@@ -29,6 +29,7 @@ import { ArtifactLink, ArtifactLinkList } from "@/components/common/artifact-lin
 import { FilterBar } from "@/components/common/filter-bar";
 import { MetricCard } from "@/components/common/metric-card";
 import { PageHeader } from "@/components/common/page-header";
+import { IdLegend } from "@/components/common/id-legend";
 import { SectionCard } from "@/components/common/section-card";
 import { SecureLinkDialog } from "@/components/common/secure-link-dialog";
 import { StatusBadge } from "@/components/common/status-badge";
@@ -176,6 +177,8 @@ export function TraceabilityView() {
           caption="No linked test case"
         />
       </div>
+
+      <IdLegend />
 
       <FilterBar
         query={query}
