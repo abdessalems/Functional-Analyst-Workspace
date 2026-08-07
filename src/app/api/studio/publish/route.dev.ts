@@ -22,6 +22,8 @@ interface PublishRequest {
   bundleSource: string;
   projectSource: string;
   projectId: string;
+  /** Required to delete; checked against STUDIO_DELETE_PASSWORD. */
+  password: string;
 }
 
 function bad(message: string, status = 400) {
@@ -39,7 +41,19 @@ export async function DELETE(request: Request) {
     return bad("Deleting is only available on a development machine.", 403);
   }
 
-  const { projectId, fileName, exportName } = (await request.json()) as Partial<PublishRequest>;
+  const { projectId, fileName, exportName, password } = (await
+    request.json()) as Partial<PublishRequest>;
+
+  // The same password that opened the studio, sent back with the request —
+  // one password for the whole tool, checked here where it cannot be read.
+  const expected = process.env.STUDIO_PASSWORD;
+  if (!expected) {
+    return bad("No STUDIO_PASSWORD is set. Add one to .env.local and restart the dev server.", 403);
+  }
+  if (password !== expected) {
+    return bad("Wrong password.", 401);
+  }
+
   if (!projectId || !fileName || !exportName) {
     return bad("The request is missing a field.");
   }
@@ -117,7 +131,15 @@ export async function POST(request: Request) {
   }
 
   const body = (await request.json()) as Partial<PublishRequest>;
-  const { fileName, exportName, bundleSource, projectSource, projectId } = body;
+  const { fileName, exportName, bundleSource, projectSource, projectId, password } = body;
+
+  const expected = process.env.STUDIO_PASSWORD;
+  if (!expected) {
+    return bad("No STUDIO_PASSWORD is set. Add one to .env.local and restart the dev server.", 403);
+  }
+  if (password !== expected) {
+    return bad("Wrong password.", 401);
+  }
 
   if (!fileName || !exportName || !bundleSource || !projectSource || !projectId) {
     return bad("The request is missing a field.");

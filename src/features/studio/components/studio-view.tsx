@@ -16,7 +16,6 @@ import {
 import type { ProjectDataBundle } from "@/data/workspaces/types";
 import { EMPTY_BUNDLE } from "@/data/workspaces/types";
 import { validateBundle } from "@/lib/validate-bundle";
-import { readSetting, writeSetting } from "@/lib/safe-storage";
 import { projects } from "@/data/projects";
 import { getProjectBundle, hasProjectBundle } from "@/data/workspaces";
 import { Badge } from "@/components/ui/badge";
@@ -64,87 +63,125 @@ import {
 import { deleteDraft, draftProjectRecord, saveDraft } from "@/features/studio/lib/draft-store";
 import { useWorkspace } from "@/components/providers/workspace-provider";
 
-const GATE_KEY = "baw.studio-open";
-const PASSPHRASE = "baraa";
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-/** The publish route only exists while the app runs on a developer's machine. */
-const IS_DEV = process.env.NODE_ENV === "development";
+/**
+ * Authoring needs the routes under /api/studio, and those only exist while the
+ * app runs locally — `pageExtensions` drops every `.dev.ts` file from the
+ * static export. On the published site the studio is a read-only preview: the
+ * import and the checks run in the browser, and nothing can be written.
+ */
+const CAN_AUTHOR = process.env.NODE_ENV === "development";
+/** Kept for the tab only. A closed tab should ask again. */
+const SESSION_KEY = "baw.studio-password";
 
+function readPassword(): string {
+  try {
+    return window.sessionStorage.getItem(SESSION_KEY) ?? "";
+  } catch {
+    return "";
+  }
+}
+
+function storePassword(value: string): void {
+  try {
+    window.sessionStorage.setItem(SESSION_KEY, value);
+  } catch {
+    /* Storage unavailable; the password simply is not remembered. */
+  }
+}
 
 export function StudioView() {
-  const [unlocked, setUnlocked] = React.useState(false);
-
-  React.useEffect(() => {
-    setUnlocked(readSetting(GATE_KEY) === "true");
-  }, []);
-
-  if (!unlocked) return <Gate onUnlock={() => setUnlocked(true)} />;
   return <Studio />;
 }
 
-function Gate({ onUnlock }: { onUnlock: () => void }) {
+/**
+ * Unlocks authoring. The password is checked by the dev server, never here —
+ * so there is nothing in this file, or in the shipped bundle, to read.
+ */
+function Unlock({ onUnlocked }: { onUnlocked: (password: string) => void }) {
   const [value, setValue] = React.useState("");
-  const [wrong, setWrong] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
+  const [busy, setBusy] = React.useState(false);
 
   const submit = (event: React.FormEvent) => {
     event.preventDefault();
-    if (value.trim().toLowerCase() === PASSPHRASE) {
-      writeSetting(GATE_KEY, "true");
-      onUnlock();
-    } else {
-      setWrong(true);
-    }
+    setBusy(true);
+    setError(null);
+    void fetch("/api/studio/unlock", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password: value }),
+    })
+      .then(async (response) => {
+        const body = (await response.json()) as { ok: boolean; message?: string };
+        if (!body.ok) throw new Error(body.message ?? "Wrong password.");
+        storePassword(value);
+        onUnlocked(value);
+      })
+      .catch((cause: Error) => setError(cause.message))
+      .finally(() => setBusy(false));
   };
 
   return (
-    <div className="mx-auto max-w-md space-y-4 py-16">
-      <Card className="space-y-4 p-6">
-        <div className="flex items-center gap-2.5">
-          {/* Not "Authoring studio" — the unlocked page is called that, and two
-              screens under one title read as nothing having happened. */}
-          <Lock className="size-4 text-muted-foreground" />
-          <h1 className="text-base font-semibold">Locked</h1>
-        </div>
-
-        <form onSubmit={submit} className="space-y-3">
-          <Label htmlFor="passphrase">Passphrase</Label>
+    <SectionCard
+      title="Authoring is locked"
+      description="Adding, publishing and deleting need the studio password."
+      icon={Lock}
+    >
+      <form onSubmit={submit} className="flex flex-wrap items-end gap-3">
+        <div className="space-y-1.5">
+          <Label htmlFor="studio-password">Password</Label>
           <Input
-            id="passphrase"
+            id="studio-password"
             type="password"
+            className="w-56"
             value={value}
             onChange={(event) => {
               setValue(event.target.value);
-              setWrong(false);
+              setError(null);
             }}
-            autoFocus
           />
-          {wrong && <p className="text-sm text-destructive">That is not the passphrase.</p>}
-          <Button type="submit" className="w-full">
-            Open studio
-          </Button>
-        </form>
+        </div>
+        <Button type="submit" disabled={busy || !value}>
+          {busy ? "Checking…" : "Unlock authoring"}
+        </Button>
+        {error && <p className="text-sm text-destructive">{error}</p>}
+      </form>
 
-        {/*
-          Said plainly on the page itself: this is a static site, so any
-          passphrase ships inside the JavaScript. It keeps the page out of the
-          way of visitors — it does not protect anything, and nothing behind it
-          needs protecting, because the studio only reads a file you choose and
-          hands one back.
-        */}
-        <p className="flex items-start gap-2 border-t border-border pt-3 text-xs leading-relaxed text-muted-foreground">
-          <Info className="mt-0.5 size-3.5 shrink-0" />
-          This hides the page from visitors. It is not security — the site is
-          static, so the passphrase is in the page source. Nothing here touches
-          the published site: the studio reads a file you pick and gives you one
-          back to commit.
-        </p>
-      </Card>
-    </div>
+      <p className="mt-3 flex items-start gap-2 border-t border-border pt-3 text-xs leading-relaxed text-muted-foreground">
+        <Info className="mt-0.5 size-3.5 shrink-0" />
+        The password is held in .env.local and checked by the server. It is not
+        part of the page, so it cannot be read out of the source.
+      </p>
+    </SectionCard>
+  );
+}
+
+/** Shown on the published site, where there is no server to author with. */
+function ReadOnlyNote() {
+  return (
+    <SectionCard
+      title="This is a preview"
+      description="Import a file and watch the checks run — nothing here changes the site."
+      icon={Info}
+    >
+      <p className="text-sm leading-relaxed text-muted-foreground">
+        The studio reads a spreadsheet in your browser and reports what it finds:
+        counts, unresolved references, duplicate ids, coverage. That much works
+        for anyone, and the file never leaves your machine.
+      </p>
+      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+        Adding a project to the workspace, publishing it and deleting one write
+        files into the source, so they only run where the source is — on the
+        analyst's own machine, behind a password the server checks.
+      </p>
+    </SectionCard>
   );
 }
 
 function Studio() {
   const download = useDownload();
+  const [password, setPassword] = React.useState("");
   const [parsed, setParsed] = React.useState<ParsedProject | null>(null);
   const [fileName, setFileName] = React.useState("");
   const [error, setError] = React.useState<string | null>(null);
@@ -156,7 +193,12 @@ function Studio() {
   const [added, setAdded] = React.useState<string | null>(null);
   const [publishing, setPublishing] = React.useState(false);
   const [published, setPublished] = React.useState<string[] | null>(null);
+  const [removingDraft, setRemovingDraft] = React.useState<string | null>(null);
   const { drafts, refreshDrafts, openProject } = useWorkspace();
+
+  // The password is remembered for the tab, so it is asked for once.
+  React.useEffect(() => setPassword(readPassword()), []);
+  const authorised = CAN_AUTHOR && password !== "";
 
   const handleFile = React.useCallback(
     async (file: File) => {
@@ -320,6 +362,9 @@ function Studio() {
         </div>
       </SectionCard>
 
+      {!CAN_AUTHOR && <ReadOnlyNote />}
+      {CAN_AUTHOR && !authorised && <Unlock onUnlocked={setPassword} />}
+
       {parsed && report && previewBundle && (
         <>
           <SectionCard
@@ -348,6 +393,7 @@ function Studio() {
             </div>
           </SectionCard>
 
+          {authorised && (
           <SectionCard
             title="3 · Add it to the workspace"
             description="It appears in the project list straight away, in this browser."
@@ -426,6 +472,7 @@ function Studio() {
               )}
             </div>
           </SectionCard>
+          )}
 
           <SectionCard
             title="4 · Publish it, when you are ready"
@@ -433,7 +480,7 @@ function Studio() {
             icon={Download}
           >
             <div className="space-y-4">
-              {IS_DEV && (
+              {authorised && (
                 <div className="space-y-2 rounded-lg border border-primary/30 bg-primary/[0.04] p-3">
                   <Button
                     disabled={report.errors.length > 0 || publishing}
@@ -446,6 +493,7 @@ function Studio() {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({
+                          password,
                           fileName,
                           exportName,
                           projectId,
@@ -543,17 +591,37 @@ function Studio() {
                   <Button variant="outline" size="sm" onClick={() => openProject(draft.project.id)}>
                     Open it
                   </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      deleteDraft(draft.project.id);
-                      refreshDrafts();
-                    }}
-                    aria-label={`Remove ${draft.project.name}`}
-                  >
-                    <Trash2 /> Remove
-                  </Button>
+                  {removingDraft === draft.project.id ? (
+                    // Confirmation, not a second password: the studio was
+                    // already unlocked, and asking twice teaches people to type
+                    // the password without reading what they are agreeing to.
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-muted-foreground">Remove it?</span>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => {
+                          deleteDraft(draft.project.id);
+                          refreshDrafts();
+                          setRemovingDraft(null);
+                        }}
+                      >
+                        Yes, remove
+                      </Button>
+                      <Button variant="ghost" size="sm" onClick={() => setRemovingDraft(null)}>
+                        Keep it
+                      </Button>
+                    </div>
+                  ) : (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setRemovingDraft(draft.project.id)}
+                      aria-label={`Remove ${draft.project.name}`}
+                    >
+                      <Trash2 /> Remove
+                    </Button>
+                  )}
                 </div>
               </div>
             ))}
@@ -561,7 +629,7 @@ function Studio() {
         </SectionCard>
       )}
 
-      {IS_DEV && <PublishedProjects />}
+      {authorised && <PublishedProjects password={password} />}
 
       <SectionCard
         title="Health of the projects already published"
@@ -602,7 +670,7 @@ function Studio() {
  * one: the first names what will happen, because this rewrites source files
  * and the undo is a git command, not a button.
  */
-function PublishedProjects() {
+function PublishedProjects({ password }: { password: string }) {
   const [confirming, setConfirming] = React.useState<string | null>(null);
   const [busy, setBusy] = React.useState(false);
   const [result, setResult] = React.useState<string | null>(null);
@@ -619,7 +687,7 @@ function PublishedProjects() {
       headers: { "Content-Type": "application/json" },
       // The export name is not knowable from the id alone, so the generated
       // convention is assumed and the server reports it if that is wrong.
-      body: JSON.stringify({ projectId, fileName, exportName: "myProjectBundle" }),
+      body: JSON.stringify({ projectId, fileName, exportName: "myProjectBundle", password }),
     })
       .then(async (response) => {
         const body = (await response.json()) as {
@@ -653,9 +721,16 @@ function PublishedProjects() {
             </div>
 
             {confirming === project.id ? (
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">Delete its files?</span>
-                <Button variant="destructive" size="sm" disabled={busy} onClick={() => remove(project.id)}>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-sm text-muted-foreground">
+                  Delete its files? This rewrites the source.
+                </span>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  disabled={busy}
+                  onClick={() => remove(project.id)}
+                >
                   {busy ? "Deleting…" : "Yes, delete"}
                 </Button>
                 <Button variant="ghost" size="sm" onClick={() => setConfirming(null)}>

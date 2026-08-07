@@ -19,12 +19,17 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   /*
-   * Routes ending `.dev.ts` exist only when a developer is running the app on
-   * their own machine — the studio writes project files through one of them.
-   * They are dropped from the static export, which is why the published site
-   * keeps its promise of having no server side at all.
+   * Pages and routes ending `.dev.tsx` / `.dev.ts` exist only while a developer
+   * runs the app on their own machine. The authoring studio is one of them: it
+   * reads a spreadsheet and writes files into src/data, so it belongs on the
+   * machine that owns the source and nowhere else.
+   *
+   * Dropping them from the static export is what lets the studio have a real
+   * password. A published page can only carry a password its own JavaScript
+   * can check, which means shipping the answer alongside the question; here the
+   * password stays in .env.local and is checked by the dev server.
    */
-  pageExtensions: isStaticExport ? ["tsx", "ts"] : ["dev.ts", "tsx", "ts"],
+  pageExtensions: isStaticExport ? ["tsx", "ts"] : ["dev.tsx", "dev.ts", "tsx", "ts"],
   ...(isStaticExport
     ? {
         output: "export",

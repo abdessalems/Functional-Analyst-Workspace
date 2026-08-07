@@ -1,5 +1,6 @@
 import type { Project } from "@/lib/types";
 import type { ProjectDataBundle } from "@/data/workspaces/types";
+import { EMPTY_BUNDLE } from "@/data/workspaces/types";
 import { readSetting, writeSetting } from "@/lib/safe-storage";
 
 /**
@@ -26,7 +27,17 @@ export function readDrafts(): DraftProject[] {
   try {
     const parsed: unknown = JSON.parse(raw);
     // A half-written or hand-edited value should lose the drafts, not the app.
-    return Array.isArray(parsed) ? (parsed as DraftProject[]) : [];
+    if (!Array.isArray(parsed)) return [];
+
+    return (parsed as DraftProject[])
+      .filter((draft) => draft?.project?.id)
+      .map((draft) => ({
+        ...draft,
+        // A draft stored before a collection existed would arrive without it,
+        // and every page that maps over one would throw. Filling the gaps from
+        // EMPTY_BUNDLE means an old draft degrades to "nothing there yet".
+        bundle: { ...EMPTY_BUNDLE, ...draft.bundle, projectId: draft.project.id },
+      }));
   } catch {
     return [];
   }
