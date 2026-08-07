@@ -37,7 +37,9 @@ import { CodeBlock } from "@/components/common/code-block";
 import { useDownload } from "@/hooks/use-download";
 import {
   applyAcceptanceCriteria,
+  buildSpecSections,
   EMPTY_PARSED,
+  EMPTY_SPEC_SHEETS,
   matchSheet,
   rowsToActors,
   rowsToApiServices,
@@ -52,6 +54,7 @@ import {
   sniffSheet,
   type ParsedProject,
   type SheetRow,
+  type SpecSheets,
 } from "@/features/studio/lib/parse-workbook";
 import {
   generateBundleFile,
@@ -97,8 +100,10 @@ function Gate({ onUnlock }: { onUnlock: () => void }) {
     <div className="mx-auto max-w-md space-y-4 py-16">
       <Card className="space-y-4 p-6">
         <div className="flex items-center gap-2.5">
+          {/* Not "Authoring studio" — the unlocked page is called that, and two
+              screens under one title read as nothing having happened. */}
           <Lock className="size-4 text-muted-foreground" />
-          <h1 className="text-base font-semibold">Authoring studio</h1>
+          <h1 className="text-base font-semibold">Locked</h1>
         </div>
 
         <form onSubmit={submit} className="space-y-3">
@@ -165,6 +170,8 @@ function Studio() {
         const result: ParsedProject = { ...EMPTY_PARSED, ignoredSheets: [] };
         // Held back until the requirements exist, whatever order the sheets come in.
         let criteriaRows: SheetRow[] = [];
+        // The spec is assembled from five sheets, so it is collected then built.
+        const spec: SpecSheets = { ...EMPTY_SPEC_SHEETS };
 
         for (const name of workbook.SheetNames) {
           const rows = XLSX.utils.sheet_to_json<SheetRow>(workbook.Sheets[name], { defval: "" });
@@ -181,10 +188,13 @@ function Studio() {
           else if (kind === "documents") result.documents = rowsToDocuments(rows, owner);
           else if (kind === "processFlows") result.processFlows = rowsToProcessFlows(rows);
           else if (kind === "acceptanceCriteria") criteriaRows = rows;
-          else result.ignoredSheets.push(name);
+          else if (kind?.startsWith("spec.")) {
+            spec[kind.slice("spec.".length) as keyof SpecSheets] = rows;
+          } else result.ignoredSheets.push(name);
         }
 
         result.requirements = applyAcceptanceCriteria(result.requirements, criteriaRows);
+        result.functionalSpecSections = buildSpecSections(spec);
 
         const imported = Object.entries(result).reduce(
           (total, [key, value]) =>
@@ -228,6 +238,7 @@ function Studio() {
       sqlValidations: parsed.sqlValidations,
       documents: parsed.documents,
       processFlows: parsed.processFlows,
+      functionalSpecSections: parsed.functionalSpecSections,
     };
   }, [parsed, projectId]);
 
@@ -242,7 +253,7 @@ function Studio() {
 
       <SectionCard
         title="1 · Import a spreadsheet"
-        description="One sheet per artefact type: Requirements, Acceptance Criteria, Business Rules, Actors, Process Steps, Diagrams, Wireframes, API Endpoints, SQL Validations, Test Cases, Documents. Bring only the sheets you have. Column headings are matched loosely — “Business Need” finds businessNeed."
+        description="One sheet per artefact type: Requirements, Acceptance Criteria, Business Rules, Actors, Process Steps, Spec Sections, Spec Fields, Spec Validations, Spec Errors, Spec Edge Cases, Diagrams, Wireframes, API Endpoints, SQL Validations, Test Cases, Documents. Bring only the sheets you have. Column headings are matched loosely — “Business Need” finds businessNeed."
         icon={FileSpreadsheet}
       >
         <div className="space-y-4">

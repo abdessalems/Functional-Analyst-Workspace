@@ -22,6 +22,7 @@ export function generateBundleFile(projectId: string, exportName: string, parsed
     ["sqlValidations", "SqlValidationQuery", parsed.sqlValidations],
     ["documents", "WorkspaceDocument", parsed.documents],
     ["processFlows", "ProcessFlow", parsed.processFlows],
+    ["functionalSpecSections", "FunctionalSpecSection", parsed.functionalSpecSections],
   ];
 
   const present = sections.filter(([, , rows]) => rows.length > 0);

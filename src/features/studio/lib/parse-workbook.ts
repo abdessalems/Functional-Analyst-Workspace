@@ -4,6 +4,7 @@ import type {
   BusinessRule,
   Diagram,
   DiagramType,
+  FunctionalSpecSection,
   ProcessFlow,
   ProcessStep,
   Requirement,
@@ -35,6 +36,7 @@ export interface ParsedProject {
   sqlValidations: SqlValidationQuery[];
   documents: WorkspaceDocument[];
   processFlows: ProcessFlow[];
+  functionalSpecSections: FunctionalSpecSection[];
   /** Sheets found in the file that were not recognised. */
   ignoredSheets: string[];
 }
@@ -52,6 +54,7 @@ export const EMPTY_PARSED: ParsedProject = {
   sqlValidations: [],
   documents: [],
   processFlows: [],
+  functionalSpecSections: [],
   ignoredSheets: [],
 };
 
@@ -396,13 +399,99 @@ export function rowsToProcessFlows(rows: SheetRow[]): ProcessFlow[] {
   return [...flows.values()];
 }
 
-const SHEET_MATCHERS: { key: ParsedCollection | "acceptanceCriteria"; names: string[] }[] = [
+/**
+ * The functional specification arrives as five sheets, because its shape is
+ * five tables: the sections themselves, then fields, validations, errors and
+ * edge cases, each row naming the section it belongs to. Flattening them into
+ * one sheet would mean repeating a section's prose on every field row.
+ */
+export interface SpecSheets {
+  sections: SheetRow[];
+  fields: SheetRow[];
+  validations: SheetRow[];
+  errors: SheetRow[];
+  edgeCases: SheetRow[];
+}
+
+export const EMPTY_SPEC_SHEETS: SpecSheets = {
+  sections: [],
+  fields: [],
+  validations: [],
+  errors: [],
+  edgeCases: [],
+};
+
+const SEVERITIES = ["Blocking", "Warning"] as const;
+
+export function buildSpecSections(sheets: SpecSheets): FunctionalSpecSection[] {
+  /** Rows belonging to one section, matched on whichever column names it. */
+  const forSection = (rows: SheetRow[], sectionId: string) =>
+    rows.filter((row) => field(row, "section", "sectionId", "parent", "spec") === sectionId);
+
+  return sheets.sections
+    .filter((row) => field(row, "id", "ref"))
+    .map((row) => {
+      const id = field(row, "id", "ref");
+
+      return {
+        id,
+        title: field(row, "title", "name"),
+        summary: field(row, "summary", "description", "purpose"),
+        requirementRefs: list(field(row, "requirements", "requirementRefs", "coverage")),
+        businessLogic: field(row, "businessLogic", "logic", "rules")
+          .split(/\r?\n|;/)
+          .map((entry) => entry.replace(/^\s*\d+[.)]\s*/, "").trim())
+          .filter(Boolean),
+        fields: forSection(sheets.fields, id).map((fieldRow) => ({
+          name: field(fieldRow, "name", "field", "attribute"),
+          type: field(fieldRow, "type", "datatype"),
+          length: field(fieldRow, "length", "size"),
+          mandatory: /^(y|yes|true|1|m|mandatory|required)$/i.test(
+            field(fieldRow, "mandatory", "required"),
+          ),
+          description: field(fieldRow, "description", "meaning"),
+          example: field(fieldRow, "example", "sample"),
+        })),
+        validations: forSection(sheets.validations, id).map((ruleRow) => ({
+          field: field(ruleRow, "field", "attribute", "name"),
+          rule: field(ruleRow, "rule", "check", "condition"),
+          errorCode: field(ruleRow, "errorCode", "code"),
+          severity: oneOf(field(ruleRow, "severity"), SEVERITIES, "Blocking"),
+        })),
+        errors: forSection(sheets.errors, id).map((errorRow) => ({
+          code: field(errorRow, "code", "errorCode"),
+          httpStatus: Number(field(errorRow, "httpStatus", "status", "http")) || 400,
+          message: field(errorRow, "message", "text"),
+          handling: field(errorRow, "handling", "action", "recovery"),
+        })),
+        edgeCases: forSection(sheets.edgeCases, id).map((edgeRow, index) => ({
+          id: field(edgeRow, "id", "ref") || `${id}-EC-${index + 1}`,
+          scenario: field(edgeRow, "scenario", "case", "situation"),
+          expectedBehaviour: field(edgeRow, "expectedBehaviour", "expected", "behaviour", "then"),
+        })),
+      };
+    });
+}
+
+export type SpecSheetKey = `spec.${keyof SpecSheets}`;
+
+const SHEET_MATCHERS: { key: ParsedCollection | "acceptanceCriteria" | SpecSheetKey; names: string[] }[] = [
+  // Before the spec sheets, because "SQL Validations" contains "validations"
+  // and would otherwise be read as the spec's field rules — which cost both
+  // collections: the SQL went missing and the spec rules were overwritten.
+  { key: "sqlValidations", names: ["sqlvalidations", "sqlchecks", "datachecks", "queries", "sql"] },
+  // Then the spec sheets: "Spec Fields" must not be read as a diagram sheet,
+  // and "Spec Errors" must not be read as anything else at all.
+  { key: "spec.fields", names: ["specfields", "fields", "datadictionary"] },
+  { key: "spec.validations", names: ["specvalidations", "validations", "fieldrules"] },
+  { key: "spec.errors", names: ["specerrors", "errors", "errorcodes"] },
+  { key: "spec.edgeCases", names: ["specedgecases", "edgecases", "edge"] },
+  { key: "spec.sections", names: ["specsections", "functionalspec", "specification", "spec"] },
   // Longest, most specific names first — "acceptance criteria" contains neither
   // "requirements" nor "tests", but "test cases" must not win over "test data".
   { key: "acceptanceCriteria", names: ["acceptancecriteria", "criteria", "gwt", "ac"] },
   { key: "processFlows", names: ["processsteps", "processflow", "process", "workflow", "steps"] },
   { key: "apiServices", names: ["apiendpoints", "endpoints", "api", "swagger"] },
-  { key: "sqlValidations", names: ["sqlvalidations", "sql", "queries", "datachecks"] },
   { key: "wireframes", names: ["wireframes", "screens", "mockups"] },
   { key: "diagrams", names: ["diagrams", "plantuml", "models", "bpmn", "uml"] },
   { key: "documents", names: ["documents", "deliverables", "docs"] },
@@ -412,7 +501,9 @@ const SHEET_MATCHERS: { key: ParsedCollection | "acceptanceCriteria"; names: str
   { key: "testCases", names: ["testcases", "tests", "testcatalogue"] },
 ];
 
-export function matchSheet(name: string): ParsedCollection | "acceptanceCriteria" | null {
+export function matchSheet(
+  name: string,
+): ParsedCollection | "acceptanceCriteria" | SpecSheetKey | null {
   const normalised = normalise(name);
 
   // Short aliases must match the whole name: "Actors" contains "ac", and a
@@ -433,7 +524,9 @@ export function matchSheet(name: string): ParsedCollection | "acceptanceCriteria
  * but "Scenario, Steps, Expected Result" is unmistakably a test catalogue.
  * Only used after `matchSheet` declines, and only when the columns are decisive.
  */
-export function sniffSheet(rows: SheetRow[]): ParsedCollection | "acceptanceCriteria" | null {
+export function sniffSheet(
+  rows: SheetRow[],
+): ParsedCollection | "acceptanceCriteria" | SpecSheetKey | null {
   const first = rows[0];
   if (!first) return null;
 

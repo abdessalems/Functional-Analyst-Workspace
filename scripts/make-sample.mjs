@@ -789,12 +789,275 @@ const documents = [
   },
 ];
 
+const specSections = [
+  {
+    ID: "FS-001",
+    Title: "Raising a dispute",
+    Summary:
+      "How a dispute is created from a settled transaction: what is checked, what is stored, and what the cardholder is told at each refusal.",
+    Requirements: "BR-001",
+    "Business Logic":
+      "1. Read the transaction and confirm it is settled\n2. Confirm the settlement date is within 120 days of today\n3. Confirm no open dispute already exists for it\n4. Store the dispute with the status Submitted and return its reference",
+  },
+  {
+    ID: "FS-002",
+    Title: "Provisional credit",
+    Summary:
+      "How the disputed amount is returned to the cardholder while the case is investigated, and how it is reversed if the dispute fails.",
+    Requirements: "BR-002",
+    "Business Logic":
+      "1. On acceptance, queue a posting for the disputed amount\n2. Post it in the next end-of-day run\n3. On rejection, reverse the posting and notify the cardholder",
+  },
+  {
+    ID: "FS-003",
+    Title: "Evidence handling",
+    Summary: "What a cardholder may attach to an open case, and what is refused.",
+    Requirements: "BR-003",
+    "Business Logic":
+      "1. Accept files only while the case is Under Review\n2. Refuse a sixth file, or any file over 10 MB\n3. Store the file against the dispute, never against the transaction",
+  },
+];
+
+const specFields = [
+  {
+    Section: "FS-001",
+    Name: "transactionId",
+    Type: "uuid",
+    Length: "36",
+    Mandatory: "Yes",
+    Description: "The settled transaction being disputed.",
+    Example: "9f2c1b7e-4a2d-4f9a-8b31-0c5e2a7d9f10",
+  },
+  {
+    Section: "FS-001",
+    Name: "reasonCode",
+    Type: "varchar",
+    Length: "10",
+    Mandatory: "Yes",
+    Description: "Why the cardholder disputes the charge, in scheme terms.",
+    Example: "13.1",
+  },
+  {
+    Section: "FS-001",
+    Name: "amount",
+    Type: "numeric",
+    Length: "15,2",
+    Mandatory: "Yes",
+    Description: "The disputed amount; may be less than the transaction, never more.",
+    Example: "84.50",
+  },
+  {
+    Section: "FS-001",
+    Name: "description",
+    Type: "varchar",
+    Length: "500",
+    Mandatory: "No",
+    Description: "The cardholder's own account of what happened.",
+    Example: "Charged twice for one meal",
+  },
+  {
+    Section: "FS-002",
+    Name: "postingId",
+    Type: "uuid",
+    Length: "36",
+    Mandatory: "Yes",
+    Description: "The ledger posting that carries the provisional credit.",
+    Example: "3d81c0aa-71f4-4d2e-9c6b-6f0b2b1e77a2",
+  },
+  {
+    Section: "FS-002",
+    Name: "valueDate",
+    Type: "date",
+    Length: "10",
+    Mandatory: "Yes",
+    Description: "The date the credit takes effect on the account.",
+    Example: "2026-02-11",
+  },
+  {
+    Section: "FS-003",
+    Name: "fileName",
+    Type: "varchar",
+    Length: "255",
+    Mandatory: "Yes",
+    Description: "The name of the attached evidence file.",
+    Example: "receipt-2026-02-08.pdf",
+  },
+  {
+    Section: "FS-003",
+    Name: "sizeBytes",
+    Type: "bigint",
+    Length: "—",
+    Mandatory: "Yes",
+    Description: "File size, checked against the 10 MB limit.",
+    Example: "2411008",
+  },
+];
+
+const specValidations = [
+  {
+    Section: "FS-001",
+    Field: "transactionId",
+    Rule: "Must reference a transaction whose status is SETTLED",
+    "Error Code": "NOT_DISPUTABLE",
+    Severity: "Blocking",
+  },
+  {
+    Section: "FS-001",
+    Field: "transactionId",
+    Rule: "Settlement date must be within 120 days of today",
+    "Error Code": "WINDOW_CLOSED",
+    Severity: "Blocking",
+  },
+  {
+    Section: "FS-001",
+    Field: "transactionId",
+    Rule: "No dispute may already be open against this transaction",
+    "Error Code": "ALREADY_DISPUTED",
+    Severity: "Blocking",
+  },
+  {
+    Section: "FS-001",
+    Field: "amount",
+    Rule: "Must be greater than zero and at most the transaction amount",
+    "Error Code": "AMOUNT_INVALID",
+    Severity: "Blocking",
+  },
+  {
+    Section: "FS-001",
+    Field: "reasonCode",
+    Rule: "Must be one of the scheme reason codes in force",
+    "Error Code": "REASON_UNKNOWN",
+    Severity: "Blocking",
+  },
+  {
+    Section: "FS-002",
+    Field: "amount",
+    Rule: "The credit must equal the disputed amount exactly",
+    "Error Code": "CREDIT_MISMATCH",
+    Severity: "Blocking",
+  },
+  {
+    Section: "FS-003",
+    Field: "sizeBytes",
+    Rule: "At most 10485760 bytes per file",
+    "Error Code": "ATTACHMENT_TOO_LARGE",
+    Severity: "Blocking",
+  },
+  {
+    Section: "FS-003",
+    Field: "fileName",
+    Rule: "Extension should be pdf, png or jpg",
+    "Error Code": "ATTACHMENT_TYPE",
+    Severity: "Warning",
+  },
+];
+
+const specErrors = [
+  {
+    Section: "FS-001",
+    Code: "NOT_DISPUTABLE",
+    "HTTP Status": 422,
+    Message: "This transaction cannot be disputed yet.",
+    Handling: "Tell the cardholder to wait until the payment settles, and show the date.",
+  },
+  {
+    Section: "FS-001",
+    Code: "WINDOW_CLOSED",
+    "HTTP Status": 422,
+    Message: "The 120-day window for disputing this payment has passed.",
+    Handling: "Show the deadline that passed and offer the contact centre.",
+  },
+  {
+    Section: "FS-001",
+    Code: "ALREADY_DISPUTED",
+    "HTTP Status": 409,
+    Message: "There is already an open dispute for this payment.",
+    Handling: "Take the cardholder to the existing case rather than refusing.",
+  },
+  {
+    Section: "FS-001",
+    Code: "AMOUNT_INVALID",
+    "HTTP Status": 400,
+    Message: "The disputed amount is not valid.",
+    Handling: "Reset the field to the full transaction amount.",
+  },
+  {
+    Section: "FS-002",
+    Code: "CREDIT_MISMATCH",
+    "HTTP Status": 500,
+    Message: "The provisional credit does not match the disputed amount.",
+    Handling: "Hold the posting and raise an operations alert; never post a partial credit.",
+  },
+  {
+    Section: "FS-003",
+    Code: "ATTACHMENT_LIMIT",
+    "HTTP Status": 422,
+    Message: "You can attach up to five files.",
+    Handling: "Hide the attach action once five files exist, rather than failing on the sixth.",
+  },
+  {
+    Section: "FS-003",
+    Code: "ATTACHMENT_TOO_LARGE",
+    "HTTP Status": 413,
+    Message: "That file is larger than 10 MB.",
+    Handling: "Say the limit before the upload starts, not after it finishes.",
+  },
+];
+
+const specEdgeCases = [
+  {
+    Section: "FS-001",
+    ID: "EC-001",
+    Scenario: "The transaction settles while the cardholder is on the screen",
+    "Expected Behaviour":
+      "The Dispute action becomes available without a reload; no error is shown for the earlier state.",
+  },
+  {
+    Section: "FS-001",
+    ID: "EC-002",
+    Scenario: "The dispute is submitted on day 120 at 23:59 local time",
+    "Expected Behaviour":
+      "It is accepted; the window is counted in whole days against the settlement date, not in hours.",
+  },
+  {
+    Section: "FS-001",
+    ID: "EC-003",
+    Scenario: "The cardholder taps Submit twice",
+    "Expected Behaviour": "One dispute is created; the second call returns the same reference.",
+  },
+  {
+    Section: "FS-002",
+    ID: "EC-004",
+    Scenario: "The account is closed before the provisional credit posts",
+    "Expected Behaviour":
+      "The credit is held and an operations task is raised; the case continues regardless.",
+  },
+  {
+    Section: "FS-002",
+    ID: "EC-005",
+    Scenario: "The transaction is refunded by the merchant while the case is open",
+    "Expected Behaviour":
+      "The provisional credit is reversed and the case is closed as Resolved, with one notification only.",
+  },
+  {
+    Section: "FS-003",
+    ID: "EC-006",
+    Scenario: "The case moves to Resolved while a file is uploading",
+    "Expected Behaviour": "The upload completes and is stored, but no further file is accepted.",
+  },
+];
+
 const SHEETS = [
   ["Requirements", requirements],
   ["Acceptance Criteria", acceptanceCriteria],
   ["Business Rules", businessRules],
   ["Actors", actors],
   ["Process Steps", processSteps],
+  ["Spec Sections", specSections],
+  ["Spec Fields", specFields],
+  ["Spec Validations", specValidations],
+  ["Spec Errors", specErrors],
+  ["Spec Edge Cases", specEdgeCases],
   ["Diagrams", diagrams],
   ["Wireframes", wireframes],
   ["API Endpoints", apiEndpoints],
