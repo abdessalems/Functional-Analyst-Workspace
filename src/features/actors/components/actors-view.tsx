@@ -185,7 +185,7 @@ export function ActorsView() {
                       <TableCell>
                         <ul className="space-y-1.5">
                           {actor.responsibilities.map((item) => (
-                            <li key={item} className="flex gap-2 text-[13px] leading-relaxed">
+                            <li key={item} className="flex gap-2 text-sm leading-relaxed">
                               <span
                                 aria-hidden
                                 className="mt-1.5 size-1 shrink-0 rounded-full bg-muted-foreground/60"
@@ -198,7 +198,7 @@ export function ActorsView() {
                       <TableCell>
                         <ul className="space-y-1.5">
                           {actor.permissions.map((item) => (
-                            <li key={item} className="flex gap-2 text-[13px] leading-relaxed">
+                            <li key={item} className="flex gap-2 text-sm leading-relaxed">
                               <span
                                 aria-hidden
                                 className="mt-1.5 size-1 shrink-0 rounded-full bg-muted-foreground/60"
@@ -237,7 +237,7 @@ export function ActorsView() {
                       <Badge variant="neutral">{actor.channel}</Badge>
                     </div>
                     <h3 className="text-[15px] font-semibold tracking-tight">{actor.name}</h3>
-                    <p className="text-[13px] leading-relaxed text-muted-foreground">
+                    <p className="text-sm leading-relaxed text-muted-foreground">
                       {actor.description}
                     </p>
                   </div>
@@ -277,7 +277,7 @@ function ListBlock({ title, items }: { title: string; items: string[] }) {
       </p>
       <ul className="space-y-1.5">
         {items.map((item) => (
-          <li key={item} className="flex gap-2 text-[13px] leading-relaxed">
+          <li key={item} className="flex gap-2 text-sm leading-relaxed">
             <span aria-hidden className="mt-1.5 size-1 shrink-0 rounded-full bg-primary/60" />
             {item}
           </li>

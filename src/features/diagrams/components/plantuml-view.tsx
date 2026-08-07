@@ -124,7 +124,7 @@ export function PlantUmlView() {
                     </span>
                   </div>
                   <h3 className="text-[15px] font-semibold tracking-tight">{diagram.title}</h3>
-                  <p className="max-w-3xl text-[13px] leading-relaxed text-muted-foreground">
+                  <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
                     {diagram.description}
                   </p>
                   <div className="flex flex-wrap items-center gap-2 pt-1">

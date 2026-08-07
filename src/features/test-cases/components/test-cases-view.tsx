@@ -233,7 +233,7 @@ export function TestCasesView() {
                     {testCase.id}
                   </TableCell>
                   <TableCell data-label="Scenario" className="max-md:flex-col max-md:items-start">
-                    <p className="text-[13px] font-medium leading-snug">{testCase.scenario}</p>
+                    <p className="text-sm font-medium leading-snug">{testCase.scenario}</p>
                     <p className="mt-1 text-xs text-muted-foreground">
                       {testCase.suite} · {testCase.type}
                     </p>
@@ -256,7 +256,7 @@ export function TestCasesView() {
                   <TableCell data-label="Steps" className="text-center tabular-nums max-md:text-left">
                     <Badge variant="neutral">{testCase.steps.length}</Badge>
                   </TableCell>
-                  <TableCell data-label="Expected" className="text-[13px] leading-relaxed max-md:flex-col max-md:items-start">
+                  <TableCell data-label="Expected" className="text-sm leading-relaxed max-md:flex-col max-md:items-start">
                     {testCase.expectedResult}
                   </TableCell>
                   <TableCell data-label="Status">
@@ -307,7 +307,7 @@ export function TestCasesView() {
                   </h4>
                   <ul className="space-y-1.5">
                     {selected.preconditions.map((precondition) => (
-                      <li key={precondition} className="flex gap-2 text-[13px] leading-relaxed">
+                      <li key={precondition} className="flex gap-2 text-sm leading-relaxed">
                         <span aria-hidden className="mt-1.5 size-1 shrink-0 rounded-full bg-primary/60" />
                         {precondition}
                       </li>
@@ -334,8 +334,8 @@ export function TestCasesView() {
                             <TableCell className="tabular-nums text-muted-foreground">
                               {step.step}
                             </TableCell>
-                            <TableCell className="text-[13px]">{step.action}</TableCell>
-                            <TableCell className="text-[13px]">{step.expected}</TableCell>
+                            <TableCell className="text-sm">{step.action}</TableCell>
+                            <TableCell className="text-sm">{step.expected}</TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
@@ -347,7 +347,7 @@ export function TestCasesView() {
                   <h4 className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
                     Expected result
                   </h4>
-                  <p className="rounded-lg border border-border bg-surface-muted p-3.5 text-[13px] leading-relaxed">
+                  <p className="rounded-lg border border-border bg-surface-muted p-3.5 text-sm leading-relaxed">
                     {selected.expectedResult}
                   </p>
                 </section>

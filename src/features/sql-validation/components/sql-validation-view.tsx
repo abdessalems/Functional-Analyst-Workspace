@@ -119,7 +119,7 @@ export function SqlValidationView() {
                     </span>
                   </div>
                   <h3 className="text-[15px] font-semibold tracking-tight">{validation.title}</h3>
-                  <p className="max-w-4xl text-[13px] leading-relaxed text-muted-foreground">
+                  <p className="max-w-4xl text-sm leading-relaxed text-muted-foreground">
                     {validation.purpose}
                   </p>
                   <div className="flex flex-wrap items-center gap-x-5 gap-y-2 pt-1">
@@ -202,7 +202,7 @@ export function SqlValidationView() {
                       {validation.notes.map((note) => (
                         <li
                           key={note}
-                          className="flex gap-2.5 rounded-md border border-border bg-surface-muted px-3 py-2 text-[13px] leading-relaxed"
+                          className="flex gap-2.5 rounded-md border border-border bg-surface-muted px-3 py-2 text-sm leading-relaxed"
                         >
                           <Info className="mt-0.5 size-3.5 shrink-0 text-primary" />
                           {note}
@@ -250,7 +250,7 @@ export function SqlValidationView() {
                           {column.nullable ? "NULL" : "NOT NULL"}
                         </Badge>
                       </TableCell>
-                      <TableCell className="text-[13px]">{column.description}</TableCell>
+                      <TableCell className="text-sm">{column.description}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -258,7 +258,7 @@ export function SqlValidationView() {
             </SectionCard>
           ))}
 
-          <Card className="p-4 text-[13px] leading-relaxed text-muted-foreground">
+          <Card className="p-4 text-sm leading-relaxed text-muted-foreground">
             Physical model shown for the tables referenced by the validation queries. The full
             logical model is maintained in the data dictionary and is out of scope for this
             workspace.

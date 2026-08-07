@@ -229,7 +229,7 @@ export function PortfolioView() {
                   <h2 className="text-[15px] font-semibold leading-snug tracking-tight">
                     {item.name}
                   </h2>
-                  <p className="line-clamp-3 text-[13px] leading-relaxed text-muted-foreground">
+                  <p className="line-clamp-3 text-sm leading-relaxed text-muted-foreground">
                     {item.summary}
                   </p>
                 </div>
@@ -281,7 +281,7 @@ export function PortfolioView() {
         </div>
       )}
 
-      <Card className="p-4 text-[13px] leading-relaxed text-muted-foreground">
+      <Card className="p-4 text-sm leading-relaxed text-muted-foreground">
         Opening a project scopes the entire workspace — the sidebar, breadcrumbs and global search
         all narrow to that project&apos;s documentation set. Projects marked{" "}
         <span className="font-medium text-foreground">Planned</span> or{" "}

@@ -62,10 +62,10 @@ export function RequirementCard({
           <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
             Business need
           </p>
-          <p className="text-[13px] leading-relaxed">{requirement.businessNeed}</p>
+          <p className="max-w-measure text-sm leading-relaxed">{requirement.businessNeed}</p>
         </div>
 
-        <p className="text-[13px] leading-relaxed text-muted-foreground">
+        <p className="max-w-measure text-sm leading-relaxed text-muted-foreground">
           {requirement.description}
         </p>
 
@@ -113,7 +113,7 @@ export function RequirementCard({
                   {requirement.acceptanceCriteria.map((criterion) => (
                     <li
                       key={criterion.id}
-                      className="rounded-lg border border-border bg-surface-muted p-3.5 text-[13px] leading-relaxed"
+                      className="rounded-lg border border-border bg-surface-muted p-3.5 text-sm leading-relaxed"
                     >
                       <p className="mb-1.5 font-mono text-[11px] text-muted-foreground">
                         {criterion.id}

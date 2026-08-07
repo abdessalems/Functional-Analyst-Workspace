@@ -83,7 +83,7 @@ export function PlainLanguageNote({ className }: { className?: string }) {
       )}
     >
       <Info className="mt-0.5 size-4 shrink-0 text-primary" />
-      <p className="text-[13px] leading-relaxed">{step.plainLanguage}</p>
+      <p className="text-sm leading-relaxed">{step.plainLanguage}</p>
     </Card>
   );
 }
@@ -112,7 +112,7 @@ export function ReadingNav({ className }: { className?: string }) {
             <span className="block text-[11px] uppercase tracking-wide text-muted-foreground">
               Previous
             </span>
-            <span className="block truncate text-[13px] font-medium">{previous.label}</span>
+            <span className="block truncate text-sm font-medium">{previous.label}</span>
           </span>
         </Link>
       ) : (
@@ -132,7 +132,7 @@ export function ReadingNav({ className }: { className?: string }) {
             <span className="block text-[11px] uppercase tracking-wide text-muted-foreground">
               Next
             </span>
-            <span className="block truncate text-[13px] font-medium">{next.label}</span>
+            <span className="block truncate text-sm font-medium">{next.label}</span>
           </span>
           <ArrowRight className="size-4 shrink-0 text-primary transition-transform group-hover:translate-x-0.5" />
         </Link>

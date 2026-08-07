@@ -141,7 +141,7 @@ export function WireframesView() {
                   <p className="font-mono text-[11px] text-muted-foreground">{wireframe.screenId}</p>
                 </div>
 
-                <p className="flex-1 text-[13px] leading-relaxed text-muted-foreground">
+                <p className="flex-1 text-sm leading-relaxed text-muted-foreground">
                   {wireframe.description}
                 </p>
 
@@ -183,7 +183,7 @@ export function WireframesView() {
                     <h4 className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
                       Description
                     </h4>
-                    <p className="text-[13px] leading-relaxed">{selected.description}</p>
+                    <p className="text-sm leading-relaxed">{selected.description}</p>
                   </section>
 
                   <section className="space-y-2">
@@ -192,7 +192,7 @@ export function WireframesView() {
                     </h4>
                     <ol className="space-y-2.5">
                       {selected.annotations.map((annotation, index) => (
-                        <li key={annotation} className="flex gap-2.5 text-[13px] leading-relaxed">
+                        <li key={annotation} className="flex gap-2.5 text-sm leading-relaxed">
                           <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[10px] font-semibold text-primary">
                             {index + 1}
                           </span>
@@ -209,7 +209,7 @@ export function WireframesView() {
                     <ArtifactLinkList ids={selected.relatedRequirements} />
                   </section>
 
-                  <section className="space-y-1.5 border-t border-border pt-4 text-[13px]">
+                  <section className="space-y-1.5 border-t border-border pt-4 text-sm">
                     <p className="flex justify-between">
                       <span className="text-muted-foreground">Version</span>
                       <span className="font-medium">v{selected.version}</span>

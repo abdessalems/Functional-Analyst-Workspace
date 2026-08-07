@@ -99,8 +99,8 @@ export function PlantUmlImage({
     return (
       <div className="flex flex-col items-center gap-2 px-6 py-12 text-center">
         <AlertTriangle className="size-5 text-amber-500" />
-        <p className="text-[13px] font-medium">Diagram could not be rendered</p>
-        <p className="max-w-md text-[13px] text-muted-foreground">
+        <p className="text-sm font-medium">Diagram could not be rendered</p>
+        <p className="max-w-md text-sm text-muted-foreground">
           The PlantUML rendering service is unreachable. The model source is on the next tab and
           renders in any PlantUML tool.
         </p>
@@ -111,7 +111,7 @@ export function PlantUmlImage({
   return (
     <div className={cn("relative flex min-h-[12rem] items-center justify-center", className)}>
       {(state === "loading" || !url) && (
-        <span className="absolute inset-0 flex items-center justify-center gap-2 text-[13px] text-muted-foreground">
+        <span className="absolute inset-0 flex items-center justify-center gap-2 text-sm text-muted-foreground">
           <Loader2 className="size-4 animate-spin" /> Rendering diagram…
         </span>
       )}

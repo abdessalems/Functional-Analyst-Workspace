@@ -99,7 +99,7 @@ export function DiagramViewer({
   return (
     <div className={cn("space-y-3", className)}>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-[13px] font-medium">{title}</p>
+        <p className="text-sm font-medium">{title}</p>
         {toolbar}
       </div>
 

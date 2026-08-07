@@ -10,6 +10,19 @@ const config: Config = {
       screens: { "2xl": "1400px" },
     },
     extend: {
+      fontSize: {
+        /*
+         * Body copy is prose here — business needs, rule logic, descriptions —
+         * so `sm` carries a reading line-height rather than the tight UI
+         * default. 13px was a control size being asked to do a paragraph's job.
+         */
+        sm: ["0.875rem", { lineHeight: "1.65" }],
+        base: ["1rem", { lineHeight: "1.7" }],
+      },
+      maxWidth: {
+        /* Roughly 70 characters: the span the eye can track back reliably. */
+        measure: "68ch",
+      },
       fontFamily: {
         sans: ["var(--font-sans)", "Segoe UI", "system-ui", "sans-serif"],
         mono: ["var(--font-mono)", "Cascadia Mono", "Consolas", "monospace"],

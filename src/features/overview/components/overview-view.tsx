@@ -118,7 +118,7 @@ export function OverviewView() {
           >
             <ul className="space-y-2">
               {project.regulatoryDrivers.map((driver) => (
-                <li key={driver} className="flex items-start gap-2 text-[13px] leading-relaxed">
+                <li key={driver} className="flex items-start gap-2 text-sm leading-relaxed">
                   <span aria-hidden className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary" />
                   {driver}
                 </li>
@@ -136,7 +136,7 @@ export function OverviewView() {
         >
           <ul className="space-y-2.5">
             {project.inScope.map((item) => (
-              <li key={item} className="flex items-start gap-2.5 text-[13px] leading-relaxed">
+              <li key={item} className="flex items-start gap-2.5 text-sm leading-relaxed">
                 <CircleCheck className="mt-0.5 size-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
                 {item}
               </li>
@@ -151,7 +151,7 @@ export function OverviewView() {
         >
           <ul className="space-y-2.5">
             {project.outOfScope.map((item) => (
-              <li key={item} className="flex items-start gap-2.5 text-[13px] leading-relaxed">
+              <li key={item} className="flex items-start gap-2.5 text-sm leading-relaxed">
                 <CircleSlash className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
                 {item}
               </li>
@@ -188,8 +188,8 @@ export function OverviewView() {
                     <span className="font-medium">{stakeholder.name}</span>
                   </div>
                 </TableCell>
-                <TableCell className="text-[13px]">{stakeholder.role}</TableCell>
-                <TableCell className="text-[13px] text-muted-foreground">
+                <TableCell className="text-sm">{stakeholder.role}</TableCell>
+                <TableCell className="text-sm text-muted-foreground">
                   {stakeholder.department}
                 </TableCell>
                 <TableCell>
@@ -198,7 +198,7 @@ export function OverviewView() {
                 <TableCell>
                   <a
                     href={`mailto:${stakeholder.email}`}
-                    className="text-[13px] text-primary underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    className="text-sm text-primary underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
                     {stakeholder.email}
                   </a>
@@ -231,14 +231,14 @@ export function OverviewView() {
                 <li key={dependency.id} className="space-y-1.5 px-5 py-3.5">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="truncate text-[13px] font-medium">{dependency.name}</p>
+                      <p className="truncate text-sm font-medium">{dependency.name}</p>
                       <p className="text-xs text-muted-foreground">
                         {dependency.type} · owned by {dependency.owner}
                       </p>
                     </div>
                     <StatusBadge status={dependency.status} />
                   </div>
-                  <p className="text-[13px] leading-relaxed text-muted-foreground">
+                  <p className="text-sm leading-relaxed text-muted-foreground">
                     {dependency.description}
                   </p>
                 </li>
@@ -257,13 +257,13 @@ export function OverviewView() {
               {project.risks.map((risk) => (
                 <li key={risk.id} className="space-y-2 px-5 py-3.5">
                   <div className="flex items-start justify-between gap-3">
-                    <p className="text-[13px] font-medium leading-relaxed">{risk.description}</p>
+                    <p className="text-sm font-medium leading-relaxed">{risk.description}</p>
                     <span className="flex shrink-0 gap-1">
                       <RiskBadge level={risk.likelihood} />
                       <RiskBadge level={risk.impact} />
                     </span>
                   </div>
-                  <p className="text-[13px] leading-relaxed text-muted-foreground">
+                  <p className="text-sm leading-relaxed text-muted-foreground">
                     <span className="font-medium text-foreground">Mitigation: </span>
                     {risk.mitigation}
                   </p>
@@ -275,7 +275,7 @@ export function OverviewView() {
         </div>
       </div>
 
-      <Card className="flex flex-wrap items-center gap-x-6 gap-y-2 p-4 text-[13px] text-muted-foreground">
+      <Card className="flex flex-wrap items-center gap-x-6 gap-y-2 p-4 text-sm text-muted-foreground">
         <span>
           Likelihood and impact badges are shown in that order. Risk scoring follows the bank&apos;s
           operational risk taxonomy.

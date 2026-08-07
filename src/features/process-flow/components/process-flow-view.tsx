@@ -144,7 +144,7 @@ export function ProcessFlowView() {
                     <Icon className="size-3.5 shrink-0 text-muted-foreground" />
                     <span className="font-mono text-[10px] text-muted-foreground">{step.id}</span>
                   </div>
-                  <p className="text-[12.5px] font-medium leading-snug">{step.name}</p>
+                  <p className="text-sm font-medium leading-snug">{step.name}</p>
                 </div>
                 {index < flow.steps.length - 1 && (
                   <span aria-hidden className="self-center text-muted-foreground">
@@ -187,12 +187,12 @@ export function ProcessFlowView() {
                         <span className="font-mono text-[11px] text-muted-foreground">
                           {step.id}
                         </span>
-                        <span className="text-[13px] font-medium">{step.name}</span>
+                        <span className="text-sm font-medium">{step.name}</span>
                         <Badge variant="outline" className="font-normal">
                           {style.label}
                         </Badge>
                       </div>
-                      <p className="text-[13px] leading-relaxed text-muted-foreground">
+                      <p className="text-sm leading-relaxed text-muted-foreground">
                         {step.description}
                       </p>
                       <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 pt-0.5">
@@ -219,7 +219,7 @@ export function ProcessFlowView() {
         ))}
       </div>
 
-      <Card className="p-4 text-[13px] leading-relaxed text-muted-foreground">
+      <Card className="p-4 text-sm leading-relaxed text-muted-foreground">
         Lanes correspond one-to-one with entries in the{" "}
         <Link
           href="/actors"

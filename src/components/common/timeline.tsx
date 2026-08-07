@@ -65,7 +65,7 @@ export function Timeline({ entries }: { entries: TimelineEntry[] }) {
                   {formatDate(entry.date)}
                 </time>
               </div>
-              <p className="text-[13px] leading-relaxed text-muted-foreground">{entry.description}</p>
+              <p className="text-sm leading-relaxed text-muted-foreground">{entry.description}</p>
             </div>
           </li>
         );

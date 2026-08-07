@@ -57,7 +57,7 @@ export function ArtifactLinkList({
   className?: string;
 }) {
   if (ids.length === 0) {
-    return <span className="text-[13px] text-muted-foreground">{emptyLabel}</span>;
+    return <span className="text-sm text-muted-foreground">{emptyLabel}</span>;
   }
 
   return (

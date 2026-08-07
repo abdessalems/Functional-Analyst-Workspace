@@ -106,7 +106,7 @@ export function FilterBar({
         )}
 
         {typeof resultCount === "number" && (
-          <span className="whitespace-nowrap px-1 text-[13px] text-muted-foreground">
+          <span className="whitespace-nowrap px-1 text-sm text-muted-foreground">
             {resultCount}
             {typeof totalCount === "number" && ` of ${totalCount}`} shown
           </span>

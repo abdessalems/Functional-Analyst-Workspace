@@ -70,7 +70,7 @@ export function BpmnView() {
                 </span>
               </div>
               <h2 className="text-[15px] font-semibold tracking-tight">{model.title}</h2>
-              <p className="max-w-3xl text-[13px] leading-relaxed text-muted-foreground">
+              <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
                 {model.description}
               </p>
               <div className="flex flex-wrap items-center gap-2 pt-1">

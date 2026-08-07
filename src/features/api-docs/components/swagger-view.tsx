@@ -129,7 +129,7 @@ export function SwaggerView() {
                     </Badge>
                     <StatusBadge status={service.status} />
                   </div>
-                  <p className="max-w-3xl text-[13px] leading-relaxed text-muted-foreground">
+                  <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
                     {service.description}
                   </p>
                   <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-muted-foreground">
@@ -161,7 +161,7 @@ export function SwaggerView() {
         </div>
       )}
 
-      <Card className="p-4 text-[13px] leading-relaxed text-muted-foreground">
+      <Card className="p-4 text-sm leading-relaxed text-muted-foreground">
         All operations require mutual TLS on the internal service mesh in addition to the bearer
         token. Error responses follow RFC 7807 problem details and always carry the workspace error
         code (for example <span className="font-mono text-xs text-foreground">IPH-LIM-002</span>) so

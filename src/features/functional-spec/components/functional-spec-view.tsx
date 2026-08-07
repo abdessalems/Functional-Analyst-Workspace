@@ -182,7 +182,7 @@ export function FunctionalSpecView() {
                       </Badge>
                       <span className="text-[15px] font-semibold">{section.title}</span>
                     </div>
-                    <p className="text-[13px] font-normal leading-relaxed text-muted-foreground">
+                    <p className="text-sm font-normal leading-relaxed text-muted-foreground">
                       {section.summary}
                     </p>
                   </div>
@@ -212,7 +212,7 @@ function SectionDetail({ section }: { section: FunctionalSpecSection }) {
       <Block title="Business logic" icon={ListTree}>
         <ol className="space-y-2.5">
           {section.businessLogic.map((line, index) => (
-            <li key={index} className="flex gap-3 text-[13px] leading-relaxed">
+            <li key={index} className="flex gap-3 text-sm leading-relaxed">
               <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded bg-muted text-[11px] font-semibold tabular-nums text-muted-foreground">
                 {index + 1}
               </span>
@@ -236,7 +236,7 @@ function SectionDetail({ section }: { section: FunctionalSpecSection }) {
             {section.validations.map((rule) => (
               <TableRow key={`${rule.field}-${rule.errorCode}`}>
                 <TableCell className="font-mono text-[12px]">{rule.field}</TableCell>
-                <TableCell className="text-[13px]">{rule.rule}</TableCell>
+                <TableCell className="text-sm">{rule.rule}</TableCell>
                 <TableCell className="font-mono text-[12px] text-primary">{rule.errorCode}</TableCell>
                 <TableCell>
                   <Badge variant={rule.severity === "Blocking" ? "danger" : "warning"}>
@@ -259,8 +259,8 @@ function SectionDetail({ section }: { section: FunctionalSpecSection }) {
                   HTTP {error.httpStatus}
                 </Badge>
               </div>
-              <p className="mt-2 text-[13px] font-medium">{error.message}</p>
-              <p className="mt-1 text-[13px] leading-relaxed text-muted-foreground">
+              <p className="mt-2 text-sm font-medium">{error.message}</p>
+              <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
                 <span className="font-medium text-foreground">Handling: </span>
                 {error.handling}
               </p>
@@ -285,14 +285,14 @@ function SectionDetail({ section }: { section: FunctionalSpecSection }) {
             {section.fields.map((field) => (
               <TableRow key={field.name}>
                 <TableCell className="font-mono text-[12px]">{field.name}</TableCell>
-                <TableCell className="text-[13px]">{field.type}</TableCell>
-                <TableCell className="tabular-nums text-[13px]">{field.length}</TableCell>
+                <TableCell className="text-sm">{field.type}</TableCell>
+                <TableCell className="tabular-nums text-sm">{field.length}</TableCell>
                 <TableCell>
                   <Badge variant={field.mandatory ? "danger" : "neutral"}>
                     {field.mandatory ? "Yes" : "No"}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-[13px]">{field.description}</TableCell>
+                <TableCell className="text-sm">{field.description}</TableCell>
                 <TableCell className="font-mono text-[12px] text-muted-foreground">
                   {field.example}
                 </TableCell>
@@ -307,8 +307,8 @@ function SectionDetail({ section }: { section: FunctionalSpecSection }) {
           {section.edgeCases.map((edge) => (
             <div key={edge.id} className="rounded-lg border border-border p-3.5">
               <p className="font-mono text-[11px] text-muted-foreground">{edge.id}</p>
-              <p className="mt-1.5 text-[13px] font-medium leading-relaxed">{edge.scenario}</p>
-              <p className="mt-1.5 text-[13px] leading-relaxed text-muted-foreground">
+              <p className="mt-1.5 text-sm font-medium leading-relaxed">{edge.scenario}</p>
+              <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
                 {edge.expectedBehaviour}
               </p>
             </div>
@@ -332,7 +332,7 @@ function Block({
 }) {
   return (
     <section className={cn("space-y-3", className)}>
-      <h4 className="flex items-center gap-2 text-[13px] font-semibold">
+      <h4 className="flex items-center gap-2 text-sm font-semibold">
         <Icon className="size-4 text-muted-foreground" />
         {title}
       </h4>
@@ -357,7 +357,7 @@ function SummaryTile({
       </span>
       <div className="min-w-0">
         <p className="text-xl font-semibold tabular-nums">{value}</p>
-        <p className="truncate text-[13px] text-muted-foreground">{label}</p>
+        <p className="truncate text-sm text-muted-foreground">{label}</p>
       </div>
     </Card>
   );

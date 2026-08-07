@@ -204,7 +204,7 @@ export function BusinessRulesView() {
                     {rule.id}
                   </TableCell>
                   <TableCell data-label="Description" className="max-md:flex-col max-md:items-start">
-                    <p className="text-[13px] leading-relaxed">{rule.description}</p>
+                    <p className="text-sm leading-relaxed">{rule.description}</p>
                     <p className="mt-1.5 font-mono text-[11px] text-muted-foreground line-clamp-1">
                       {rule.logic}
                     </p>
@@ -212,7 +212,7 @@ export function BusinessRulesView() {
                   <TableCell data-label="Priority">
                     <PriorityBadge priority={rule.priority} />
                   </TableCell>
-                  <TableCell data-label="Source" className="text-[13px] text-muted-foreground">{rule.source}</TableCell>
+                  <TableCell data-label="Source" className="text-sm text-muted-foreground">{rule.source}</TableCell>
                   <TableCell data-label="Status">
                     <StatusBadge status={rule.status} />
                   </TableCell>

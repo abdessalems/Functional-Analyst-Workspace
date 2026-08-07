@@ -41,7 +41,7 @@ export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
           <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
             Current project
           </p>
-          <p className="text-[13px] font-semibold leading-snug">{project.shortName}</p>
+          <p className="text-sm font-semibold leading-snug">{project.shortName}</p>
           <div className="flex flex-wrap items-center gap-1.5">
             <span className="font-mono text-[10px] text-muted-foreground">{project.code}</span>
             <StatusBadge status={project.status} />

@@ -22,16 +22,16 @@ export function PageHeader({ title, description, meta, actions, className }: Pag
         <div className="min-w-0 space-y-1.5">
           <h1 className="text-[22px] font-semibold tracking-tight sm:text-[26px]">{title}</h1>
           {description && (
-            <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">{description}</p>
+            <p className="max-w-measure text-sm leading-relaxed text-muted-foreground">{description}</p>
           )}
           {/* Renders only for pages that are part of the reading path. */}
-          <PlainLanguageNote className="mt-3 max-w-3xl" />
+          <PlainLanguageNote className="mt-3 max-w-measure" />
         </div>
         {actions && <div className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div>}
       </div>
 
       {meta && meta.length > 0 && (
-        <dl className="flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-border pt-3 text-[13px]">
+        <dl className="flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-border pt-3 text-sm">
           {meta.map((entry) => (
             <div key={entry.label} className="flex items-center gap-1.5">
               <dt className="text-muted-foreground">{entry.label}</dt>

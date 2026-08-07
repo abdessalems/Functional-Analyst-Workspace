@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Download, Network, ShieldCheck, TriangleAlert } from "lucide-react";
+import { Download, ListTree, Network, ShieldCheck, Table2, TriangleAlert } from "lucide-react";
 
 import type { TraceabilityLink } from "@/lib/types";
 import { cn, matchesQuery } from "@/lib/utils";
@@ -37,6 +37,8 @@ import { useArtifactFilters } from "@/hooks/use-artifact-filters";
 import { useHighlight } from "@/hooks/use-highlight";
 import { toCsv, useDownload } from "@/hooks/use-download";
 import { TraceChain } from "@/features/traceability/components/trace-chain";
+import { TraceList } from "@/features/traceability/components/trace-list";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const INITIAL_FILTERS = { coverage: "all", category: "all" };
 
@@ -203,9 +205,28 @@ export function TraceabilityView() {
       {results.length === 0 ? (
         <NoResultsState query={query} onReset={reset} />
       ) : (
+      <Tabs defaultValue="chain">
+        <TabsList>
+          <TabsTrigger value="chain">
+            <ListTree /> Chain view
+          </TabsTrigger>
+          <TabsTrigger value="matrix">
+            <Table2 /> Full matrix
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="chain">
+          <TraceList
+            links={results}
+            getRequirementById={getRequirementById}
+            highlight={highlight}
+          />
+        </TabsContent>
+
+        <TabsContent value="matrix">
         <SectionCard
           title="Requirement traceability"
-          description="Select a row to open the full chain for that requirement."
+          description="Every artefact reference is clickable."
           flush
           contentClassName="p-0"
         >
@@ -239,7 +260,7 @@ export function TraceabilityView() {
                     <TableCell>
                       <div className="space-y-1" onClick={(event) => event.stopPropagation()}>
                         <ArtifactLink id={link.requirementId} />
-                        <p className="text-[13px] font-medium leading-snug">{requirement?.title}</p>
+                        <p className="text-sm font-medium leading-snug">{requirement?.title}</p>
                         <p className="text-xs text-muted-foreground">{requirement?.category}</p>
                       </div>
                     </TableCell>
@@ -254,7 +275,7 @@ export function TraceabilityView() {
                     </TableCell>
                     <TableCell>
                       {link.databaseObjects.length === 0 ? (
-                        <span className="text-[13px] text-muted-foreground">—</span>
+                        <span className="text-sm text-muted-foreground">—</span>
                       ) : (
                         <div className="flex flex-wrap gap-1">
                           {link.databaseObjects.map((object) => (
@@ -286,9 +307,11 @@ export function TraceabilityView() {
             </TableBody>
           </Table>
         </SectionCard>
+        </TabsContent>
+      </Tabs>
       )}
 
-      <Card className="flex flex-col gap-2 p-4 text-[13px] leading-relaxed text-muted-foreground">
+      <Card className="flex flex-col gap-2 p-4 text-sm leading-relaxed text-muted-foreground">
         <p>
           <span className="font-medium text-foreground">Coverage rules · </span>
           <span className="font-medium text-foreground">Full</span> — the requirement has business

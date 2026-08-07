@@ -35,7 +35,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           <WorkspaceLogo className="size-8 shrink-0 rounded-md" />
           {!collapsed && (
             <span className="flex flex-col leading-tight">
-              <span className="text-[13px] font-semibold tracking-tight">Analyst Workspace</span>
+              <span className="text-sm font-semibold tracking-tight">Analyst Workspace</span>
               <span className="text-[11px] text-muted-foreground">Saadaoui Abdessalem</span>
             </span>
           )}

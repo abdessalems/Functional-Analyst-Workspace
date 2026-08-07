@@ -221,7 +221,7 @@ export function JourneyView() {
       />
 
       <Card className="border-primary/25 bg-primary/[0.04] p-5">
-        <p className="text-[13px] leading-relaxed">
+        <p className="text-sm leading-relaxed">
           <span className="font-semibold">Start here.</span> Follow the seven stages below to see the
           full lifecycle of this project, from the first conversation with the business to the
           evidence that the delivered system does what was agreed. Each card opens the real artefact
@@ -244,7 +244,7 @@ export function JourneyView() {
             <div className="min-w-0 flex-1 space-y-3 pb-4">
               <div className="space-y-1">
                 <h2 className="text-[15px] font-semibold tracking-tight">{phase.title}</h2>
-                <p className="text-[13px] italic leading-relaxed text-muted-foreground">
+                <p className="text-sm italic leading-relaxed text-muted-foreground">
                   {phase.question}
                 </p>
               </div>
@@ -268,7 +268,7 @@ export function JourneyView() {
                           <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
                             <Icon className="size-4" />
                           </span>
-                          <span className="min-w-0 flex-1 truncate text-[13px] font-semibold">
+                          <span className="min-w-0 flex-1 truncate text-sm font-semibold">
                             {deliverable.label}
                           </span>
                           {deliverable.countKey &&
@@ -280,7 +280,7 @@ export function JourneyView() {
                               </Badge>
                             ))}
                         </div>
-                        <p className="flex-1 text-[13px] leading-relaxed text-muted-foreground">
+                        <p className="flex-1 text-sm leading-relaxed text-muted-foreground">
                           {deliverable.produced}
                         </p>
                         <span className="inline-flex items-center gap-1 text-xs font-medium text-primary opacity-0 transition-opacity group-hover:opacity-100">
@@ -297,7 +297,7 @@ export function JourneyView() {
       </ol>
 
       <Card className="flex flex-wrap items-center justify-between gap-3 p-5">
-        <p className="max-w-2xl text-[13px] leading-relaxed text-muted-foreground">
+        <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
           The traceability matrix is the page that ties all seven stages together — it shows every
           requirement and the complete chain of artefacts that implement and evidence it.
         </p>

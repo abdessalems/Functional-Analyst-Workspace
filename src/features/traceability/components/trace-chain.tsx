@@ -87,7 +87,7 @@ export function TraceChain({ link }: { link: TraceabilityLink }) {
               </div>
 
               {empty ? (
-                <p className="text-[13px] italic text-muted-foreground">
+                <p className="text-sm italic text-muted-foreground">
                   No linked artefact at this level
                 </p>
               ) : (

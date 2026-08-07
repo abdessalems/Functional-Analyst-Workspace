@@ -59,7 +59,7 @@ export function EndpointPanel({
       <CollapsibleTrigger className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring">
         <MethodBadge method={endpoint.method} />
         <span className="min-w-0 flex-1">
-          <span className="block truncate font-mono text-[13px] font-medium">{endpoint.path}</span>
+          <span className="block truncate font-mono text-sm font-medium">{endpoint.path}</span>
           <span className="block truncate text-xs text-muted-foreground">{endpoint.summary}</span>
         </span>
         <Badge variant="outline" className="hidden font-mono sm:inline-flex">
@@ -76,7 +76,7 @@ export function EndpointPanel({
       <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down">
         <div className="space-y-5 border-t border-border p-5">
           <div className="space-y-2">
-            <p className="text-[13px] leading-relaxed">{endpoint.description}</p>
+            <p className="text-sm leading-relaxed">{endpoint.description}</p>
             <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-muted-foreground">
               <span className="flex items-center gap-1.5">
                 <KeyRound className="size-3.5" />
@@ -123,7 +123,7 @@ export function EndpointPanel({
                 >
                   <div className="flex items-center gap-2.5 bg-surface-muted px-3 py-2">
                     <Badge variant={STATUS_TONE(response.status)}>{response.status}</Badge>
-                    <span className="text-[13px]">{response.description}</span>
+                    <span className="text-sm">{response.description}</span>
                   </div>
                   {response.body && (
                     <CodeBlock
@@ -163,7 +163,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 function ParameterTable({ parameters }: { parameters: ApiEndpoint["parameters"] }) {
   if (parameters.length === 0) {
-    return <p className="text-[13px] text-muted-foreground">None</p>;
+    return <p className="text-sm text-muted-foreground">None</p>;
   }
 
   return (
@@ -183,7 +183,7 @@ function ParameterTable({ parameters }: { parameters: ApiEndpoint["parameters"] 
           {parameters.map((parameter) => (
             <TableRow key={parameter.name}>
               <TableCell className="font-mono text-[12px]">{parameter.name}</TableCell>
-              <TableCell className="text-[13px]">{parameter.in}</TableCell>
+              <TableCell className="text-sm">{parameter.in}</TableCell>
               <TableCell className="font-mono text-[12px] text-muted-foreground">
                 {parameter.type}
               </TableCell>
@@ -192,7 +192,7 @@ function ParameterTable({ parameters }: { parameters: ApiEndpoint["parameters"] 
                   {parameter.required ? "Required" : "Optional"}
                 </Badge>
               </TableCell>
-              <TableCell className="text-[13px]">{parameter.description}</TableCell>
+              <TableCell className="text-sm">{parameter.description}</TableCell>
               <TableCell className="max-w-[16rem] truncate font-mono text-[11px] text-muted-foreground">
                 {parameter.example}
               </TableCell>

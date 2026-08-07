@@ -40,7 +40,7 @@ export function SectionCard({
             <span className="truncate">{title}</span>
           </CardTitle>
           {description && (
-            <p className="text-[13px] leading-relaxed text-muted-foreground">{description}</p>
+            <p className="max-w-measure text-sm leading-relaxed text-muted-foreground">{description}</p>
           )}
         </div>
         {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}

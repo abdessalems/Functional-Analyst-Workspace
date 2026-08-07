@@ -110,7 +110,7 @@ export function Topbar() {
             <AvatarFallback>{initials(ANALYST.name)}</AvatarFallback>
           </Avatar>
           <span className="hidden flex-col items-start leading-tight xl:flex">
-            <span className="text-[13px] font-medium">{ANALYST.name}</span>
+            <span className="text-sm font-medium">{ANALYST.name}</span>
             <span className="text-[11px] text-muted-foreground">{ANALYST.role}</span>
           </span>
         </span>

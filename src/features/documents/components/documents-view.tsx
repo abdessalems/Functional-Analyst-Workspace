@@ -207,7 +207,7 @@ export function DocumentsView() {
                 </div>
 
                 <div className="flex-1 space-y-3 px-5">
-                  <p className="text-[13px] leading-relaxed text-muted-foreground">
+                  <p className="text-sm leading-relaxed text-muted-foreground">
                     {item.description}
                   </p>
 
@@ -311,7 +311,7 @@ export function DocumentsView() {
                     {buildVersionHistory(preview).map((entry) => (
                       <li key={entry.version} className="flex items-start justify-between gap-3 px-3.5 py-2.5">
                         <div className="min-w-0">
-                          <p className="text-[13px] font-medium">v{entry.version}</p>
+                          <p className="text-sm font-medium">v{entry.version}</p>
                           <p className="text-xs text-muted-foreground">{entry.note}</p>
                         </div>
                         <span className="shrink-0 text-xs text-muted-foreground">{entry.date}</span>
