@@ -1,4 +1,4 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 /**
@@ -26,6 +26,89 @@ interface PublishRequest {
 
 function bad(message: string, status = 400) {
   return Response.json({ ok: false, message }, { status });
+}
+
+/**
+ * Removes a published project: its bundle file, its registry lines and its
+ * entry in the register. Only entries the studio generated can be removed —
+ * they are JSON-shaped, so their extent can be found by matching braces. A
+ * hand-written project is left alone and reported, rather than half-deleted.
+ */
+export async function DELETE(request: Request) {
+  if (process.env.NODE_ENV !== "development") {
+    return bad("Deleting is only available on a development machine.", 403);
+  }
+
+  const { projectId, fileName, exportName } = (await request.json()) as Partial<PublishRequest>;
+  if (!projectId || !fileName || !exportName) {
+    return bad("The request is missing a field.");
+  }
+  if (!/^[a-z0-9-]+$/.test(fileName)) {
+    return bad(`"${fileName}" is not a usable file name.`);
+  }
+
+  const removed: string[] = [];
+
+  try {
+    // 1 — the register entry, found by brace matching from its "id" line.
+    const register = await readFile(REGISTER, "utf8");
+    const idAt = register.indexOf(`"id": "${projectId}"`);
+    if (idAt !== -1) {
+      const start = register.lastIndexOf("{", idAt);
+      let depth = 0;
+      let end = -1;
+      for (let i = start; i < register.length; i += 1) {
+        if (register[i] === "{") depth += 1;
+        else if (register[i] === "}") {
+          depth -= 1;
+          if (depth === 0) {
+            end = i + 1;
+            break;
+          }
+        }
+      }
+      if (end === -1) {
+        return bad("Could not find the end of that project's entry — remove it by hand.", 500);
+      }
+      const after = register[end] === "," ? end + 1 : end;
+      const updated = register.slice(0, start).replace(/[ \t]*$/, "") + register.slice(after);
+      await writeFile(REGISTER, updated.replace(/\n{3,}/g, "\n\n"), "utf8");
+      removed.push(path.relative(ROOT, REGISTER));
+    } else if (register.includes(`id: "${projectId}"`)) {
+      return bad(
+        `${projectId} was written by hand, not by the studio. Remove it from projects.ts yourself.`,
+      );
+    }
+
+    // 2 — the registry: the import line and the entry in the BUNDLES array.
+    const registry = await readFile(REGISTRY, "utf8");
+    const withoutImport = registry.replace(
+      new RegExp(`^import \\{ ${exportName} \\} from "@/data/workspaces/${fileName}";\\n`, "m"),
+      "",
+    );
+    const updatedRegistry = withoutImport.replace(
+      new RegExp(`(,\\s*)?\\b${exportName}\\b(\\s*,)?`),
+      (match, before: string | undefined, afterComma: string | undefined) =>
+        before && afterComma ? "," : "",
+    );
+    if (updatedRegistry !== registry) {
+      await writeFile(REGISTRY, updatedRegistry, "utf8");
+      removed.push(path.relative(ROOT, REGISTRY));
+    }
+
+    // 3 — the bundle itself.
+    const bundlePath = path.join(BUNDLE_DIR, `${fileName}.ts`);
+    try {
+      await rm(bundlePath);
+      removed.push(path.relative(ROOT, bundlePath));
+    } catch {
+      // Already gone; the registry cleanup above was the part that mattered.
+    }
+
+    return Response.json({ ok: true, removed });
+  } catch (cause) {
+    return bad(cause instanceof Error ? cause.message : "The files could not be changed.", 500);
+  }
 }
 
 export async function POST(request: Request) {

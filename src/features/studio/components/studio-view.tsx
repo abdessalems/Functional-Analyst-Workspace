@@ -18,7 +18,7 @@ import { EMPTY_BUNDLE } from "@/data/workspaces/types";
 import { validateBundle } from "@/lib/validate-bundle";
 import { readSetting, writeSetting } from "@/lib/safe-storage";
 import { projects } from "@/data/projects";
-import { getProjectBundle } from "@/data/workspaces";
+import { getProjectBundle, hasProjectBundle } from "@/data/workspaces";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -561,6 +561,8 @@ function Studio() {
         </SectionCard>
       )}
 
+      {IS_DEV && <PublishedProjects />}
+
       <SectionCard
         title="Health of the projects already published"
         description="The same checks, run against what is on the site now."
@@ -592,6 +594,99 @@ function Studio() {
         </div>
       </SectionCard>
     </div>
+  );
+}
+
+/**
+ * Removing a published project, locally. Deleting is two clicks rather than
+ * one: the first names what will happen, because this rewrites source files
+ * and the undo is a git command, not a button.
+ */
+function PublishedProjects() {
+  const [confirming, setConfirming] = React.useState<string | null>(null);
+  const [busy, setBusy] = React.useState(false);
+  const [result, setResult] = React.useState<string | null>(null);
+  const [failed, setFailed] = React.useState<string | null>(null);
+
+  const published = projects.filter((project) => hasProjectBundle(project.id));
+
+  const remove = (projectId: string) => {
+    const fileName = projectId.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    setBusy(true);
+    setFailed(null);
+    void fetch("/api/studio/publish", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      // The export name is not knowable from the id alone, so the generated
+      // convention is assumed and the server reports it if that is wrong.
+      body: JSON.stringify({ projectId, fileName, exportName: "myProjectBundle" }),
+    })
+      .then(async (response) => {
+        const body = (await response.json()) as {
+          ok: boolean;
+          removed?: string[];
+          message?: string;
+        };
+        if (!body.ok) throw new Error(body.message ?? "Deleting failed.");
+        setResult(`Removed ${projectId} from ${(body.removed ?? []).join(", ")}.`);
+        setConfirming(null);
+      })
+      .catch((cause: Error) => setFailed(cause.message))
+      .finally(() => setBusy(false));
+  };
+
+  return (
+    <SectionCard
+      title="Remove a published project"
+      description="Deletes its bundle and its entries in the source. Only on this machine — commit the change to remove it from the site."
+      icon={Trash2}
+    >
+      <div className="space-y-3">
+        {published.map((project) => (
+          <div
+            key={project.id}
+            className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border p-3"
+          >
+            <div>
+              <p className="text-sm font-medium">{project.name}</p>
+              <p className="text-xs text-muted-foreground">{project.id}</p>
+            </div>
+
+            {confirming === project.id ? (
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-muted-foreground">Delete its files?</span>
+                <Button variant="destructive" size="sm" disabled={busy} onClick={() => remove(project.id)}>
+                  {busy ? "Deleting…" : "Yes, delete"}
+                </Button>
+                <Button variant="ghost" size="sm" onClick={() => setConfirming(null)}>
+                  Keep it
+                </Button>
+              </div>
+            ) : (
+              <Button variant="ghost" size="sm" onClick={() => setConfirming(project.id)}>
+                <Trash2 /> Remove
+              </Button>
+            )}
+          </div>
+        ))}
+
+        {result && (
+          <p className="flex items-start gap-2 text-sm text-emerald-600 dark:text-emerald-400">
+            <CheckCircle2 className="mt-0.5 size-4 shrink-0" /> {result} Reload the page to see it
+            gone.
+          </p>
+        )}
+        {failed && (
+          <p className="flex items-start gap-2 text-sm text-destructive">
+            <AlertTriangle className="mt-0.5 size-4 shrink-0" /> {failed}
+          </p>
+        )}
+
+        <p className="text-xs text-muted-foreground">
+          To undo: <span className="font-mono">git checkout -- src/data</span>
+        </p>
+      </div>
+    </SectionCard>
   );
 }
 

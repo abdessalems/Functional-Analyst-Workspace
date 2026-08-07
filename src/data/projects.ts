@@ -1038,52 +1038,7 @@ export const projects: Project[] = [
     completion: 41,
     regulatoryDrivers: ["Mortgage Credit Directive", "Consumer Duty"],
   },
-  {
-    "id": "PRJ-NEW-001",
-    "code": "MY-1.0",
-    "name": "My imported project",
-    "shortName": "My imported project",
-    "domain": "Banking",
-    "subDomain": "Imported",
-    "status": "In Progress",
-    "version": "1.0",
-    "release": "—",
-    "owner": {
-      "id": "USR-DRAFT",
-      "name": "Saadaoui Abdessalem",
-      "role": "Functional Analyst",
-      "email": "",
-      "department": ""
-    },
-    "businessOwner": "",
-    "programme": "",
-    "summary": "Imported into this browser from a spreadsheet on 2026-08-07. It is a draft: it is not on the published site until its bundle is committed.",
-    "businessObjective": "",
-    "inScope": [],
-    "outOfScope": [],
-    "stakeholders": [],
-    "timeline": [],
-    "dependencies": [],
-    "risks": [],
-    "tags": [
-      "Draft",
-      "Imported"
-    ],
-    "metrics": {
-      "requirements": 4,
-      "businessRules": 4,
-      "apis": 4,
-      "documents": 3,
-      "testCases": 5,
-      "actors": 4,
-      "diagrams": 5
-    },
-    "startDate": "2026-08-07",
-    "targetDate": "",
-    "lastUpdated": "2026-08-07",
-    "completion": 0,
-    "regulatoryDrivers": []
-  },
+
 ];
 
 /** The project the workspace opens on. */
