@@ -129,6 +129,55 @@
   }
 }
 
+@layer components {
+  /*
+   * Depth, used sparingly. Enterprise tools earn trust through restraint, so
+   * colour carries meaning (status, priority) and these treatments carry only
+   * hierarchy — a page header, a landing hero, a card lifting under the cursor.
+   */
+  .surface-raised {
+    background-image: linear-gradient(
+      180deg,
+      hsl(var(--surface)) 0%,
+      hsl(var(--surface-muted)) 100%
+    );
+  }
+
+  .brand-wash {
+    background-image:
+      radial-gradient(60rem 22rem at 8% -10%, hsl(var(--primary) / 0.13), transparent 60%),
+      radial-gradient(44rem 20rem at 92% 0%, hsl(var(--primary) / 0.07), transparent 55%);
+  }
+
+  .brand-rule {
+    background-image: linear-gradient(
+      90deg,
+      hsl(var(--primary) / 0.55),
+      hsl(var(--primary) / 0.12) 42%,
+      transparent 78%
+    );
+  }
+
+  .lift {
+    transition:
+      transform 160ms ease,
+      box-shadow 160ms ease,
+      border-color 160ms ease;
+  }
+
+  .lift:hover {
+    transform: translateY(-2px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lift,
+    .lift:hover {
+      transform: none;
+      transition: none;
+    }
+  }
+}
+
 /* ---- Syntax highlighting tokens (SQL / JSON / PlantUML viewers) ---- */
 .tok-keyword {
   @apply font-semibold text-[#0550ae] dark:text-[#79b8ff];

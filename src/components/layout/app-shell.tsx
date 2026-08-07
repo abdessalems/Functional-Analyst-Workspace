@@ -36,8 +36,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             tabIndex={-1}
             className="app-scrollbar flex-1 overflow-y-auto focus-visible:outline-none"
           >
-            <div className="mx-auto w-full max-w-[1600px] px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-              {children}
+            {/* A single wash of brand colour behind the top of the page. */}
+            <div className="brand-wash">
+              <div className="mx-auto w-full max-w-[1600px] px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+                {children}
+              </div>
             </div>
           </main>
         </div>

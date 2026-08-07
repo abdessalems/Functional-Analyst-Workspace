@@ -173,7 +173,7 @@ export function PortfolioView() {
             <Card
               key={item.id}
               className={cn(
-                "group flex flex-col transition-shadow hover:border-primary/40 hover:shadow-raised",
+                "group lift flex flex-col overflow-hidden hover:border-primary/45 hover:shadow-flyout",
                 item.metrics.testCases > 0 && item.status === "Completed" && "border-primary/25",
               )}
             >

@@ -1,9 +1,12 @@
 import type { Actor, BusinessRule, Requirement, WorkspaceDocument } from "@/lib/types";
 import type { ProjectDataBundle } from "@/data/workspaces/types";
 import { EMPTY_BUNDLE } from "@/data/workspaces/types";
+import { europayCriteria } from "@/data/workspaces/europay-hub-criteria";
+import { europaySqlTables, europaySqlValidations } from "@/data/workspaces/europay-hub-sql";
 import { europayApiServices } from "@/data/workspaces/europay-hub-api";
 import { europayTestCases } from "@/data/workspaces/europay-hub-tests";
 import { europayDiagrams, europayFunctionalSpec } from "@/data/workspaces/europay-hub-models";
+import { europayProcessFlows } from "@/data/workspaces/europay-hub-process";
 
 /**
  * EuroPay Hub — European merchant payment platform.
@@ -17,7 +20,7 @@ import { europayDiagrams, europayFunctionalSpec } from "@/data/workspaces/europa
  * criteria and the test catalogue — are transcribed from the same folder.
  */
 
-const requirements: Requirement[] = [
+const baseRequirements: Requirement[] = [
   {
     id: "FR-1",
     title: "Merchant Registration & Authentication",
@@ -349,6 +352,15 @@ const requirements: Requirement[] = [
     relatedRules: ["BR-EP-008"],
   },
 ];
+
+/**
+ * Acceptance criteria come from the project's own criteria document, so each
+ * requirement carries the exact AC ids the test cases reference.
+ */
+const requirements: Requirement[] = baseRequirements.map((requirement) => ({
+  ...requirement,
+  acceptanceCriteria: europayCriteria[requirement.id] ?? requirement.acceptanceCriteria,
+}));
 
 /** BR-001…008 exactly as catalogued in the project's business requirements document. */
 const businessRules: BusinessRule[] = [
@@ -709,22 +721,25 @@ export const europayHubBundle: ProjectDataBundle = {
   businessRules,
   actors,
   functionalSpecSections: europayFunctionalSpec,
+  processFlows: europayProcessFlows,
   diagrams: europayDiagrams,
   apiServices: europayApiServices,
+  sqlTables: europaySqlTables,
+  sqlValidations: europaySqlValidations,
   testCases: europayTestCases,
   documents,
   databaseObjectsByRequirement: {
-    "FR-1": ["merchants", "users"],
-    "FR-2": ["api_keys"],
-    "FR-3": ["orders", "customers"],
-    "FR-4": ["payments"],
-    "FR-5": ["payments", "payment_transitions"],
-    "FR-6": ["payments", "idempotency_keys"],
-    "FR-7": ["refunds", "payments"],
-    "FR-8": ["payments"],
-    "FR-9": ["webhook_outbox", "webhook_endpoints"],
-    "FR-10": ["webhook_delivery_attempts"],
-    "FR-11": ["audit_events"],
-    "FR-12": ["payments", "orders"],
+    "FR-1": ["MERCHANT", "APP_USER"],
+    "FR-2": ["API_KEY"],
+    "FR-3": ["ORDERS", "CUSTOMER"],
+    "FR-4": ["PAYMENT", "ORDERS"],
+    "FR-5": ["PAYMENT"],
+    "FR-6": ["PAYMENT", "IDEMPOTENCY_KEY"],
+    "FR-7": ["REFUND", "PAYMENT"],
+    "FR-8": ["PAYMENT"],
+    "FR-9": ["WEBHOOK_EVENT", "WEBHOOK_ENDPOINT"],
+    "FR-10": ["WEBHOOK_DELIVERY"],
+    "FR-11": ["AUDIT_LOG"],
+    "FR-12": ["PAYMENT", "ORDERS"],
   },
 };

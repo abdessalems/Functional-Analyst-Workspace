@@ -32,8 +32,8 @@ export function MetricCard({
   const content = (
     <Card
       className={cn(
-        "group h-full p-4 transition-shadow",
-        href && "hover:border-primary/30 hover:shadow-raised",
+        "group lift surface-raised h-full p-4",
+        href && "hover:border-primary/40 hover:shadow-raised",
       )}
     >
       <div className="flex items-start justify-between gap-3">
