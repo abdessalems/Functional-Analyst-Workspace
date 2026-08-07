@@ -7,6 +7,7 @@ import { ChevronLeft } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { navigationSections } from "@/config/navigation";
+import { READING_PATH } from "@/config/reading-path";
 import { useWorkspace } from "@/components/providers/workspace-provider";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { StatusBadge } from "@/components/common/status-badge";
@@ -63,7 +64,8 @@ export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
           {collapsed ? (
             <div className="mx-2 my-1 h-px bg-border" role="presentation" />
           ) : (
-            <p className="px-2 pb-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+            <p className="flex items-center gap-2 px-2 pb-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+              <span aria-hidden className={cn("h-3 w-0.5 rounded-full", section.accent)} />
               {section.label}
             </p>
           )}
@@ -72,6 +74,8 @@ export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
             const isActive = pathname === item.href;
             const Icon = item.icon;
             const count = item.countKey ? counts[item.countKey] : undefined;
+            const pathIndex = READING_PATH.findIndex((entry) => entry.href === item.href);
+            const step = pathIndex === -1 ? undefined : pathIndex + 1;
             const chip = count !== undefined ? (count > 0 ? String(count) : undefined) : item.badge;
 
             const link = (
@@ -96,6 +100,17 @@ export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
                     aria-hidden
                     className="absolute inset-y-1 left-0 w-0.5 rounded-full bg-primary"
                   />
+                )}
+                {/* The step number teaches the order; the icon aids recognition. */}
+                {!collapsed && step !== undefined && (
+                  <span
+                    className={cn(
+                      "w-4 shrink-0 text-right text-[10px] font-semibold tabular-nums",
+                      isActive ? "text-primary" : "text-muted-foreground/70",
+                    )}
+                  >
+                    {step}
+                  </span>
                 )}
                 <Icon className={cn("size-4 shrink-0", isActive && "text-primary")} />
                 {!collapsed && (

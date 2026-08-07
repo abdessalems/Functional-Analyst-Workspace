@@ -53,6 +53,12 @@ export interface NavSection {
   id: string;
   label: string;
   /**
+   * Structural colour for the section spine. This is safe to use decoratively
+   * because it marks *where you are*, never *how something is doing* — status
+   * and priority keep the semantic palette to themselves.
+   */
+  accent: string;
+  /**
    * `portfolio` sections are always visible; `project` sections appear only
    * once an analyst has entered a project from the landing page.
    */
@@ -67,6 +73,7 @@ export interface NavSection {
 export const navigationSections: NavSection[] = [
   {
     id: "portfolio",
+    accent: "bg-slate-400",
     label: "Portfolio",
     scope: "portfolio",
     items: [
@@ -80,6 +87,7 @@ export const navigationSections: NavSection[] = [
   },
   {
     id: "workspace",
+    accent: "bg-teal-400",
     label: "Workspace",
     scope: "project",
     items: [
@@ -93,6 +101,7 @@ export const navigationSections: NavSection[] = [
   },
   {
     id: "analysis",
+    accent: "bg-sky-400",
     label: "Analysis",
     scope: "project",
     items: [
@@ -134,6 +143,7 @@ export const navigationSections: NavSection[] = [
   },
   {
     id: "design",
+    accent: "bg-violet-400",
     label: "Design & Modelling",
     scope: "project",
     items: [
@@ -169,6 +179,7 @@ export const navigationSections: NavSection[] = [
   },
   {
     id: "build",
+    accent: "bg-amber-400",
     label: "Build & Validation",
     scope: "project",
     items: [
@@ -197,6 +208,7 @@ export const navigationSections: NavSection[] = [
   },
   {
     id: "governance",
+    accent: "bg-emerald-400",
     label: "Governance",
     scope: "project",
     items: [
