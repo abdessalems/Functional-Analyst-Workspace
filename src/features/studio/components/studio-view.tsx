@@ -34,10 +34,19 @@ import { SectionCard } from "@/components/common/section-card";
 import { CodeBlock } from "@/components/common/code-block";
 import { useDownload } from "@/hooks/use-download";
 import {
+  applyAcceptanceCriteria,
+  EMPTY_PARSED,
   matchSheet,
+  rowsToActors,
+  rowsToApiServices,
+  rowsToDiagrams,
+  rowsToDocuments,
+  rowsToProcessFlows,
   rowsToRequirements,
   rowsToRules,
+  rowsToSqlValidations,
   rowsToTestCases,
+  rowsToWireframes,
   sniffSheet,
   type ParsedProject,
   type SheetRow,
@@ -46,102 +55,8 @@ import { generateBundleFile, registrySnippet } from "@/features/studio/lib/gener
 
 const GATE_KEY = "baw.studio-open";
 const PASSPHRASE = "baraa";
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
-/**
- * The example file. One row per sheet, filled in, so the headings are shown
- * being used rather than described — the fastest way to see what goes where.
- */
-const TEMPLATE_SHEETS: { name: string; rows: Record<string, string>[] }[] = [
-  {
-    name: "Requirements",
-    rows: [
-      {
-        ID: "BR-001",
-        Title: "Validate the IBAN before a transfer is accepted",
-        "Business Need": "Payments to a malformed account are rejected late and cost a manual repair.",
-        Description: "The beneficiary IBAN is checked for country, length and check digits at submission.",
-        Priority: "Critical",
-        Status: "Approved",
-        Category: "Payments",
-        MoSCoW: "Must",
-        Owner: "Saadaoui Abdessalem",
-        "Last Updated": "2026-01-15",
-        Version: "1.0",
-        Rules: "RULE-001",
-        Tests: "TC-001, TC-002",
-        APIs: "",
-        Documents: "",
-      },
-    ],
-  },
-  {
-    name: "Business Rules",
-    rows: [
-      {
-        ID: "RULE-001",
-        Description: "An IBAN must pass the mod-97 check digit test.",
-        Logic: "IF mod97(rearranged_iban) <> 1 THEN reject WITH 'INVALID_IBAN'",
-        Priority: "Critical",
-        Source: "ISO 13616",
-        Status: "Approved",
-        Category: "Validation",
-        Owner: "Saadaoui Abdessalem",
-        "Effective From": "2026-01-01",
-        Requirements: "BR-001",
-      },
-    ],
-  },
-  {
-    name: "Test Cases",
-    rows: [
-      {
-        ID: "TC-001",
-        Scenario: "A valid IBAN is accepted",
-        Suite: "Payments",
-        Preconditions: "A funded account exists; the user is signed in",
-        Steps:
-          "1. Enter a valid IBAN -> the field shows no error\n2. Submit the transfer -> the transfer is accepted",
-        "Expected Result": "The transfer reaches the status Accepted.",
-        Status: "Passed",
-        Priority: "Critical",
-        Type: "Functional",
-        Requirement: "BR-001",
-        "Last Run": "2026-01-20",
-        "Executed By": "Saadaoui Abdessalem",
-        Defect: "",
-      },
-      {
-        ID: "TC-002",
-        Scenario: "A malformed IBAN is rejected",
-        Suite: "Payments",
-        Preconditions: "A funded account exists; the user is signed in",
-        Steps: "1. Enter an IBAN with a wrong check digit -> the error INVALID_IBAN is shown",
-        "Expected Result": "The transfer is refused and no money moves.",
-        Status: "Passed",
-        Priority: "Critical",
-        Type: "Negative",
-        Requirement: "BR-001",
-        "Last Run": "2026-01-20",
-        "Executed By": "Saadaoui Abdessalem",
-        Defect: "",
-      },
-    ],
-  },
-];
-
-/** Builds the example workbook in the browser — nothing is hosted or fetched. */
-async function downloadTemplate() {
-  const XLSX = await import("xlsx");
-  const book = XLSX.utils.book_new();
-
-  for (const sheet of TEMPLATE_SHEETS) {
-    const worksheet = XLSX.utils.json_to_sheet(sheet.rows);
-    worksheet["!cols"] = Object.keys(sheet.rows[0]).map(() => ({ wch: 28 }));
-    XLSX.utils.book_append_sheet(book, worksheet, sheet.name);
-  }
-
-  XLSX.writeFile(book, "project-template.xlsx");
-}
 
 export function StudioView() {
   const [unlocked, setUnlocked] = React.useState(false);
@@ -232,12 +147,9 @@ function Studio() {
         const XLSX = await import("xlsx");
         const workbook = XLSX.read(await file.arrayBuffer(), { cellDates: true });
 
-        const result: ParsedProject = {
-          requirements: [],
-          businessRules: [],
-          testCases: [],
-          ignoredSheets: [],
-        };
+        const result: ParsedProject = { ...EMPTY_PARSED, ignoredSheets: [] };
+        // Held back until the requirements exist, whatever order the sheets come in.
+        let criteriaRows: SheetRow[] = [];
 
         for (const name of workbook.SheetNames) {
           const rows = XLSX.utils.sheet_to_json<SheetRow>(workbook.Sheets[name], { defval: "" });
@@ -246,16 +158,32 @@ function Studio() {
           if (kind === "requirements") result.requirements = rowsToRequirements(rows, owner);
           else if (kind === "businessRules") result.businessRules = rowsToRules(rows, owner);
           else if (kind === "testCases") result.testCases = rowsToTestCases(rows, owner);
+          else if (kind === "actors") result.actors = rowsToActors(rows);
+          else if (kind === "diagrams") result.diagrams = rowsToDiagrams(rows, owner);
+          else if (kind === "wireframes") result.wireframes = rowsToWireframes(rows, owner);
+          else if (kind === "apiServices") result.apiServices = rowsToApiServices(rows, owner);
+          else if (kind === "sqlValidations") result.sqlValidations = rowsToSqlValidations(rows, owner);
+          else if (kind === "documents") result.documents = rowsToDocuments(rows, owner);
+          else if (kind === "processFlows") result.processFlows = rowsToProcessFlows(rows);
+          else if (kind === "acceptanceCriteria") criteriaRows = rows;
           else result.ignoredSheets.push(name);
         }
 
-        if (
-          result.requirements.length === 0 &&
-          result.businessRules.length === 0 &&
-          result.testCases.length === 0
-        ) {
+        result.requirements = applyAcceptanceCriteria(result.requirements, criteriaRows);
+
+        const imported = Object.entries(result).reduce(
+          (total, [key, value]) =>
+            key === "ignoredSheets" || !Array.isArray(value) ? total : total + value.length,
+          0,
+        );
+
+        if (imported === 0) {
+          // Naming the sheets found is the difference between "it did not work"
+          // and "I gave it the wrong file" — usually it is the wrong file.
           setError(
-            "No recognised sheets. Name them Requirements, Business Rules and Test Cases — a CSV file counts as one sheet, so name the file itself.",
+            `Nothing to import from ${file.name}. Found ${result.ignoredSheets
+              .map((sheet) => `“${sheet}”`)
+              .join(", ")} — no requirements, rules or test cases in there. Name the sheets Requirements, Business Rules and Test Cases, or use the example file below to see the layout.`,
           );
         }
 
@@ -278,6 +206,13 @@ function Studio() {
       requirements: parsed.requirements,
       businessRules: parsed.businessRules,
       testCases: parsed.testCases,
+      actors: parsed.actors,
+      diagrams: parsed.diagrams,
+      wireframes: parsed.wireframes,
+      apiServices: parsed.apiServices,
+      sqlValidations: parsed.sqlValidations,
+      documents: parsed.documents,
+      processFlows: parsed.processFlows,
     };
   }, [parsed, projectId]);
 
@@ -292,7 +227,7 @@ function Studio() {
 
       <SectionCard
         title="1 · Import a spreadsheet"
-        description="One sheet per artefact type, named Requirements, Business Rules and Test Cases. Column headings are matched loosely — “Business Need” finds businessNeed."
+        description="One sheet per artefact type: Requirements, Acceptance Criteria, Business Rules, Actors, Process Steps, Diagrams, Wireframes, API Endpoints, SQL Validations, Test Cases, Documents. Bring only the sheets you have. Column headings are matched loosely — “Business Need” finds businessNeed."
         icon={FileSpreadsheet}
       >
         <div className="space-y-4">
@@ -339,11 +274,14 @@ function Studio() {
           </label>
 
           <div className="flex flex-wrap items-center gap-2">
-            <Button variant="outline" size="sm" onClick={() => void downloadTemplate()}>
-              <FileSpreadsheet /> Download an example file
+            <Button variant="outline" size="sm" asChild>
+              {/* A static asset, so the base path has to be applied by hand. */}
+              <a href={`${BASE_PATH}/example-project.xlsx`} download>
+                <FileSpreadsheet /> Download an example file
+              </a>
             </Button>
             <span className="text-xs text-muted-foreground">
-              Three sheets with the expected headings and one example row each.
+              A complete worked project — eleven sheets, filled in.
             </span>
           </div>
 
