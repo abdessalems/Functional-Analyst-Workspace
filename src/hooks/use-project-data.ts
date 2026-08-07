@@ -11,8 +11,12 @@ import { getBundleCounts, getProjectBundle } from "@/data/workspaces";
  * this hook, so switching project switches the whole workspace.
  */
 export function useProjectData() {
-  const { project } = useWorkspace();
-  return React.useMemo(() => getProjectBundle(project.id), [project.id]);
+  const { project, draftBundle } = useWorkspace();
+  // A project imported in this browser is read from the draft, not the registry.
+  return React.useMemo(
+    () => draftBundle ?? getProjectBundle(project.id),
+    [project.id, draftBundle],
+  );
 }
 
 export function useProjectCounts() {

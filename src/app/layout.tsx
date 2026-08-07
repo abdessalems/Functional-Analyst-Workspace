@@ -26,7 +26,9 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
+      {/* Grammarly and similar extensions add attributes to the body before
+          React hydrates; that difference is theirs, not ours. */}
+      <body suppressHydrationWarning>
         {/* Dark by default so the workspace matches the portfolio it is embedded in. */}
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
           <WorkspaceProvider>

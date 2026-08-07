@@ -18,6 +18,13 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  /*
+   * Routes ending `.dev.ts` exist only when a developer is running the app on
+   * their own machine — the studio writes project files through one of them.
+   * They are dropped from the static export, which is why the published site
+   * keeps its promise of having no server side at all.
+   */
+  pageExtensions: isStaticExport ? ["tsx", "ts"] : ["dev.ts", "tsx", "ts"],
   ...(isStaticExport
     ? {
         output: "export",

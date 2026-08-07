@@ -6,8 +6,10 @@ import {
   CheckCircle2,
   Download,
   FileSpreadsheet,
+  FolderPlus,
   Info,
   Lock,
+  Trash2,
   Upload,
 } from "lucide-react";
 
@@ -51,11 +53,19 @@ import {
   type ParsedProject,
   type SheetRow,
 } from "@/features/studio/lib/parse-workbook";
-import { generateBundleFile, registrySnippet } from "@/features/studio/lib/generate-bundle";
+import {
+  generateBundleFile,
+  generateProjectRecord,
+  registrySnippet,
+} from "@/features/studio/lib/generate-bundle";
+import { deleteDraft, draftProjectRecord, saveDraft } from "@/features/studio/lib/draft-store";
+import { useWorkspace } from "@/components/providers/workspace-provider";
 
 const GATE_KEY = "baw.studio-open";
 const PASSPHRASE = "baraa";
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+/** The publish route only exists while the app runs on a developer's machine. */
+const IS_DEV = process.env.NODE_ENV === "development";
 
 
 export function StudioView() {
@@ -137,6 +147,11 @@ function Studio() {
   const [projectId, setProjectId] = React.useState("PRJ-NEW-001");
   const [exportName, setExportName] = React.useState("myProjectBundle");
   const [owner, setOwner] = React.useState("Saadaoui Abdessalem");
+  const [projectName, setProjectName] = React.useState("My imported project");
+  const [added, setAdded] = React.useState<string | null>(null);
+  const [publishing, setPublishing] = React.useState(false);
+  const [published, setPublished] = React.useState<string[] | null>(null);
+  const { drafts, refreshDrafts, openProject } = useWorkspace();
 
   const handleFile = React.useCallback(
     async (file: File) => {
@@ -294,7 +309,7 @@ function Studio() {
         </div>
       </SectionCard>
 
-      {parsed && report && (
+      {parsed && report && previewBundle && (
         <>
           <SectionCard
             title="2 · Check what came through"
@@ -323,11 +338,152 @@ function Studio() {
           </SectionCard>
 
           <SectionCard
-            title="3 · Take the file and commit it"
-            description="Save it into src/data/workspaces, add the project to the register, and register the bundle."
+            title="3 · Add it to the workspace"
+            description="It appears in the project list straight away, in this browser."
+            icon={FolderPlus}
+          >
+            <div className="space-y-4">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-1.5">
+                  <Label htmlFor="project-name">Project name</Label>
+                  <Input
+                    id="project-name"
+                    value={projectName}
+                    onChange={(event) => setProjectName(event.target.value)}
+                  />
+                </div>
+              </div>
+
+              {report.errors.length > 0 ? (
+                // The check is the gate: a project with dead links looks
+                // finished and reads as broken, which is worse than absent.
+                <div className="space-y-2 rounded-lg border border-destructive/30 bg-destructive/[0.05] p-3">
+                  <p className="flex items-center gap-2 text-sm font-medium">
+                    <AlertTriangle className="size-4 text-destructive" />
+                    Fix {report.errors.length}{" "}
+                    {report.errors.length === 1 ? "error" : "errors"} first
+                  </p>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    {report.errors.slice(0, 8).map((issue, index) => (
+                      <li key={index}>
+                        <span className="font-mono text-xs">{issue.where}</span> — {issue.message}
+                      </li>
+                    ))}
+                    {report.errors.length > 8 && (
+                      <li>and {report.errors.length - 8} more, listed above.</li>
+                    )}
+                  </ul>
+                  <p className="text-xs text-muted-foreground">
+                    Correct the spreadsheet and choose the file again. Warnings do not block
+                    anything — they are gaps worth knowing about, not mistakes.
+                  </p>
+                </div>
+              ) : (
+                <div className="flex flex-wrap items-center gap-3">
+                  <Button
+                    onClick={() => {
+                      const record = draftProjectRecord(
+                        projectId,
+                        projectName,
+                        owner,
+                        previewBundle,
+                      );
+                      const stored = saveDraft({
+                        project: record,
+                        bundle: previewBundle,
+                        importedAt: new Date().toISOString(),
+                        sourceFile: fileName,
+                      });
+                      if (!stored) {
+                        setError(
+                          "The browser refused to store the project — it is probably too large for local storage, or storage is turned off. The download below always works.",
+                        );
+                        return;
+                      }
+                      refreshDrafts();
+                      setAdded(record.id);
+                    }}
+                  >
+                    <FolderPlus /> Add {projectName} to the workspace
+                  </Button>
+                  {added === projectId && (
+                    <span className="flex items-center gap-1.5 text-sm text-emerald-600 dark:text-emerald-400">
+                      <CheckCircle2 className="size-4" /> Added — open it from the project list.
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
+          </SectionCard>
+
+          <SectionCard
+            title="4 · Publish it, when you are ready"
+            description="A draft lives in this browser only. Publishing writes it into the source, where a commit puts it on the site for everyone."
             icon={Download}
           >
             <div className="space-y-4">
+              {IS_DEV && (
+                <div className="space-y-2 rounded-lg border border-primary/30 bg-primary/[0.04] p-3">
+                  <Button
+                    disabled={report.errors.length > 0 || publishing}
+                    onClick={() => {
+                      setPublishing(true);
+                      setPublished(null);
+                      setError(null);
+                      const fileName = projectId.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+                      void fetch("/api/studio/publish", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                          fileName,
+                          exportName,
+                          projectId,
+                          bundleSource: generateBundleFile(projectId, exportName, parsed),
+                          projectSource: generateProjectRecord(
+                            draftProjectRecord(projectId, projectName, owner, previewBundle),
+                          ),
+                        }),
+                      })
+                        .then(async (response) => {
+                          const result = (await response.json()) as {
+                            ok: boolean;
+                            written?: string[];
+                            message?: string;
+                          };
+                          if (!result.ok) throw new Error(result.message ?? "Publishing failed.");
+                          setPublished(result.written ?? []);
+                        })
+                        .catch((cause: Error) => setError(cause.message))
+                        .finally(() => setPublishing(false));
+                    }}
+                  >
+                    <FolderPlus /> {publishing ? "Writing…" : "Write it into the project"}
+                  </Button>
+
+                  {published && (
+                    <div className="space-y-1 text-sm">
+                      <p className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
+                        <CheckCircle2 className="size-4" /> Written — the page will reload itself.
+                      </p>
+                      <ul className="font-mono text-xs text-muted-foreground">
+                        {published.map((file) => (
+                          <li key={file}>{file}</li>
+                        ))}
+                      </ul>
+                      <p className="text-xs text-muted-foreground">
+                        Now commit those files and push. Remove the draft above — the project is
+                        real now, and keeping both would show it twice.
+                      </p>
+                    </div>
+                  )}
+
+                  <p className="text-xs text-muted-foreground">
+                    Available because you are running the app locally. The published site has no
+                    server, so this button is not part of it.
+                  </p>
+                </div>
+              )}
+
               <Button
                 onClick={() =>
                   download(
@@ -351,6 +507,47 @@ function Studio() {
             </div>
           </SectionCard>
         </>
+      )}
+
+      {drafts.length > 0 && (
+        <SectionCard
+          title="Projects added in this browser"
+          description="Visible to you, on this machine. Nobody else sees them until the file is committed."
+          icon={FolderPlus}
+        >
+          <div className="space-y-3">
+            {drafts.map((draft) => (
+              <div
+                key={draft.project.id}
+                className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border p-3"
+              >
+                <div className="min-w-0 space-y-0.5">
+                  <p className="text-sm font-medium">{draft.project.name}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {draft.project.id} · from {draft.sourceFile} ·{" "}
+                    {draft.importedAt.slice(0, 10)}
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button variant="outline" size="sm" onClick={() => openProject(draft.project.id)}>
+                    Open it
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      deleteDraft(draft.project.id);
+                      refreshDrafts();
+                    }}
+                    aria-label={`Remove ${draft.project.name}`}
+                  >
+                    <Trash2 /> Remove
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </SectionCard>
       )}
 
       <SectionCard

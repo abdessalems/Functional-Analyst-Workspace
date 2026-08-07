@@ -16,7 +16,6 @@ import {
 
 import type { Project } from "@/lib/types";
 import { cn, formatDate, matchesQuery } from "@/lib/utils";
-import { projects } from "@/data/projects";
 import { useWorkspace } from "@/components/providers/workspace-provider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -35,7 +34,10 @@ const INITIAL_FILTERS = { status: "all", subDomain: "all" };
 export function PortfolioView() {
   const router = useRouter();
   const download = useDownload();
-  const { openProject, project: lastProject, isProjectOpen } = useWorkspace();
+  // The register comes from the workspace context rather than the module
+  // constant, so a project imported in the studio appears here beside the
+  // committed ones.
+  const { openProject, project: lastProject, isProjectOpen, projects } = useWorkspace();
 
   const predicate = React.useCallback(
     (item: Project, query: string, filters: typeof INITIAL_FILTERS) => {
@@ -76,7 +78,7 @@ export function PortfolioView() {
       ]),
     );
     download(csv, "project-register.csv", "text/csv");
-  }, [download]);
+  }, [download, projects]);
 
   const totals = React.useMemo(
     () => ({
@@ -86,7 +88,7 @@ export function PortfolioView() {
       requirements: projects.reduce((sum, item) => sum + item.metrics.requirements, 0),
       testCases: projects.reduce((sum, item) => sum + item.metrics.testCases, 0),
     }),
-    [],
+    [projects],
   );
 
   const walkthroughProject =

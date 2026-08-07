@@ -64,6 +64,15 @@ ${assignments}
 `;
 }
 
+/**
+ * The project's entry for the register, as source ready to be appended to the
+ * `projects` array. JSON is a valid TypeScript object literal, which keeps this
+ * a formatting job rather than a code generator.
+ */
+export function generateProjectRecord(project: unknown) {
+  return `  ${JSON.stringify(project, null, 2).replace(/\n/g, "\n  ")},`;
+}
+
 /** The one line to add to the registry, shown next to the download. */
 export function registrySnippet(exportName: string, fileName: string) {
   return `import { ${exportName} } from "@/data/workspaces/${fileName}";
