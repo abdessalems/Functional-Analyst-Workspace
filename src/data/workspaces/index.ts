@@ -29,7 +29,6 @@ export function getBundleCounts(bundle: ProjectDataBundle) {
     actors: bundle.actors.length,
     functionalSpecSections: bundle.functionalSpecSections.length,
     processFlows: bundle.processFlows.length,
-    bpmnModels: bundle.bpmnModels.length,
     diagrams: bundle.diagrams.length,
     wireframes: bundle.wireframes.length,
     apis: bundle.apiServices.reduce((sum, service) => sum + service.endpoints.length, 0),

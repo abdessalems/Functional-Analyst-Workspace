@@ -9,10 +9,8 @@ import {
   FolderKanban,
   GitBranch,
   ListChecks,
-  Network,
   Route,
   ScrollText,
-  Settings,
   ShieldCheck,
   Table2,
   Users,
@@ -26,7 +24,6 @@ export type NavCountKey =
   | "actors"
   | "functionalSpecSections"
   | "processFlows"
-  | "bpmnModels"
   | "diagrams"
   | "wireframes"
   | "apis"
@@ -76,12 +73,6 @@ export const navigationSections: NavSection[] = [
         href: "/",
         icon: FolderKanban,
         description: "Portfolio register of banking change initiatives",
-      },
-      {
-        label: "Settings",
-        href: "/settings",
-        icon: Settings,
-        description: "Workspace preferences, appearance and integrations",
       },
     ],
   },
@@ -150,13 +141,6 @@ export const navigationSections: NavSection[] = [
         countKey: "processFlows",
         icon: Workflow,
         description: "Swimlane view of the end-to-end payment process",
-      },
-      {
-        label: "BPMN",
-        href: "/bpmn",
-        countKey: "bpmnModels",
-        icon: Network,
-        description: "BPMN 2.0 collaboration model with zoom and export",
       },
       {
         label: "PlantUML",

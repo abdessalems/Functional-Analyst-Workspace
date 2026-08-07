@@ -7,7 +7,6 @@ import {
   Cog,
   Flag,
   GitFork,
-  Network,
   SquareUser,
   Timer,
   Workflow,
@@ -100,11 +99,6 @@ export function ProcessFlowView() {
         ]}
         actions={
           <>
-            <Button variant="outline" size="sm" asChild>
-              <Link href="/bpmn">
-                <Network /> Open BPMN model
-              </Link>
-            </Button>
             <SecureLinkDialog resourceName={flow.name} resourcePath="/process-flow" />
           </>
         }

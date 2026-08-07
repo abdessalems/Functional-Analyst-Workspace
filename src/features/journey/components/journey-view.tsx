@@ -12,7 +12,6 @@ import {
   FileText,
   GitBranch,
   ListChecks,
-  Network,
   ScrollText,
   ShieldCheck,
   Table2,
@@ -118,13 +117,6 @@ const PHASES: Phase[] = [
         countKey: "processFlows",
         icon: Workflow,
         produced: "Swimlane decomposition of the process, each step linked to the rules that govern it",
-      },
-      {
-        label: "BPMN Model",
-        href: "/bpmn",
-        countKey: "bpmnModels",
-        icon: Network,
-        produced: "BPMN 2.0 collaboration diagram with gateways, exception paths and compensation",
       },
       {
         label: "UML Models",

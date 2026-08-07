@@ -21,7 +21,7 @@ import { NoResultsState } from "@/components/common/states";
 import { useArtifactFilters } from "@/hooks/use-artifact-filters";
 import { useHighlight } from "@/hooks/use-highlight";
 import { useDownload } from "@/hooks/use-download";
-import { hasUmlPreview, UmlPreview } from "@/features/diagrams/components/uml-previews";
+import { PlantUmlImage, plantUmlUrl } from "@/features/diagrams/components/plantuml-image";
 
 const INITIAL_FILTERS = { type: "all" };
 
@@ -141,38 +141,32 @@ export function PlantUmlView() {
                   >
                     <Download /> .puml
                   </Button>
-                  {hasUmlPreview(diagram.previewKey) && (
-                    <Button variant="outline" size="sm" onClick={() => setFullscreen(diagram)}>
-                      <Maximize2 /> Full screen
-                    </Button>
-                  )}
+                  <Button variant="outline" size="sm" asChild>
+                    <a href={plantUmlUrl(diagram.source, "png")} target="_blank" rel="noreferrer">
+                      <Download /> PNG
+                    </a>
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={() => setFullscreen(diagram)}>
+                    <Maximize2 /> Full screen
+                  </Button>
                 </div>
               </div>
 
-              <Tabs
-                defaultValue={hasUmlPreview(diagram.previewKey) ? "preview" : "source"}
-                className="p-5"
-              >
+              <Tabs defaultValue="preview" className="p-5">
                 <TabsList>
-                  {hasUmlPreview(diagram.previewKey) && (
-                    <TabsTrigger value="preview">
-                      <GitBranch /> Preview
-                    </TabsTrigger>
-                  )}
+                  <TabsTrigger value="preview">
+                    <GitBranch /> Diagram
+                  </TabsTrigger>
                   <TabsTrigger value="source">
                     <Code2 /> PlantUML source
                   </TabsTrigger>
                 </TabsList>
 
-                {hasUmlPreview(diagram.previewKey) && (
-                  <TabsContent value="preview">
-                    <div className="app-scrollbar overflow-auto rounded-lg border border-border bg-surface-muted p-5">
-                      <div className="w-fit min-w-full">
-                        <UmlPreview previewKey={diagram.previewKey} />
-                      </div>
-                    </div>
-                  </TabsContent>
-                )}
+                <TabsContent value="preview">
+                  <div className="app-scrollbar overflow-auto rounded-lg border border-border bg-surface-muted p-5">
+                    <PlantUmlImage source={diagram.source} alt={`${diagram.type} diagram — ${diagram.title}`} />
+                  </div>
+                </TabsContent>
 
                 <TabsContent value="source">
                   <CodeBlock
@@ -200,7 +194,7 @@ export function PlantUmlView() {
               </DialogHeader>
               <div className="app-scrollbar flex-1 overflow-auto bg-surface-muted p-8">
                 <div className="mx-auto w-fit">
-                  <UmlPreview previewKey={fullscreen.previewKey} />
+                  <PlantUmlImage source={fullscreen.source} alt={fullscreen.title} />
                 </div>
               </div>
             </>
