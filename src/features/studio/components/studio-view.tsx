@@ -44,7 +44,7 @@ import {
 import { generateBundleFile, registrySnippet } from "@/features/studio/lib/generate-bundle";
 
 const GATE_KEY = "baw.studio-open";
-const PASSPHRASE = "analyst";
+const PASSPHRASE = "baraa";
 
 export function StudioView() {
   const [unlocked, setUnlocked] = React.useState(false);
