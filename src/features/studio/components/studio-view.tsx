@@ -46,6 +46,102 @@ import { generateBundleFile, registrySnippet } from "@/features/studio/lib/gener
 const GATE_KEY = "baw.studio-open";
 const PASSPHRASE = "baraa";
 
+/**
+ * The example file. One row per sheet, filled in, so the headings are shown
+ * being used rather than described — the fastest way to see what goes where.
+ */
+const TEMPLATE_SHEETS: { name: string; rows: Record<string, string>[] }[] = [
+  {
+    name: "Requirements",
+    rows: [
+      {
+        ID: "BR-001",
+        Title: "Validate the IBAN before a transfer is accepted",
+        "Business Need": "Payments to a malformed account are rejected late and cost a manual repair.",
+        Description: "The beneficiary IBAN is checked for country, length and check digits at submission.",
+        Priority: "Critical",
+        Status: "Approved",
+        Category: "Payments",
+        MoSCoW: "Must",
+        Owner: "Saadaoui Abdessalem",
+        "Last Updated": "2026-01-15",
+        Version: "1.0",
+        Rules: "RULE-001",
+        Tests: "TC-001, TC-002",
+        APIs: "",
+        Documents: "",
+      },
+    ],
+  },
+  {
+    name: "Business Rules",
+    rows: [
+      {
+        ID: "RULE-001",
+        Description: "An IBAN must pass the mod-97 check digit test.",
+        Logic: "IF mod97(rearranged_iban) <> 1 THEN reject WITH 'INVALID_IBAN'",
+        Priority: "Critical",
+        Source: "ISO 13616",
+        Status: "Approved",
+        Category: "Validation",
+        Owner: "Saadaoui Abdessalem",
+        "Effective From": "2026-01-01",
+        Requirements: "BR-001",
+      },
+    ],
+  },
+  {
+    name: "Test Cases",
+    rows: [
+      {
+        ID: "TC-001",
+        Scenario: "A valid IBAN is accepted",
+        Suite: "Payments",
+        Preconditions: "A funded account exists; the user is signed in",
+        Steps:
+          "1. Enter a valid IBAN -> the field shows no error\n2. Submit the transfer -> the transfer is accepted",
+        "Expected Result": "The transfer reaches the status Accepted.",
+        Status: "Passed",
+        Priority: "Critical",
+        Type: "Functional",
+        Requirement: "BR-001",
+        "Last Run": "2026-01-20",
+        "Executed By": "Saadaoui Abdessalem",
+        Defect: "",
+      },
+      {
+        ID: "TC-002",
+        Scenario: "A malformed IBAN is rejected",
+        Suite: "Payments",
+        Preconditions: "A funded account exists; the user is signed in",
+        Steps: "1. Enter an IBAN with a wrong check digit -> the error INVALID_IBAN is shown",
+        "Expected Result": "The transfer is refused and no money moves.",
+        Status: "Passed",
+        Priority: "Critical",
+        Type: "Negative",
+        Requirement: "BR-001",
+        "Last Run": "2026-01-20",
+        "Executed By": "Saadaoui Abdessalem",
+        Defect: "",
+      },
+    ],
+  },
+];
+
+/** Builds the example workbook in the browser — nothing is hosted or fetched. */
+async function downloadTemplate() {
+  const XLSX = await import("xlsx");
+  const book = XLSX.utils.book_new();
+
+  for (const sheet of TEMPLATE_SHEETS) {
+    const worksheet = XLSX.utils.json_to_sheet(sheet.rows);
+    worksheet["!cols"] = Object.keys(sheet.rows[0]).map(() => ({ wch: 28 }));
+    XLSX.utils.book_append_sheet(book, worksheet, sheet.name);
+  }
+
+  XLSX.writeFile(book, "project-template.xlsx");
+}
+
 export function StudioView() {
   const [unlocked, setUnlocked] = React.useState(false);
 
@@ -239,6 +335,15 @@ function Studio() {
               }}
             />
           </label>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <Button variant="outline" size="sm" onClick={() => void downloadTemplate()}>
+              <FileSpreadsheet /> Download an example file
+            </Button>
+            <span className="text-xs text-muted-foreground">
+              Three sheets with the expected headings and one example row each.
+            </span>
+          </div>
 
           {error && (
             <p className="flex items-start gap-2 rounded-lg border border-destructive/30 bg-destructive/[0.05] p-3 text-sm">
