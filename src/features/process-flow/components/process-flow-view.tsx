@@ -15,8 +15,7 @@ import {
 
 import type { ProcessStep } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { actors } from "@/data/actors";
-import { processFlows } from "@/data/process-flow";
+import { useProjectData } from "@/hooks/use-project-data";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -25,6 +24,7 @@ import { DefinitionList } from "@/components/common/definition-list";
 import { PageHeader } from "@/components/common/page-header";
 import { SectionCard } from "@/components/common/section-card";
 import { SecureLinkDialog } from "@/components/common/secure-link-dialog";
+import { EmptyState } from "@/components/common/states";
 
 const STEP_STYLE: Record<
   ProcessStep["type"],
@@ -58,17 +58,34 @@ const STEP_STYLE: Record<
 };
 
 export function ProcessFlowView() {
+  const { processFlows, actors } = useProjectData();
   const flow = processFlows[0];
 
   const stepsByLane = React.useMemo(
     () =>
-      flow.lanes.map((lane) => ({
+      (flow?.lanes ?? []).map((lane) => ({
         lane,
         actor: actors.find((actor) => actor.id === lane.actorId),
-        steps: flow.steps.filter((step) => step.lane === lane.id),
+        steps: flow!.steps.filter((step) => step.lane === lane.id),
       })),
-    [flow],
+    [flow, actors],
   );
+
+  if (!flow) {
+    return (
+      <div className="space-y-6">
+        <PageHeader
+          title="Process Flow"
+          description="Swimlane decomposition of the end-to-end process."
+        />
+        <EmptyState
+          icon={Workflow}
+          title="No process model yet"
+          description="This project has no process flow in the workspace. It is added once the end-to-end journey has been agreed with the business."
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

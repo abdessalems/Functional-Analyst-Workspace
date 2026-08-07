@@ -4,7 +4,7 @@ import * as React from "react";
 import { FileDown, Info, Network } from "lucide-react";
 
 import { formatDate } from "@/lib/utils";
-import { bpmnModels, processFlows } from "@/data/process-flow";
+import { useProjectData } from "@/hooks/use-project-data";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -14,23 +14,39 @@ import { PageHeader } from "@/components/common/page-header";
 import { SectionCard } from "@/components/common/section-card";
 import { SecureLinkDialog } from "@/components/common/secure-link-dialog";
 import { ArtifactLinkList } from "@/components/common/artifact-link";
+import { EmptyState } from "@/components/common/states";
 import { useDownload } from "@/hooks/use-download";
 import { BpmnCanvas } from "@/features/diagrams/components/bpmn-canvas";
 
 export function BpmnView() {
   const download = useDownload();
+  const { bpmnModels, processFlows } = useProjectData();
   const model = bpmnModels[0];
-  const flow = processFlows.find((item) => item.id === model.processFlowId)!;
+  const flow = processFlows.find((item) => item.id === model?.processFlowId);
 
   const exportXml = React.useCallback(() => {
+    if (!flow || !model) return;
     const xml = buildBpmnXml(flow.id, flow.name, flow.steps.map((step) => step.name));
     download(xml, `${model.id}-${model.title.replace(/\s+/g, "-").toLowerCase()}.bpmn`, "application/xml");
   }, [download, flow, model]);
 
   const rules = React.useMemo(
-    () => Array.from(new Set(flow.steps.flatMap((step) => step.rules))).sort(),
-    [flow.steps],
+    () => Array.from(new Set((flow?.steps ?? []).flatMap((step) => step.rules))).sort(),
+    [flow],
   );
+
+  if (!model || !flow) {
+    return (
+      <div className="space-y-6">
+        <PageHeader title="BPMN" description="Executable process model of the collaboration." />
+        <EmptyState
+          icon={Network}
+          title="No BPMN model yet"
+          description="This project has no BPMN collaboration model in the workspace. It is produced once the process flow has been agreed."
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

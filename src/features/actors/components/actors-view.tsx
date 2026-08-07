@@ -5,7 +5,7 @@ import { Building2, Download, Monitor, Users } from "lucide-react";
 
 import type { Actor } from "@/lib/types";
 import { cn, matchesQuery } from "@/lib/utils";
-import { actors } from "@/data/actors";
+import { useProjectData } from "@/hooks/use-project-data";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -39,6 +39,7 @@ const TYPE_TONE = {
 export function ActorsView() {
   const { highlight, marker } = useHighlight();
   const download = useDownload();
+  const { actors } = useProjectData();
 
   const predicate = React.useCallback(
     (item: Actor, query: string, filters: typeof INITIAL_FILTERS) => {
@@ -75,8 +76,8 @@ export function ActorsView() {
         actor.systemsUsed.join(" | "),
       ]),
     );
-    download(csv, "actors-v2.3.csv", "text/csv");
-  }, [download]);
+    download(csv, "actors.csv", "text/csv");
+  }, [download, actors]);
 
   const counts = React.useMemo(
     () => ({
@@ -84,7 +85,7 @@ export function ActorsView() {
       system: actors.filter((actor) => actor.type === "System").length,
       external: actors.filter((actor) => actor.type === "External").length,
     }),
-    [],
+    [actors],
   );
 
   return (

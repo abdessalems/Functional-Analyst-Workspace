@@ -5,7 +5,7 @@ import { Code2, Download, GitBranch, Maximize2 } from "lucide-react";
 
 import type { Diagram } from "@/lib/types";
 import { cn, formatDate, matchesQuery } from "@/lib/utils";
-import { diagrams } from "@/data/diagrams";
+import { useProjectData } from "@/hooks/use-project-data";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -27,6 +27,7 @@ const INITIAL_FILTERS = { type: "all" };
 export function PlantUmlView() {
   const { highlight, marker } = useHighlight();
   const download = useDownload();
+  const { diagrams } = useProjectData();
   const [fullscreen, setFullscreen] = React.useState<Diagram | null>(null);
 
   const predicate = React.useCallback(

@@ -16,7 +16,8 @@ import {
 } from "lucide-react";
 
 import type { SearchEntityType } from "@/lib/types";
-import { searchWorkspace } from "@/data/search-index";
+import { buildSearchIndex, searchWorkspace } from "@/data/search-index";
+import { useProjectData } from "@/hooks/use-project-data";
 import { Button } from "@/components/ui/button";
 import {
   CommandDialog,
@@ -73,7 +74,9 @@ export function GlobalSearch() {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, []);
 
-  const results = React.useMemo(() => searchWorkspace(query), [query]);
+  const bundle = useProjectData();
+  const index = React.useMemo(() => buildSearchIndex(bundle), [bundle]);
+  const results = React.useMemo(() => searchWorkspace(index, query), [index, query]);
 
   const grouped = React.useMemo(() => {
     return GROUP_ORDER.map((type) => ({

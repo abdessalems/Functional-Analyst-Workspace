@@ -11,7 +11,6 @@ import {
   FileCode2,
   FileText,
   GitBranch,
-  LayoutDashboard,
   ListChecks,
   Network,
   ScrollText,
@@ -23,6 +22,8 @@ import {
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import type { NavCountKey } from "@/config/navigation";
+import { useProjectCounts } from "@/hooks/use-project-data";
 import { useWorkspace } from "@/components/providers/workspace-provider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -33,7 +34,7 @@ interface Deliverable {
   label: string;
   href: string;
   icon: LucideIcon;
-  count?: string;
+  countKey?: NavCountKey;
   produced: string;
 }
 
@@ -65,8 +66,8 @@ const PHASES: Phase[] = [
       {
         label: "Business Requirements",
         href: "/requirements",
+        countKey: "requirements",
         icon: ListChecks,
-        count: "24",
         produced: "Each requirement states the business need and its Given/When/Then acceptance criteria",
       },
     ],
@@ -79,15 +80,15 @@ const PHASES: Phase[] = [
       {
         label: "Business Rules",
         href: "/business-rules",
+        countKey: "businessRules",
         icon: ShieldCheck,
-        count: "16",
         produced: "Rule logic with its source of authority — scheme rulebook, regulation or internal policy",
       },
       {
         label: "Actors",
         href: "/actors",
+        countKey: "actors",
         icon: Users,
-        count: "8",
         produced: "Human, system and external actors with their responsibilities and permissions",
       },
     ],
@@ -100,8 +101,8 @@ const PHASES: Phase[] = [
       {
         label: "Functional Specification",
         href: "/functional-specification",
+        countKey: "functionalSpecSections",
         icon: ScrollText,
-        count: "8 sections",
         produced: "Business logic, validation rules, error catalogue, field definitions and edge cases",
       },
     ],
@@ -114,20 +115,22 @@ const PHASES: Phase[] = [
       {
         label: "Process Flow",
         href: "/process-flow",
+        countKey: "processFlows",
         icon: Workflow,
         produced: "Swimlane decomposition of the process, each step linked to the rules that govern it",
       },
       {
         label: "BPMN Model",
         href: "/bpmn",
+        countKey: "bpmnModels",
         icon: Network,
         produced: "BPMN 2.0 collaboration diagram with gateways, exception paths and compensation",
       },
       {
         label: "UML Models",
         href: "/plantuml",
+        countKey: "diagrams",
         icon: GitBranch,
-        count: "5",
         produced: "Use case, sequence, component, activity and state models kept as PlantUML source",
       },
     ],
@@ -140,8 +143,8 @@ const PHASES: Phase[] = [
       {
         label: "Wireframes",
         href: "/wireframes",
+        countKey: "wireframes",
         icon: Boxes,
-        count: "6",
         produced: "Annotated screens for the customer journey and the back-office console",
       },
     ],
@@ -154,15 +157,15 @@ const PHASES: Phase[] = [
       {
         label: "API Contract",
         href: "/swagger-api",
+        countKey: "apis",
         icon: FileCode2,
-        count: "5 endpoints",
         produced: "Request, response, headers and status codes per operation, exportable as OpenAPI",
       },
       {
         label: "SQL Validation",
         href: "/sql-validation",
+        countKey: "sqlValidations",
         icon: Database,
-        count: "6 queries",
         produced: "Queries that prove the rules hold in the database, with results and conclusions",
       },
     ],
@@ -175,15 +178,15 @@ const PHASES: Phase[] = [
       {
         label: "Test Cases",
         href: "/test-cases",
+        countKey: "testCases",
         icon: ClipboardCheck,
-        count: "39",
         produced: "Preconditions, steps, expected results and execution status, each linked to a requirement",
       },
       {
         label: "Documents",
         href: "/documents",
+        countKey: "documents",
         icon: FileText,
-        count: "7",
         produced: "Controlled register with versions, owners and classification",
       },
       {
@@ -198,6 +201,21 @@ const PHASES: Phase[] = [
 
 export function JourneyView() {
   const { project } = useWorkspace();
+  const counts = useProjectCounts();
+
+  // Only show stages this project actually produced something for.
+  const phases = React.useMemo(
+    () =>
+      PHASES.map((phase) => ({
+        ...phase,
+        deliverables: phase.deliverables.filter(
+          (deliverable) => !deliverable.countKey || counts[deliverable.countKey] > 0,
+        ),
+      }))
+        .filter((phase) => phase.deliverables.length > 0)
+        .map((phase, index) => ({ ...phase, step: index + 1 })),
+    [counts],
+  );
 
   return (
     <div className="space-y-6">
@@ -209,32 +227,25 @@ export function JourneyView() {
           { label: "Version", value: project.version },
           { label: "Analyst", value: project.owner.name },
         ]}
-        actions={
-          <Button variant="outline" size="sm" asChild>
-            <Link href="/dashboard">
-              <LayoutDashboard /> Delivery dashboard
-            </Link>
-          </Button>
-        }
       />
 
       <Card className="border-primary/25 bg-primary/[0.04] p-5">
         <p className="text-[13px] leading-relaxed">
           <span className="font-semibold">Start here.</span> Follow the seven stages below to see the
-          full lifecycle of a banking project, from the first conversation with the business to the
+          full lifecycle of this project, from the first conversation with the business to the
           evidence that the delivered system does what was agreed. Each card opens the real artefact
           — not a description of it.
         </p>
       </Card>
 
       <ol className="space-y-4">
-        {PHASES.map((phase, index) => (
+        {phases.map((phase, index) => (
           <li key={phase.step} className="relative flex gap-4">
             <div className="flex shrink-0 flex-col items-center">
               <span className="flex size-9 items-center justify-center rounded-full border-2 border-primary/40 bg-surface text-sm font-semibold text-primary">
                 {phase.step}
               </span>
-              {index < PHASES.length - 1 && (
+              {index < phases.length - 1 && (
                 <span aria-hidden className="mt-1 w-px flex-1 bg-border" />
               )}
             </div>
@@ -269,8 +280,8 @@ export function JourneyView() {
                           <span className="min-w-0 flex-1 truncate text-[13px] font-semibold">
                             {deliverable.label}
                           </span>
-                          {deliverable.count && (
-                            <Badge variant="neutral">{deliverable.count}</Badge>
+                          {deliverable.countKey && (
+                            <Badge variant="neutral">{counts[deliverable.countKey]}</Badge>
                           )}
                         </div>
                         <p className="flex-1 text-[13px] leading-relaxed text-muted-foreground">

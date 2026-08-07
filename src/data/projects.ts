@@ -26,7 +26,7 @@ export const projects: Project[] = [
     businessOwner: "Head of Payments Operations",
     programme: "Payments Modernisation Programme",
     summary:
-      "Delivery of a real-time SEPA Instant Credit Transfer (SCT Inst) capability for retail and SME customers, replacing the batch-based legacy transfer engine. The hub exposes a synchronous payment initiation API, performs real-time sanctions and fraud screening, and settles through the TIPS gateway within the 10-second scheme deadline.",
+      "Sample analysis — a method demonstration, not client work. Delivery of a real-time SEPA Instant Credit Transfer (SCT Inst) capability for retail and SME customers, replacing the batch-based legacy transfer engine. The hub exposes a synchronous payment initiation API, performs real-time sanctions and fraud screening, and settles through the TIPS gateway within the 10-second scheme deadline.",
     businessObjective:
       "Enable 24/7/365 euro payments up to EUR 100,000 with an end-to-end execution time under 10 seconds, achieve full compliance with the EPC SCT Inst rulebook v2024, and reduce the cost per outbound payment by 38% by decommissioning the legacy batch transfer engine.",
     inScope: [
@@ -256,6 +256,7 @@ export const projects: Project[] = [
       },
     ],
     tags: [
+      "Sample analysis",
       "SEPA",
       "SCT Inst",
       "ISO 20022",
@@ -283,6 +284,243 @@ export const projects: Project[] = [
       "EU Instant Payments Regulation (EU) 2024/886",
       "PSD2 — Strong Customer Authentication (RTS)",
       "EU Funds Transfer Regulation 2015/847",
+    ],
+  },
+  {
+    id: "PRJ-EPH-001",
+    code: "EPH-1.0",
+    name: "EuroPay Hub — Merchant Payment Platform",
+    shortName: "EuroPay Hub",
+    domain: "Payments",
+    subDomain: "Merchant Acquiring",
+    status: "In Progress",
+    version: "1.0",
+    release: "Phases 0–6",
+    owner: {
+      id: "USR-001",
+      name: "Saadaoui Abdessalem",
+      role: "Functional Analyst & Java Developer",
+      email: "abdessalemsaa@gmail.com",
+      department: "Product Engineering",
+    },
+    businessOwner: "Platform Admin",
+    programme: "EuroPay Platform",
+    summary:
+      "A European merchant payment platform enabling acceptance of multiple payment methods through a single API. It abstracts the differences between payment rails — Wero, Bancontact, Visa and future methods — behind one consistent contract, with a fully observable payment lifecycle, idempotent creation, refunds and reliable webhook notification.",
+    businessObjective:
+      "Let a merchant accept payments via several methods through one API; provide a reliable, observable payment lifecycle with clear states; notify merchants of outcomes reliably through webhooks with retries; prevent duplicate charges through idempotency; support refund, cancel and retry; and be secure by default with authentication, authorisation and auditability.",
+    inScope: [
+      "Merchant onboarding, authentication (JWT), and API-key issuance",
+      "Customer and order management",
+      "Payment creation and full lifecycle across mock Wero/Bancontact/Visa",
+      "Refunds, cancellations, retries of failed payments",
+      "Webhook configuration, delivery, retries, and logs",
+      "Audit logging of significant actions",
+      "EUR currency only",
+    ],
+    outOfScope: [
+      "Real PSP connectivity and real fund movement",
+      "Multi-currency and FX",
+      "3-D Secure/SCA flows (may be simulated later)",
+      "Merchant dashboard UI (API only; UI is a future improvement)",
+      "Payouts/settlement banking integration (modelled as a state only)",
+    ],
+    stakeholders: [
+      {
+        id: "STK-EP-1",
+        name: "Merchant",
+        role: "Primary user — accepts payments via the API",
+        email: "merchant@europay.example",
+        department: "External",
+        raci: "Responsible",
+      },
+      {
+        id: "STK-EP-2",
+        name: "Customer",
+        role: "Payer completing the purchase",
+        email: "customer@europay.example",
+        department: "External",
+        raci: "Informed",
+      },
+      {
+        id: "STK-EP-3",
+        name: "Platform Admin",
+        role: "Operates and configures the platform",
+        email: "admin@europay.example",
+        department: "Platform",
+        raci: "Accountable",
+      },
+      {
+        id: "STK-EP-4",
+        name: "Compliance / Audit",
+        role: "Reviews the append-only audit trail",
+        email: "compliance@europay.example",
+        department: "Governance",
+        raci: "Consulted",
+      },
+      {
+        id: "STK-EP-5",
+        name: "Saadaoui Abdessalem",
+        role: "Functional Analyst & Java Developer",
+        email: "abdessalemsaa@gmail.com",
+        department: "Product Engineering",
+        raci: "Responsible",
+      },
+    ],
+    timeline: [
+      {
+        id: "MS-EP-0",
+        label: "Phase 0 — Glossary & business requirements",
+        date: "2025-11-10",
+        status: "Completed",
+        description:
+          "Ubiquitous language agreed and the BRD baselined: 6 objectives, 12 functional requirements, scope and non-functional requirements.",
+      },
+      {
+        id: "MS-EP-1",
+        label: "Phase 1 — Identity, merchant & API keys",
+        date: "2025-12-08",
+        status: "Completed",
+        description:
+          "Merchant registration, JWT authentication, role-based access and hashed API keys with one-time secret display.",
+      },
+      {
+        id: "MS-EP-2",
+        label: "Phase 2 — Orders & customers",
+        date: "2026-01-05",
+        status: "Completed",
+        description:
+          "Order creation, cancellation and customer reuse by email and merchant tuple, with ownership-based data isolation.",
+      },
+      {
+        id: "MS-EP-3",
+        label: "Phase 3 — Payments & idempotency",
+        date: "2026-01-26",
+        status: "Completed",
+        description:
+          "Payment creation across mock Wero, Bancontact and Visa through a provider registry, with idempotent replay.",
+      },
+      {
+        id: "MS-EP-4",
+        label: "Phase 4 — Lifecycle, refunds & retries",
+        date: "2026-02-16",
+        status: "Completed",
+        description:
+          "State machine enforcement, full refunds on settled payments, expiry scheduling and bounded retries.",
+      },
+      {
+        id: "MS-EP-5",
+        label: "Phase 5 — Webhooks",
+        date: "2026-03-09",
+        status: "In Progress",
+        description:
+          "Transactional outbox, HMAC-SHA256 signing, three-attempt retry with exponential backoff and delivery logging.",
+      },
+      {
+        id: "MS-EP-6",
+        label: "Phase 6 — Audit & dashboard",
+        date: "2026-04-06",
+        status: "Upcoming",
+        description:
+          "Append-only audit events and server-side aggregated dashboard metrics, scoped per merchant.",
+      },
+    ],
+    dependencies: [
+      {
+        id: "DEP-EP-1",
+        name: "PostgreSQL",
+        type: "Internal System",
+        owner: "Saadaoui Abdessalem",
+        status: "Resolved",
+        description: "Primary data store; integration tests run against it via Testcontainers.",
+      },
+      {
+        id: "DEP-EP-2",
+        name: "Mock payment providers (Wero, Bancontact, Visa)",
+        type: "Vendor",
+        owner: "Saadaoui Abdessalem",
+        status: "On Track",
+        description:
+          "Provider adapters resolved through a registry so a real PSP can replace a mock without touching the domain.",
+      },
+      {
+        id: "DEP-EP-3",
+        name: "Merchant webhook endpoints",
+        type: "External Party",
+        owner: "Merchant",
+        status: "On Track",
+        description:
+          "Merchant-operated HTTPS endpoints; only a 2xx response counts as successful delivery.",
+      },
+    ],
+    risks: [
+      {
+        id: "RSK-EP-1",
+        description:
+          "A retried API call creates a duplicate charge if the idempotency key is not honoured end to end.",
+        likelihood: "Medium",
+        impact: "High",
+        mitigation:
+          "Idempotency-Key header persisted with the payment; a replayed key returns the original result (BR-002).",
+        owner: "Saadaoui Abdessalem",
+      },
+      {
+        id: "RSK-EP-2",
+        description:
+          "A webhook is lost when the merchant endpoint is unavailable, leaving the merchant's system out of sync.",
+        likelihood: "High",
+        impact: "Medium",
+        mitigation:
+          "Transactional outbox guarantees the event survives the commit; three retries with exponential backoff and full delivery logging (BR-005).",
+        owner: "Saadaoui Abdessalem",
+      },
+      {
+        id: "RSK-EP-3",
+        description: "One merchant reads another merchant's orders, payments or audit records.",
+        likelihood: "Low",
+        impact: "High",
+        mitigation:
+          "Ownership-based isolation enforced in every query, plus role-based access control at the endpoint.",
+        owner: "Saadaoui Abdessalem",
+      },
+      {
+        id: "RSK-EP-4",
+        description:
+          "Architecture erodes over time as infrastructure concerns leak into the domain layer.",
+        likelihood: "Medium",
+        impact: "Medium",
+        mitigation:
+          "Clean Architecture boundaries enforced automatically by ArchUnit tests in CI.",
+        owner: "Saadaoui Abdessalem",
+      },
+    ],
+    tags: [
+      "Payments",
+      "Wero",
+      "Bancontact",
+      "Visa",
+      "Idempotency",
+      "Webhooks",
+      "Clean Architecture",
+      "DDD",
+      "Java 21",
+    ],
+    metrics: {
+      requirements: 12,
+      businessRules: 8,
+      apis: 0,
+      documents: 0,
+      testCases: 0,
+      actors: 6,
+      diagrams: 0,
+    },
+    startDate: "2025-11-10",
+    targetDate: "2026-04-06",
+    lastUpdated: "2026-02-18",
+    completion: 72,
+    regulatoryDrivers: [
+      "PSD2 — strong authentication and auditability principles",
+      "EUR-only scope pending multi-currency assessment",
     ],
   },
   {

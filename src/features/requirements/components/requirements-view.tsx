@@ -5,7 +5,7 @@ import { Download, ListChecks } from "lucide-react";
 
 import type { Requirement } from "@/lib/types";
 import { matchesQuery } from "@/lib/utils";
-import { requirementCategories, requirements } from "@/data/requirements";
+import { useProjectData } from "@/hooks/use-project-data";
 import { Button } from "@/components/ui/button";
 import { FilterBar } from "@/components/common/filter-bar";
 import { MetricCard } from "@/components/common/metric-card";
@@ -22,6 +22,12 @@ const INITIAL_FILTERS = { status: "all", priority: "all", category: "all" };
 export function RequirementsView() {
   const { highlight, marker } = useHighlight();
   const download = useDownload();
+  const { requirements } = useProjectData();
+
+  const requirementCategories = React.useMemo(
+    () => Array.from(new Set(requirements.map((item) => item.category))).sort(),
+    [requirements],
+  );
 
   const predicate = React.useCallback(
     (item: Requirement, query: string, filters: typeof INITIAL_FILTERS) => {
@@ -61,8 +67,8 @@ export function RequirementsView() {
         item.lastUpdated,
       ]),
     );
-    download(csv, "business-requirements-v2.3.csv", "text/csv");
-  }, [download]);
+    download(csv, "business-requirements.csv", "text/csv");
+  }, [download, requirements]);
 
   const counts = React.useMemo(
     () => ({
@@ -73,7 +79,7 @@ export function RequirementsView() {
         (item) => item.status === "Draft" || item.status === "In Review",
       ).length,
     }),
-    [],
+    [requirements],
   );
 
   return (

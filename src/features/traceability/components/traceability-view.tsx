@@ -5,8 +5,7 @@ import { Download, Network, ShieldCheck, TriangleAlert } from "lucide-react";
 
 import type { TraceabilityLink } from "@/lib/types";
 import { cn, matchesQuery } from "@/lib/utils";
-import { getRequirementById, requirementCategories } from "@/data/requirements";
-import { traceabilityLinks, traceabilitySummary } from "@/data/traceability";
+import { useProjectData, useTraceability } from "@/hooks/use-project-data";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -44,7 +43,19 @@ const INITIAL_FILTERS = { coverage: "all", category: "all" };
 export function TraceabilityView() {
   const { highlight, marker } = useHighlight();
   const download = useDownload();
+  const { requirements } = useProjectData();
+  const { links: traceabilityLinks, summary: traceabilitySummary } = useTraceability();
   const [selected, setSelected] = React.useState<TraceabilityLink | null>(null);
+
+  const getRequirementById = React.useCallback(
+    (id: string) => requirements.find((item) => item.id === id),
+    [requirements],
+  );
+
+  const requirementCategories = React.useMemo(
+    () => Array.from(new Set(requirements.map((item) => item.category))).sort(),
+    [requirements],
+  );
 
   const predicate = React.useCallback(
     (item: TraceabilityLink, query: string, filters: typeof INITIAL_FILTERS) => {
@@ -65,7 +76,7 @@ export function TraceabilityView() {
         item.diagramIds.join(" "),
       );
     },
-    [],
+    [getRequirementById],
   );
 
   const { query, setQuery, filters, setFilter, reset, isFiltered, results } = useArtifactFilters({
@@ -78,7 +89,7 @@ export function TraceabilityView() {
     if (!highlight) return;
     const match = traceabilityLinks.find((item) => item.requirementId === highlight);
     if (match) setSelected(match);
-  }, [highlight]);
+  }, [highlight, traceabilityLinks]);
 
   const exportMatrix = React.useCallback(() => {
     const csv = toCsv(
@@ -107,8 +118,8 @@ export function TraceabilityView() {
         link.coverage,
       ]),
     );
-    download(csv, "traceability-matrix-v2.3.csv", "text/csv");
-  }, [download]);
+    download(csv, "traceability-matrix.csv", "text/csv");
+  }, [download, traceabilityLinks, getRequirementById]);
 
   return (
     <div className="space-y-6">

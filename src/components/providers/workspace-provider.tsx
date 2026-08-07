@@ -4,6 +4,7 @@ import * as React from "react";
 
 import type { Project } from "@/lib/types";
 import { ACTIVE_PROJECT_ID, projects } from "@/data/projects";
+import { hasProjectBundle } from "@/data/workspaces";
 
 const PROJECT_KEY = "baw.selected-project";
 const OPEN_KEY = "baw.project-open";
@@ -19,7 +20,7 @@ interface WorkspaceContextValue {
   /** Return to the portfolio landing. */
   closeProject: () => void;
   selectProject: (projectId: string) => void;
-  /** Only the flagship project has a fully migrated artefact set. */
+  /** True when the project's documentation set has been migrated. */
   hasArtifacts: boolean;
 }
 
@@ -66,7 +67,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       openProject,
       closeProject,
       selectProject,
-      hasArtifacts: project.id === ACTIVE_PROJECT_ID,
+      hasArtifacts: hasProjectBundle(project.id),
     };
   }, [projectId, isProjectOpen, openProject, closeProject, selectProject]);
 

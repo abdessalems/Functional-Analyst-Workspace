@@ -5,7 +5,7 @@ import { Download, ShieldCheck } from "lucide-react";
 
 import type { BusinessRule } from "@/lib/types";
 import { cn, formatDate, matchesQuery } from "@/lib/utils";
-import { businessRuleCategories, businessRules } from "@/data/business-rules";
+import { useProjectData } from "@/hooks/use-project-data";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -43,7 +43,13 @@ const INITIAL_FILTERS = { status: "all", priority: "all", category: "all" };
 export function BusinessRulesView() {
   const { highlight, marker } = useHighlight();
   const download = useDownload();
+  const { businessRules } = useProjectData();
   const [selected, setSelected] = React.useState<BusinessRule | null>(null);
+
+  const businessRuleCategories = React.useMemo(
+    () => Array.from(new Set(businessRules.map((rule) => rule.category))).sort(),
+    [businessRules],
+  );
 
   const predicate = React.useCallback(
     (item: BusinessRule, query: string, filters: typeof INITIAL_FILTERS) => {
@@ -74,8 +80,8 @@ export function BusinessRulesView() {
         rule.impactedRequirements.join(" | "),
       ]),
     );
-    download(csv, "business-rules-v2.3.csv", "text/csv");
-  }, [download]);
+    download(csv, "business-rules.csv", "text/csv");
+  }, [download, businessRules]);
 
   const counts = React.useMemo(
     () => ({
@@ -89,7 +95,7 @@ export function BusinessRulesView() {
       ).length,
       implemented: businessRules.filter((rule) => rule.status === "Implemented").length,
     }),
-    [],
+    [businessRules],
   );
 
   return (

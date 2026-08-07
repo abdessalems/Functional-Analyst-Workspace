@@ -3,9 +3,9 @@
 import * as React from "react";
 import { Download, FileCode2, Server, ShieldCheck } from "lucide-react";
 
-import type { ApiEndpoint } from "@/lib/types";
+import type { ApiEndpoint, ApiService } from "@/lib/types";
 import { matchesQuery } from "@/lib/utils";
-import { apiEndpoints, apiServices } from "@/data/api";
+import { useProjectData } from "@/hooks/use-project-data";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -24,6 +24,12 @@ const INITIAL_FILTERS = { method: "all", tag: "all" };
 export function SwaggerView() {
   const { highlight, marker } = useHighlight();
   const download = useDownload();
+  const { apiServices } = useProjectData();
+
+  const apiEndpoints = React.useMemo(
+    () => apiServices.flatMap((service) => service.endpoints),
+    [apiServices],
+  );
 
   const predicate = React.useCallback(
     (item: ApiEndpoint, query: string, filters: typeof INITIAL_FILTERS) => {
@@ -49,11 +55,11 @@ export function SwaggerView() {
 
   const exportSpec = React.useCallback(() => {
     download(
-      JSON.stringify(buildOpenApiDocument(), null, 2),
-      "instant-payments-openapi-2.3.0.json",
+      JSON.stringify(buildOpenApiDocument(apiServices), null, 2),
+      "openapi.json",
       "application/json",
     );
-  }, [download]);
+  }, [download, apiServices]);
 
   const visibleIds = React.useMemo(() => new Set(results.map((item) => item.id)), [results]);
 
@@ -166,7 +172,7 @@ export function SwaggerView() {
 }
 
 /** Builds a valid OpenAPI 3.0.3 document from the endpoint catalogue. */
-function buildOpenApiDocument() {
+function buildOpenApiDocument(apiServices: ApiService[]) {
   const paths: Record<string, Record<string, unknown>> = {};
 
   for (const service of apiServices) {

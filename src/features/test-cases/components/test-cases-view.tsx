@@ -5,7 +5,7 @@ import { Bug, ClipboardCheck, Download } from "lucide-react";
 
 import type { TestCase } from "@/lib/types";
 import { cn, formatDate, matchesQuery } from "@/lib/utils";
-import { testCases, testSuites } from "@/data/test-cases";
+import { useProjectData } from "@/hooks/use-project-data";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -42,7 +42,13 @@ const INITIAL_FILTERS = { status: "all", suite: "all", priority: "all", type: "a
 export function TestCasesView() {
   const { highlight, marker } = useHighlight();
   const download = useDownload();
+  const { testCases } = useProjectData();
   const [selected, setSelected] = React.useState<TestCase | null>(null);
+
+  const testSuites = React.useMemo(
+    () => Array.from(new Set(testCases.map((item) => item.suite))).sort(),
+    [testCases],
+  );
 
   const predicate = React.useCallback(
     (item: TestCase, query: string, filters: typeof INITIAL_FILTERS) => {
@@ -72,7 +78,7 @@ export function TestCasesView() {
     if (!highlight) return;
     const match = testCases.find((item) => item.id === highlight);
     if (match) setSelected(match);
-  }, [highlight]);
+  }, [highlight, testCases]);
 
   const exportCsv = React.useCallback(() => {
     const csv = toCsv(
@@ -103,8 +109,8 @@ export function TestCasesView() {
         item.defect ?? "",
       ]),
     );
-    download(csv, "test-cases-uat-2.3.csv", "text/csv");
-  }, [download]);
+    download(csv, "test-cases.csv", "text/csv");
+  }, [download, testCases]);
 
   const counts = React.useMemo(() => {
     const passed = testCases.filter((item) => item.status === "Passed").length;
@@ -113,9 +119,9 @@ export function TestCasesView() {
       passed,
       failed: testCases.filter((item) => item.status === "Failed").length,
       blocked: testCases.filter((item) => item.status === "Blocked").length,
-      passRate: Math.round((passed / testCases.length) * 100),
+      passRate: testCases.length === 0 ? 0 : Math.round((passed / testCases.length) * 100),
     };
-  }, []);
+  }, [testCases]);
 
   return (
     <div className="space-y-6">

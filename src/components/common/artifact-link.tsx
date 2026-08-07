@@ -6,10 +6,12 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { resolveArtifact } from "@/lib/artifact-links";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { useProjectData } from "@/hooks/use-project-data";
 
-/** Clickable reference chip for a business key such as REQ-004 or TC-017. */
+/** Clickable reference chip for a business key such as FR-4 or TC-017. */
 export function ArtifactLink({ id, className }: { id: string; className?: string }) {
-  const artifact = resolveArtifact(id);
+  const bundle = useProjectData();
+  const artifact = resolveArtifact(id, bundle);
 
   if (!artifact) {
     return (

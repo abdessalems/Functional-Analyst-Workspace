@@ -5,7 +5,7 @@ import { Boxes, Maximize2, Monitor, Smartphone } from "lucide-react";
 
 import type { Wireframe } from "@/lib/types";
 import { cn, formatDate, matchesQuery } from "@/lib/utils";
-import { wireframes } from "@/data/diagrams";
+import { useProjectData } from "@/hooks/use-project-data";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -25,6 +25,7 @@ const INITIAL_FILTERS = { channel: "all", status: "all" };
 
 export function WireframesView() {
   const { highlight, marker } = useHighlight();
+  const { wireframes } = useProjectData();
   const [selected, setSelected] = React.useState<Wireframe | null>(null);
 
   const predicate = React.useCallback(
@@ -46,7 +47,7 @@ export function WireframesView() {
     if (!highlight) return;
     const match = wireframes.find((item) => item.id === highlight);
     if (match) setSelected(match);
-  }, [highlight]);
+  }, [highlight, wireframes]);
 
   return (
     <div className="space-y-6">

@@ -1,0 +1,574 @@
+import type { Actor, BusinessRule, Requirement } from "@/lib/types";
+import type { ProjectDataBundle } from "@/data/workspaces/types";
+import { EMPTY_BUNDLE } from "@/data/workspaces/types";
+
+/**
+ * EuroPay Hub — European merchant payment platform.
+ *
+ * Content transcribed from the project's own analysis artefacts:
+ * https://github.com/abdessalems/europay-hub/tree/main/docs
+ *
+ * Business objectives (BO-1…6), functional requirements (FR-1…12) and the
+ * headline business rules (BR-001…008) are taken from `01-business-requirements.md`
+ * as written. The deeper artefact sets — API contracts, use cases, acceptance
+ * criteria and the 70-case test catalogue — live in the same folder and are
+ * transcribed progressively.
+ */
+
+const requirements: Requirement[] = [
+  {
+    id: "FR-1",
+    title: "Merchant Registration & Authentication",
+    businessNeed:
+      "BO-6 — Be secure by default (authentication, authorisation, auditability). A merchant cannot transact until it has an identity the platform can trust and audit.",
+    description:
+      "A merchant can register and authenticate. Registration atomically creates the merchant and its first user; authentication issues a JWT carrying the user's identity and role. Login failures are indistinguishable from one another so the endpoint cannot be used to enumerate accounts.",
+    priority: "Critical",
+    status: "Implemented",
+    category: "Identity & Access",
+    moscow: "Must",
+    owner: "Saadaoui Abdessalem",
+    lastUpdated: "2026-02-18",
+    version: "1.0",
+    acceptanceCriteria: [
+      {
+        id: "AC-FR1-1",
+        given: "a new merchant with an unused email address",
+        when: "the registration endpoint is called",
+        then: "HTTP 201 is returned with a merchantId and a userId, and the user holds the MERCHANT role",
+      },
+      {
+        id: "AC-FR1-2",
+        given: "an email address already registered",
+        when: "registration is attempted again",
+        then: "the request is rejected — email uniqueness is enforced platform-wide",
+      },
+    ],
+    relatedDocuments: ["DOC-EP-01", "DOC-EP-03"],
+    relatedApis: [],
+    relatedTestCases: ["TC-EP-001"],
+    relatedRules: ["BR-EP-008"],
+  },
+  {
+    id: "FR-2",
+    title: "API Key Management",
+    businessNeed:
+      "BO-1 — Server-to-server integration needs a credential that is independent of a human login session and can be rotated without downtime.",
+    description:
+      "A merchant can generate and revoke API keys. The secret is displayed once at creation and never again; only the key prefix and a BCrypt hash are persisted. Keys are merchant-scoped, cryptographically generated, and can be revoked or allowed to expire.",
+    priority: "Critical",
+    status: "Implemented",
+    category: "Identity & Access",
+    moscow: "Must",
+    owner: "Saadaoui Abdessalem",
+    lastUpdated: "2026-02-18",
+    version: "1.0",
+    acceptanceCriteria: [
+      {
+        id: "AC-FR2-1",
+        given: "an authenticated merchant",
+        when: "an API key is created",
+        then: "the plaintext secret is returned exactly once and only its prefix and hash are stored",
+      },
+    ],
+    relatedDocuments: ["DOC-EP-01", "DOC-EP-03"],
+    relatedApis: [],
+    relatedTestCases: ["TC-EP-010"],
+    relatedRules: ["BR-EP-001"],
+  },
+  {
+    id: "FR-3",
+    title: "Order Management",
+    businessNeed:
+      "BO-1 — A payment is always raised against a commercial intent; the order is that intent and gives the merchant something to reconcile against.",
+    description:
+      "A merchant can create, view and cancel orders. Order references are unique per merchant, amounts are validated against the configured EUR maximum, and cancellation is restricted to orders still in the CREATED state. Customers are reused by the email and merchant tuple.",
+    priority: "High",
+    status: "Implemented",
+    category: "Orders & Customers",
+    moscow: "Must",
+    owner: "Saadaoui Abdessalem",
+    lastUpdated: "2026-02-18",
+    version: "1.0",
+    acceptanceCriteria: [
+      {
+        id: "AC-FR3-1",
+        given: "an order that has not yet been paid",
+        when: "the merchant cancels it",
+        then: "the cancellation succeeds only while the order is in CREATED",
+      },
+    ],
+    relatedDocuments: ["DOC-EP-01", "DOC-EP-02"],
+    relatedApis: [],
+    relatedTestCases: [],
+    relatedRules: ["BR-EP-006", "BR-EP-007"],
+  },
+  {
+    id: "FR-4",
+    title: "Payment Creation",
+    businessNeed:
+      "BO-1 — Let a merchant accept payments via several methods through one API, abstracting the differences between payment rails behind one consistent contract.",
+    description:
+      "A merchant can create a payment for an order using a chosen method. The provider is resolved through a registry, so Wero, Bancontact and Visa are selected by configuration rather than by branching logic. Amount and currency are inherited from the order, and the caller may authenticate with either a JWT or an API key.",
+    priority: "Critical",
+    status: "Implemented",
+    category: "Payments",
+    moscow: "Must",
+    owner: "Saadaoui Abdessalem",
+    lastUpdated: "2026-02-18",
+    version: "1.0",
+    acceptanceCriteria: [
+      {
+        id: "AC-FR4-1",
+        given: "an order in a payable state",
+        when: "a payment is created with method WERO",
+        then: "the payment is routed to the Wero provider and inherits the order's amount and currency",
+      },
+    ],
+    relatedDocuments: ["DOC-EP-01", "DOC-EP-02"],
+    relatedApis: [],
+    relatedTestCases: [],
+    relatedRules: ["BR-EP-001", "BR-EP-006", "BR-EP-007"],
+  },
+  {
+    id: "FR-5",
+    title: "Payment State Machine",
+    businessNeed:
+      "BO-2 — Provide a reliable, observable payment lifecycle with clear states, so that any payment's position is unambiguous at any moment.",
+    description:
+      "A payment progresses through a well-defined state machine. Transitions are enforced centrally rather than by each caller, which is what makes refunds, retries, cancellation windows and expiry deterministic.",
+    priority: "Critical",
+    status: "Implemented",
+    category: "Payments",
+    moscow: "Must",
+    owner: "Saadaoui Abdessalem",
+    lastUpdated: "2026-02-18",
+    version: "1.0",
+    acceptanceCriteria: [
+      {
+        id: "AC-FR5-1",
+        given: "a payment in a terminal state",
+        when: "an illegal transition is attempted",
+        then: "the transition is rejected by the state machine, not by the calling code",
+      },
+    ],
+    relatedDocuments: ["DOC-EP-01", "DOC-EP-02"],
+    relatedApis: [],
+    relatedTestCases: [],
+    relatedRules: ["BR-EP-003", "BR-EP-004"],
+  },
+  {
+    id: "FR-6",
+    title: "Idempotency",
+    businessNeed:
+      "BO-4 — Prevent duplicate charges and enforce payment safety. A retried network call must never take a customer's money twice.",
+    description:
+      "Duplicate payment requests are prevented via an Idempotency-Key header. A repeated request carrying the same key returns the original result rather than creating a second payment.",
+    priority: "Critical",
+    status: "Implemented",
+    category: "Payments",
+    moscow: "Must",
+    owner: "Saadaoui Abdessalem",
+    lastUpdated: "2026-02-18",
+    version: "1.0",
+    acceptanceCriteria: [
+      {
+        id: "AC-FR6-1",
+        given: "a payment already created with a given Idempotency-Key",
+        when: "the identical request is replayed",
+        then: "the original payment is returned and no second payment exists",
+      },
+    ],
+    relatedDocuments: ["DOC-EP-01", "DOC-EP-02"],
+    relatedApis: [],
+    relatedTestCases: [],
+    relatedRules: ["BR-EP-002"],
+  },
+  {
+    id: "FR-7",
+    title: "Full Refunds",
+    businessNeed:
+      "BO-5 — Support post-payment operations. A merchant must be able to return funds without leaving the platform.",
+    description:
+      "A successful payment can be refunded in full. Refunds are permitted only for payments that reached SUCCESS or SETTLED, which prevents refunding money that was never captured.",
+    priority: "High",
+    status: "Implemented",
+    category: "Payments",
+    moscow: "Must",
+    owner: "Saadaoui Abdessalem",
+    lastUpdated: "2026-02-18",
+    version: "1.0",
+    acceptanceCriteria: [
+      {
+        id: "AC-FR7-1",
+        given: "a payment that is not in SUCCESS or SETTLED",
+        when: "a refund is requested",
+        then: "the refund is rejected",
+      },
+    ],
+    relatedDocuments: ["DOC-EP-01", "DOC-EP-02"],
+    relatedApis: [],
+    relatedTestCases: [],
+    relatedRules: ["BR-EP-003"],
+  },
+  {
+    id: "FR-8",
+    title: "Cancellation & Retry",
+    businessNeed:
+      "BO-5 — Support post-payment operations: refund, cancel, retry, so a transient failure does not cost the merchant the sale.",
+    description:
+      "A payment can be cancelled before completion, and a failed payment can be retried. Retry is bounded, and expired payments cannot be approved.",
+    priority: "High",
+    status: "Implemented",
+    category: "Payments",
+    moscow: "Must",
+    owner: "Saadaoui Abdessalem",
+    lastUpdated: "2026-02-18",
+    version: "1.0",
+    acceptanceCriteria: [
+      {
+        id: "AC-FR8-1",
+        given: "a payment that has expired",
+        when: "approval is attempted",
+        then: "the approval is rejected",
+      },
+    ],
+    relatedDocuments: ["DOC-EP-01", "DOC-EP-02"],
+    relatedApis: [],
+    relatedTestCases: [],
+    relatedRules: ["BR-EP-004"],
+  },
+  {
+    id: "FR-9",
+    title: "Webhook Events",
+    businessNeed:
+      "BO-3 — Notify merchants of payment outcomes reliably. Polling is wasteful and slow; the merchant's own systems must be told.",
+    description:
+      "The platform sends webhook events for payment state changes. Events are written through a transactional outbox so an event is never lost when the transaction commits, and each delivery is signed with HMAC-SHA256 so the merchant can verify authenticity.",
+    priority: "High",
+    status: "Implemented",
+    category: "Webhooks",
+    moscow: "Must",
+    owner: "Saadaoui Abdessalem",
+    lastUpdated: "2026-02-18",
+    version: "1.0",
+    acceptanceCriteria: [
+      {
+        id: "AC-FR9-1",
+        given: "a payment whose state changes",
+        when: "the transaction commits",
+        then: "a webhook event is enqueued through the outbox and signed with HMAC-SHA256",
+      },
+    ],
+    relatedDocuments: ["DOC-EP-01", "DOC-EP-02"],
+    relatedApis: [],
+    relatedTestCases: [],
+    relatedRules: ["BR-EP-005"],
+  },
+  {
+    id: "FR-10",
+    title: "Webhook Retries",
+    businessNeed:
+      "BO-3 — At-least-once delivery. A merchant endpoint that is briefly down must not cause a permanently lost notification.",
+    description:
+      "Failed webhooks are retried up to 3 times with exponential backoff. Only a 2xx response counts as delivered; every attempt is logged, and secrets are masked in those logs.",
+    priority: "High",
+    status: "Implemented",
+    category: "Webhooks",
+    moscow: "Must",
+    owner: "Saadaoui Abdessalem",
+    lastUpdated: "2026-02-18",
+    version: "1.0",
+    acceptanceCriteria: [
+      {
+        id: "AC-FR10-1",
+        given: "a merchant endpoint returning a non-2xx response",
+        when: "delivery is attempted",
+        then: "the delivery is retried at most 3 times with exponential backoff and every attempt is logged",
+      },
+    ],
+    relatedDocuments: ["DOC-EP-01", "DOC-EP-02"],
+    relatedApis: [],
+    relatedTestCases: [],
+    relatedRules: ["BR-EP-005"],
+  },
+  {
+    id: "FR-11",
+    title: "Audit Logging",
+    businessNeed:
+      "BO-6 — Auditability. Compliance must be able to reconstruct who did what, and when, without reading application logs.",
+    description:
+      "Significant actions are recorded in an append-only audit log. Entries are never mutated, and merchant scoping is applied so one merchant can never read another's activity.",
+    priority: "High",
+    status: "Implemented",
+    category: "Audit & Reporting",
+    moscow: "Must",
+    owner: "Saadaoui Abdessalem",
+    lastUpdated: "2026-02-18",
+    version: "1.0",
+    acceptanceCriteria: [
+      {
+        id: "AC-FR11-1",
+        given: "any significant action on the platform",
+        when: "it completes",
+        then: "an append-only audit entry exists for it",
+      },
+    ],
+    relatedDocuments: ["DOC-EP-01", "DOC-EP-02"],
+    relatedApis: [],
+    relatedTestCases: [],
+    relatedRules: ["BR-EP-008"],
+  },
+  {
+    id: "FR-12",
+    title: "Dashboard Metrics",
+    businessNeed:
+      "BO-2 — Observability for the merchant, not only for the operator: the merchant needs to see its own transactions and totals.",
+    description:
+      "Merchants can view transactions and dashboard metrics. Metrics are aggregated server-side rather than by loading full tables, and every query is filtered to the calling merchant's own data.",
+    priority: "Medium",
+    status: "Implemented",
+    category: "Audit & Reporting",
+    moscow: "Should",
+    owner: "Saadaoui Abdessalem",
+    lastUpdated: "2026-02-18",
+    version: "1.0",
+    acceptanceCriteria: [
+      {
+        id: "AC-FR12-1",
+        given: "a merchant requesting dashboard metrics",
+        when: "the aggregation runs",
+        then: "it is computed server-side and scoped to that merchant only",
+      },
+    ],
+    relatedDocuments: ["DOC-EP-01"],
+    relatedApis: [],
+    relatedTestCases: [],
+    relatedRules: ["BR-EP-008"],
+  },
+];
+
+/** BR-001…008 exactly as catalogued in the project's business requirements document. */
+const businessRules: BusinessRule[] = [
+  {
+    id: "BR-EP-001",
+    description: "An API key is required for all merchant server-to-server calls.",
+    logic: "IF request.origin = 'SERVER_TO_SERVER' AND request.apiKey IS NULL THEN reject 401",
+    priority: "Critical",
+    source: "EuroPay Hub BRD — BR-001",
+    status: "Implemented",
+    category: "Identity & Access",
+    owner: "Saadaoui Abdessalem",
+    effectiveFrom: "2026-02-18",
+    impactedRequirements: ["FR-2", "FR-4"],
+  },
+  {
+    id: "BR-EP-002",
+    description: "Duplicate payment requests with the same Idempotency-Key return the original result.",
+    logic:
+      "IF EXISTS(payment WHERE idempotencyKey = request.idempotencyKey) THEN return original payment ELSE create new",
+    priority: "Critical",
+    source: "EuroPay Hub BRD — BR-002",
+    status: "Implemented",
+    category: "Payments",
+    owner: "Saadaoui Abdessalem",
+    effectiveFrom: "2026-02-18",
+    impactedRequirements: ["FR-6"],
+  },
+  {
+    id: "BR-EP-003",
+    description: "A refund is only allowed for a payment in SUCCESS (or SETTLED).",
+    logic: "IF payment.status NOT IN ('SUCCESS','SETTLED') THEN reject refund",
+    priority: "Critical",
+    source: "EuroPay Hub BRD — BR-003",
+    status: "Implemented",
+    category: "Payments",
+    owner: "Saadaoui Abdessalem",
+    effectiveFrom: "2026-02-18",
+    impactedRequirements: ["FR-7", "FR-5"],
+  },
+  {
+    id: "BR-EP-004",
+    description: "An EXPIRED payment cannot be approved.",
+    logic: "IF payment.status = 'EXPIRED' THEN reject approval",
+    priority: "Critical",
+    source: "EuroPay Hub BRD — BR-004",
+    status: "Implemented",
+    category: "Payments",
+    owner: "Saadaoui Abdessalem",
+    effectiveFrom: "2026-02-18",
+    impactedRequirements: ["FR-8", "FR-5"],
+  },
+  {
+    id: "BR-EP-005",
+    description: "Webhooks are retried at most 3 times.",
+    logic:
+      "IF delivery.response NOT IN 2xx AND attempt < 3 THEN schedule retry WITH exponential backoff ELSE mark failed",
+    priority: "High",
+    source: "EuroPay Hub BRD — BR-005",
+    status: "Implemented",
+    category: "Webhooks",
+    owner: "Saadaoui Abdessalem",
+    effectiveFrom: "2026-02-18",
+    impactedRequirements: ["FR-9", "FR-10"],
+  },
+  {
+    id: "BR-EP-006",
+    description: "The payment amount must not exceed the configurable maximum.",
+    logic: "IF payment.amount > config.maxAmount THEN reject",
+    priority: "High",
+    source: "EuroPay Hub BRD — BR-006",
+    status: "Implemented",
+    category: "Orders & Customers",
+    owner: "Saadaoui Abdessalem",
+    effectiveFrom: "2026-02-18",
+    impactedRequirements: ["FR-3", "FR-4"],
+  },
+  {
+    id: "BR-EP-007",
+    description: "Only EUR is supported initially.",
+    logic: "IF order.currency <> 'EUR' THEN reject",
+    priority: "High",
+    source: "EuroPay Hub BRD — BR-007",
+    status: "Implemented",
+    category: "Orders & Customers",
+    owner: "Saadaoui Abdessalem",
+    effectiveFrom: "2026-02-18",
+    impactedRequirements: ["FR-3", "FR-4"],
+  },
+  {
+    id: "BR-EP-008",
+    description: "Every important action must be audited.",
+    logic: "ON significantAction DO append auditEvent (immutable, merchant-scoped)",
+    priority: "High",
+    source: "EuroPay Hub BRD — BR-008",
+    status: "Implemented",
+    category: "Audit & Reporting",
+    owner: "Saadaoui Abdessalem",
+    effectiveFrom: "2026-02-18",
+    impactedRequirements: ["FR-1", "FR-11", "FR-12"],
+  },
+];
+
+const actors: Actor[] = [
+  {
+    id: "ACT-EP-001",
+    name: "Merchant",
+    type: "Human",
+    description:
+      "A European business accepting payments through the platform. Integrates server-to-server and manages its own orders, keys and webhooks.",
+    responsibilities: [
+      "Register and authenticate on the platform",
+      "Generate and revoke API keys",
+      "Create, view and cancel orders",
+      "Create payments and request refunds",
+      "Configure webhook endpoints and review delivery logs",
+    ],
+    permissions: [
+      "MERCHANT role via JWT, or server-to-server via API key",
+      "Full access to its own orders, customers, payments and audit entries",
+      "No visibility of any other merchant's data",
+    ],
+    systemsUsed: ["EuroPay Hub REST API", "Merchant back office"],
+    channel: "Server-to-server API",
+  },
+  {
+    id: "ACT-EP-002",
+    name: "Customer",
+    type: "Human",
+    description:
+      "The payer completing a purchase with the merchant, using Wero, Bancontact or Visa.",
+    responsibilities: [
+      "Complete the payment on the selected method",
+      "Receive the outcome of the payment attempt",
+    ],
+    permissions: [
+      "No direct platform access — represented as a customer record owned by the merchant",
+    ],
+    systemsUsed: ["Payment method app or page"],
+    channel: "Checkout",
+  },
+  {
+    id: "ACT-EP-003",
+    name: "Platform Admin",
+    type: "Human",
+    description:
+      "Operator of the platform, holding the ADMIN role, responsible for configuration and cross-merchant support.",
+    responsibilities: [
+      "Maintain platform configuration such as the maximum payment amount",
+      "Investigate delivery and provider failures",
+      "Support merchant onboarding",
+    ],
+    permissions: ["ADMIN role enforced with @PreAuthorize", "Cannot bypass the audit trail"],
+    systemsUsed: ["EuroPay Hub REST API", "Operational tooling"],
+    channel: "Back office",
+  },
+  {
+    id: "ACT-EP-004",
+    name: "Compliance / Audit",
+    type: "Human",
+    description:
+      "Reviews the append-only audit trail to evidence that platform activity is controlled and reconstructable.",
+    responsibilities: [
+      "Review audit events for significant actions",
+      "Evidence access control and data isolation between merchants",
+    ],
+    permissions: ["Read-only access to audit records", "Cannot mutate or delete audit entries"],
+    systemsUsed: ["Audit log", "Reporting"],
+    channel: "Governance",
+  },
+  {
+    id: "ACT-EP-005",
+    name: "Payment Provider (Wero / Bancontact / Visa)",
+    type: "External",
+    description:
+      "The payment rail executing the transaction. Mocked in the current scope; selected at runtime through the provider registry.",
+    responsibilities: [
+      "Accept a payment instruction for its method",
+      "Return the outcome of the authorisation",
+    ],
+    permissions: ["Receives only the data required to execute the payment"],
+    systemsUsed: ["Provider adapter", "Provider registry"],
+    channel: "Provider interface",
+  },
+  {
+    id: "ACT-EP-006",
+    name: "Merchant Webhook Endpoint",
+    type: "System",
+    description:
+      "The merchant-operated HTTPS endpoint receiving signed payment lifecycle events from the platform.",
+    responsibilities: [
+      "Accept signed event deliveries",
+      "Verify the HMAC-SHA256 signature",
+      "Return 2xx to acknowledge receipt",
+    ],
+    permissions: [
+      "Receives only events for its own merchant",
+      "Delivery is retried at most 3 times before being marked failed",
+    ],
+    systemsUsed: ["Merchant integration layer"],
+    channel: "Outbound webhook",
+  },
+];
+
+export const europayHubBundle: ProjectDataBundle = {
+  ...EMPTY_BUNDLE,
+  projectId: "PRJ-EPH-001",
+  requirements,
+  businessRules,
+  actors,
+  databaseObjectsByRequirement: {
+    "FR-1": ["merchants", "users"],
+    "FR-2": ["api_keys"],
+    "FR-3": ["orders", "customers"],
+    "FR-4": ["payments"],
+    "FR-5": ["payments", "payment_transitions"],
+    "FR-6": ["payments", "idempotency_keys"],
+    "FR-7": ["refunds", "payments"],
+    "FR-8": ["payments"],
+    "FR-9": ["webhook_outbox", "webhook_endpoints"],
+    "FR-10": ["webhook_delivery_attempts"],
+    "FR-11": ["audit_events"],
+    "FR-12": ["payments", "orders"],
+  },
+};

@@ -1,6 +1,5 @@
 import type { LucideIcon } from "lucide-react";
 import {
-  Activity,
   BookOpen,
   Boxes,
   ClipboardCheck,
@@ -9,7 +8,6 @@ import {
   FileText,
   FolderKanban,
   GitBranch,
-  LayoutDashboard,
   ListChecks,
   Network,
   Route,
@@ -21,13 +19,35 @@ import {
   Workflow,
 } from "lucide-react";
 
+/** Artefact collections a nav item can report a count for. */
+export type NavCountKey =
+  | "requirements"
+  | "businessRules"
+  | "actors"
+  | "functionalSpecSections"
+  | "processFlows"
+  | "bpmnModels"
+  | "diagrams"
+  | "wireframes"
+  | "apis"
+  | "sqlValidations"
+  | "testCases"
+  | "documents";
+
 export interface NavItem {
   label: string;
   href: string;
   icon: LucideIcon;
   description: string;
-  /** Shown as a count chip in the sidebar. */
+  /** Static chip, used for portfolio-level entries. */
   badge?: string;
+  /**
+   * Which collection of the active project this page shows. The sidebar reads
+   * the count from the project's data, and hides the page entirely when the
+   * project has nothing to show there — so a project only ever displays the
+   * pages it actually has.
+   */
+  countKey?: NavCountKey;
 }
 
 export interface NavSection {
@@ -56,7 +76,6 @@ export const navigationSections: NavSection[] = [
         href: "/",
         icon: FolderKanban,
         description: "Portfolio register of banking change initiatives",
-        badge: "6",
       },
       {
         label: "Settings",
@@ -77,12 +96,6 @@ export const navigationSections: NavSection[] = [
         icon: Route,
         description: "The seven stages of the analysis lifecycle and what each one produced",
       },
-      {
-        label: "Dashboard",
-        href: "/dashboard",
-        icon: LayoutDashboard,
-        description: "Delivery status, artefact counts and recent workspace activity",
-      },
     ],
   },
   {
@@ -99,30 +112,30 @@ export const navigationSections: NavSection[] = [
       {
         label: "Business Requirements",
         href: "/requirements",
+        countKey: "requirements",
         icon: ListChecks,
         description: "Baselined business requirements with acceptance criteria",
-        badge: "24",
       },
       {
         label: "Functional Specification",
         href: "/functional-specification",
+        countKey: "functionalSpecSections",
         icon: ScrollText,
         description: "Business logic, validations, error handling and field definitions",
-        badge: "8",
       },
       {
         label: "Business Rules",
         href: "/business-rules",
+        countKey: "businessRules",
         icon: ShieldCheck,
         description: "Rule catalogue governing the payment decision path",
-        badge: "16",
       },
       {
         label: "Actors",
         href: "/actors",
+        countKey: "actors",
         icon: Users,
         description: "Human, system and external actors with permissions",
-        badge: "8",
       },
     ],
   },
@@ -134,28 +147,30 @@ export const navigationSections: NavSection[] = [
       {
         label: "Process Flow",
         href: "/process-flow",
+        countKey: "processFlows",
         icon: Workflow,
         description: "Swimlane view of the end-to-end payment process",
       },
       {
         label: "BPMN",
         href: "/bpmn",
+        countKey: "bpmnModels",
         icon: Network,
         description: "BPMN 2.0 collaboration model with zoom and export",
       },
       {
         label: "PlantUML",
         href: "/plantuml",
+        countKey: "diagrams",
         icon: GitBranch,
         description: "Use case, sequence, component, activity and state models",
-        badge: "5",
       },
       {
         label: "Wireframes",
         href: "/wireframes",
+        countKey: "wireframes",
         icon: Boxes,
         description: "Screen designs with annotations and version history",
-        badge: "6",
       },
     ],
   },
@@ -167,23 +182,23 @@ export const navigationSections: NavSection[] = [
       {
         label: "Swagger API",
         href: "/swagger-api",
+        countKey: "apis",
         icon: FileCode2,
         description: "REST contract documentation for the payment services",
-        badge: "5",
       },
       {
         label: "SQL Validation",
         href: "/sql-validation",
+        countKey: "sqlValidations",
         icon: Database,
         description: "Validation queries, result sets and analyst notes",
-        badge: "6",
       },
       {
         label: "Test Cases",
         href: "/test-cases",
+        countKey: "testCases",
         icon: ClipboardCheck,
         description: "SIT and UAT catalogue with execution status",
-        badge: "39",
       },
     ],
   },
@@ -195,9 +210,9 @@ export const navigationSections: NavSection[] = [
       {
         label: "Documents",
         href: "/documents",
+        countKey: "documents",
         icon: FileText,
         description: "Controlled document register with versions and owners",
-        badge: "7",
       },
       {
         label: "Traceability Matrix",
@@ -218,5 +233,3 @@ export function findNavItem(pathname: string): NavItem | undefined {
 export function findNavSection(pathname: string): NavSection | undefined {
   return navigationSections.find((section) => section.items.some((item) => item.href === pathname));
 }
-
-export const activityIcon = Activity;

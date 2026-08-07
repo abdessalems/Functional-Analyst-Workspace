@@ -10,6 +10,7 @@ import { navigationSections } from "@/config/navigation";
 import { useWorkspace } from "@/components/providers/workspace-provider";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { StatusBadge } from "@/components/common/status-badge";
+import { useProjectCounts } from "@/hooks/use-project-data";
 
 interface SidebarNavProps {
   collapsed?: boolean;
@@ -23,10 +24,16 @@ interface SidebarNavProps {
 export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
   const pathname = usePathname();
   const { project, isProjectOpen, closeProject } = useWorkspace();
+  const counts = useProjectCounts();
 
-  const sections = navigationSections.filter(
-    (section) => section.scope === "portfolio" || isProjectOpen,
-  );
+  // Show a page only when the active project actually has something on it.
+  const sections = navigationSections
+    .filter((section) => section.scope === "portfolio" || isProjectOpen)
+    .map((section) => ({
+      ...section,
+      items: section.items.filter((item) => !item.countKey || counts[item.countKey] > 0),
+    }))
+    .filter((section) => section.items.length > 0);
 
   return (
     <nav aria-label="Workspace sections" className="flex flex-col gap-5 px-3 pb-6">
@@ -66,6 +73,7 @@ export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
           {section.items.map((item) => {
             const isActive = pathname === item.href;
             const Icon = item.icon;
+            const chip = item.countKey ? String(counts[item.countKey]) : item.badge;
 
             const link = (
               <Link
@@ -94,7 +102,7 @@ export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
                 {!collapsed && (
                   <>
                     <span className="flex-1 truncate">{item.label}</span>
-                    {item.badge && (
+                    {chip && (
                       <span
                         className={cn(
                           "rounded px-1.5 py-0.5 text-[11px] font-medium tabular-nums",
@@ -103,7 +111,7 @@ export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
                             : "bg-muted text-muted-foreground group-hover:bg-background",
                         )}
                       >
-                        {item.badge}
+                        {chip}
                       </span>
                     )}
                   </>

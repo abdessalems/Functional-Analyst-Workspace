@@ -16,7 +16,7 @@ import {
 
 import type { DocumentFormat, WorkspaceDocument } from "@/lib/types";
 import { cn, formatDate, matchesQuery } from "@/lib/utils";
-import { documents } from "@/data/documents";
+import { useProjectData } from "@/hooks/use-project-data";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -79,6 +79,7 @@ const CONFIDENTIALITY_TONE = {
 export function DocumentsView() {
   const { highlight, marker } = useHighlight();
   const download = useDownload();
+  const { documents } = useProjectData();
   const [preview, setPreview] = React.useState<WorkspaceDocument | null>(null);
 
   const predicate = React.useCallback(

@@ -12,7 +12,7 @@ import {
 
 import type { FunctionalSpecSection } from "@/lib/types";
 import { cn, matchesQuery } from "@/lib/utils";
-import { functionalSpecSections } from "@/data/functional-spec";
+import { useProjectData } from "@/hooks/use-project-data";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -40,9 +40,13 @@ import { useDownload } from "@/hooks/use-download";
 
 export function FunctionalSpecView() {
   const download = useDownload();
-  const [openSections, setOpenSections] = React.useState<string[]>([
-    functionalSpecSections[0]?.id ?? "",
-  ]);
+  const { functionalSpecSections } = useProjectData();
+  const [openSections, setOpenSections] = React.useState<string[]>([]);
+
+  // Open the first section whenever the active project changes.
+  React.useEffect(() => {
+    setOpenSections(functionalSpecSections[0] ? [functionalSpecSections[0].id] : []);
+  }, [functionalSpecSections]);
 
   const predicate = React.useCallback((item: FunctionalSpecSection, query: string) => {
     return matchesQuery(
@@ -94,8 +98,8 @@ export function FunctionalSpecView() {
       )
       .join("\n");
 
-    download(text, "functional-specification-v2.3.txt");
-  }, [download]);
+    download(text, "functional-specification.txt");
+  }, [download, functionalSpecSections]);
 
   const totals = React.useMemo(
     () => ({
@@ -104,7 +108,7 @@ export function FunctionalSpecView() {
       fields: functionalSpecSections.reduce((sum, s) => sum + s.fields.length, 0),
       edgeCases: functionalSpecSections.reduce((sum, s) => sum + s.edgeCases.length, 0),
     }),
-    [],
+    [functionalSpecSections],
   );
 
   return (

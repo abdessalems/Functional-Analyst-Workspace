@@ -5,7 +5,7 @@ import { Database, Info, Play, Table2 } from "lucide-react";
 
 import type { SqlValidationQuery } from "@/lib/types";
 import { cn, formatDate, matchesQuery } from "@/lib/utils";
-import { sqlTables, sqlValidations } from "@/data/sql";
+import { useProjectData } from "@/hooks/use-project-data";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -33,6 +33,7 @@ const INITIAL_FILTERS = { status: "all" };
 
 export function SqlValidationView() {
   const { highlight, marker } = useHighlight();
+  const { sqlTables, sqlValidations } = useProjectData();
 
   const predicate = React.useCallback(
     (item: SqlValidationQuery, query: string, filters: typeof INITIAL_FILTERS) => {
