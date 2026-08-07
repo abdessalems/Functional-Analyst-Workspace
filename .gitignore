@@ -37,3 +37,7 @@ yarn-error.log*
 # static export output
 /out/
 
+
+# scratch
+.tmp-*
+
