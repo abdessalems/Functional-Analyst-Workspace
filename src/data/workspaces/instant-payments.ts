@@ -1,7 +1,7 @@
 import { actors } from "@/data/actors";
 import { apiServices } from "@/data/api";
 import { businessRules } from "@/data/business-rules";
-import { diagrams, wireframes } from "@/data/diagrams";
+import { bpmnDiagram, diagrams, wireframes } from "@/data/diagrams";
 import { documents } from "@/data/documents";
 import { functionalSpecSections } from "@/data/functional-spec";
 import { bpmnModels, processFlows } from "@/data/process-flow";
@@ -50,7 +50,7 @@ export const instantPaymentsBundle: ProjectDataBundle = {
   functionalSpecSections,
   processFlows,
   bpmnModels,
-  diagrams,
+  diagrams: [...diagrams, bpmnDiagram],
   wireframes,
   apiServices,
   sqlTables,

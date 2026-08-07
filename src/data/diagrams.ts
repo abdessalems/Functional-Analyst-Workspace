@@ -248,6 +248,66 @@ RECALLED --> [*]
   },
 ];
 
+export const bpmnDiagram: Diagram = {
+  id: "UML-006",
+  title: "Outbound Instant Payment — BPMN",
+  type: "BPMN",
+  description:
+    "Collaboration model of the outbound payment process across the customer, the channel, the hub, the financial crime controls and the scheme gateway, including the compensating reservation release.",
+  version: "2.3",
+  author: "Saadaoui Abdessalem",
+  lastUpdated: "2025-05-14",
+  relatedRequirements: ["REQ-001", "REQ-003", "REQ-005", "REQ-006", "REQ-007"],
+  source: `@startuml IPH-BPMN-OutboundPayment
+' Instant Payments Hub — outbound payment process (BPMN-style, swimlanes)
+title Outbound instant payment execution
+
+|Customer|
+start
+:Enter beneficiary and amount;
+
+|Digital Channel|
+:Validate input (IBAN, amount, reference);
+
+|Instant Payments Hub|
+:Verify payee (VoP);
+if (name match?) then (NO_MATCH)
+  :Block and warn customer;
+  stop
+else (MATCH)
+endif
+:Evaluate limits and reachability;
+
+|Financial Crime Controls|
+:Score fraud risk;
+if (score >= 85?) then (yes)
+  :Block and create fraud case;
+  stop
+endif
+:Screen sanctions lists;
+if (sanctions hit?) then (yes)
+  :Hold for compliance review;
+  stop
+endif
+
+|Core Ledger and Scheme|
+:Reserve funds (TTL 25s);
+:Submit pacs.008 to TIPS;
+if (pacs.002 ACCP within 10s?) then (yes)
+  :Convert reservation to booked debit;
+  :Publish settlement notification;
+else (no)
+  :Release reservation;
+  :Reject with translated reason;
+  stop
+endif
+
+|Customer|
+:Receive confirmation with scheme reference;
+stop
+@enduml`,
+};
+
 export const wireframes: Wireframe[] = [
   {
     id: "WF-001",

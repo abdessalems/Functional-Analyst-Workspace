@@ -21,14 +21,18 @@ import { NoResultsState } from "@/components/common/states";
 import { useArtifactFilters } from "@/hooks/use-artifact-filters";
 import { useHighlight } from "@/hooks/use-highlight";
 import { useDownload } from "@/hooks/use-download";
-import { PlantUmlImage, plantUmlUrl } from "@/features/diagrams/components/plantuml-image";
+import { PlantUmlImage, PlantUmlPngLink } from "@/features/diagrams/components/plantuml-image";
 
 const INITIAL_FILTERS = { type: "all" };
 
 export function PlantUmlView() {
   const { highlight, marker } = useHighlight();
   const download = useDownload();
-  const { diagrams } = useProjectData();
+  const { diagrams: allDiagrams } = useProjectData();
+  const diagrams = React.useMemo(
+    () => allDiagrams.filter((diagram) => diagram.type !== "BPMN"),
+    [allDiagrams],
+  );
   const { project } = useWorkspace();
   const [fullscreen, setFullscreen] = React.useState<Diagram | null>(null);
 
@@ -142,9 +146,9 @@ export function PlantUmlView() {
                     <Download /> .puml
                   </Button>
                   <Button variant="outline" size="sm" asChild>
-                    <a href={plantUmlUrl(diagram.source, "png")} target="_blank" rel="noreferrer">
+                    <PlantUmlPngLink source={diagram.source}>
                       <Download /> PNG
-                    </a>
+                    </PlantUmlPngLink>
                   </Button>
                   <Button variant="outline" size="sm" onClick={() => setFullscreen(diagram)}>
                     <Maximize2 /> Full screen

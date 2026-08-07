@@ -8,6 +8,7 @@ import {
   FileText,
   FolderKanban,
   GitBranch,
+  Network,
   ListChecks,
   Route,
   ScrollText,
@@ -24,6 +25,7 @@ export type NavCountKey =
   | "actors"
   | "functionalSpecSections"
   | "processFlows"
+  | "bpmnModels"
   | "diagrams"
   | "wireframes"
   | "apis"
@@ -143,11 +145,18 @@ export const navigationSections: NavSection[] = [
         description: "Swimlane view of the end-to-end payment process",
       },
       {
+        label: "BPMN",
+        href: "/bpmn",
+        countKey: "bpmnModels",
+        icon: Network,
+        description: "Business process model in BPMN notation with swimlanes and gateways",
+      },
+      {
         label: "PlantUML",
         href: "/plantuml",
         countKey: "diagrams",
         icon: GitBranch,
-        description: "Use case, sequence, component, activity and state models",
+        description: "Use case, class, ER, sequence and state models kept as PlantUML source",
       },
       {
         label: "Wireframes",
