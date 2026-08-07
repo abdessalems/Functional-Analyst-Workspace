@@ -7,7 +7,7 @@
     "dev": "next dev",
     "build": "next build",
     "build:static": "node scripts/build-static.mjs",
-    "build:fa": "node scripts/build-static.mjs --base=/FA",
+    "build:fa": "node scripts/build-static.mjs --base=/fa",
     "deploy:fa": "node scripts/deploy-fa.mjs",
     "check:diagrams": "node scripts/check-diagrams.mjs",
     "preview:static": "npx --yes serve out -l 4000",

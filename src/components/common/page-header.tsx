@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
-import { PlainLanguageNote } from "@/components/common/reading-nav";
+import { PlainLanguageNote, SectionRule } from "@/components/common/reading-nav";
 
 interface PageHeaderProps {
   title: string;
@@ -15,8 +15,9 @@ interface PageHeaderProps {
 export function PageHeader({ title, description, meta, actions, className }: PageHeaderProps) {
   return (
     <div className={cn("relative flex flex-col gap-4 pb-6", className)}>
-      {/* A single hairline of brand colour to anchor the page, nothing more. */}
-      <span aria-hidden className="brand-rule absolute -top-1 left-0 h-px w-full" />
+      {/* A hairline in the colour of the section this page belongs to, so the
+          sidebar grouping carries through into the page itself. */}
+      <SectionRule />
       <div className="flex flex-col gap-3 pt-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0 space-y-1.5">
           <h1 className="text-[22px] font-semibold tracking-tight sm:text-[26px]">{title}</h1>

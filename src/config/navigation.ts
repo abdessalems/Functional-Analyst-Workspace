@@ -53,9 +53,9 @@ export interface NavSection {
   id: string;
   label: string;
   /**
-   * Structural colour for the section spine. This is safe to use decoratively
-   * because it marks *where you are*, never *how something is doing* — status
-   * and priority keep the semantic palette to themselves.
+   * Structural colour for the section, as a raw CSS colour. Safe to use
+   * decoratively because it marks *where you are*, never *how something is
+   * doing* — status and priority keep the semantic palette to themselves.
    */
   accent: string;
   /**
@@ -73,7 +73,7 @@ export interface NavSection {
 export const navigationSections: NavSection[] = [
   {
     id: "portfolio",
-    accent: "bg-slate-400",
+    accent: "hsl(215 16% 60%)",
     label: "Portfolio",
     scope: "portfolio",
     items: [
@@ -87,7 +87,7 @@ export const navigationSections: NavSection[] = [
   },
   {
     id: "workspace",
-    accent: "bg-teal-400",
+    accent: "hsl(172 66% 50%)",
     label: "Workspace",
     scope: "project",
     items: [
@@ -101,7 +101,7 @@ export const navigationSections: NavSection[] = [
   },
   {
     id: "analysis",
-    accent: "bg-sky-400",
+    accent: "hsl(199 89% 60%)",
     label: "Analysis",
     scope: "project",
     items: [
@@ -143,7 +143,7 @@ export const navigationSections: NavSection[] = [
   },
   {
     id: "design",
-    accent: "bg-violet-400",
+    accent: "hsl(258 90% 70%)",
     label: "Design & Modelling",
     scope: "project",
     items: [
@@ -179,7 +179,7 @@ export const navigationSections: NavSection[] = [
   },
   {
     id: "build",
-    accent: "bg-amber-400",
+    accent: "hsl(38 92% 58%)",
     label: "Build & Validation",
     scope: "project",
     items: [
@@ -208,7 +208,7 @@ export const navigationSections: NavSection[] = [
   },
   {
     id: "governance",
-    accent: "bg-emerald-400",
+    accent: "hsl(152 60% 52%)",
     label: "Governance",
     scope: "project",
     items: [

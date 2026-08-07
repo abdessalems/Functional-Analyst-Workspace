@@ -7,7 +7,7 @@
  *   npm run build:static   static export into ./out, served by any web server
  *
  * When hosting under a subfolder, set the base path:
- *   NEXT_PUBLIC_BASE_PATH=/projects/analyst-workspace npm run build:static
+ *   NEXT_PUBLIC_BASE_PATH=/fa npm run build:static
  */
 const isStaticExport = process.env.STATIC_EXPORT === "true";
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";

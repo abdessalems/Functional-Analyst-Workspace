@@ -7,7 +7,63 @@ import { ArrowLeft, ArrowRight, Info } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { getNeighbours, getReadingStep } from "@/config/reading-path";
+import { findNavSection } from "@/config/navigation";
 import { Card } from "@/components/ui/card";
+
+/** A hairline in the colour of the section the current page belongs to. */
+export function SectionRule() {
+  const pathname = usePathname();
+  const section = findNavSection(pathname);
+  const colour = section?.accent ?? "hsl(var(--primary))";
+
+  return (
+    <span
+      aria-hidden
+      className="absolute -top-1 left-0 h-px w-full"
+      style={{
+        backgroundImage: `linear-gradient(90deg, ${colour}, ${colour} 6rem, transparent 62%)`,
+        opacity: 0.75,
+      }}
+    />
+  );
+}
+
+/**
+ * How far through the fifteen steps the reader is. A walkthrough that shows its
+ * own length is one people finish.
+ */
+export function ReadingProgress() {
+  const pathname = usePathname();
+  const { position } = getNeighbours(pathname);
+  const section = findNavSection(pathname);
+  if (!position) return null;
+
+  const percent = Math.round((position.step / position.total) * 100);
+
+  return (
+    <div className="space-y-1.5">
+      <div className="flex items-baseline justify-between text-[11px] text-muted-foreground">
+        <span className="uppercase tracking-wide">{section?.label ?? "Analysis"}</span>
+        <span className="tabular-nums">
+          Step {position.step} of {position.total}
+        </span>
+      </div>
+      <div
+        className="h-1 w-full overflow-hidden rounded-full bg-muted"
+        role="progressbar"
+        aria-valuenow={position.step}
+        aria-valuemin={1}
+        aria-valuemax={position.total}
+        aria-label="Progress through the analysis process"
+      >
+        <div
+          className="h-full rounded-full transition-[width] duration-300"
+          style={{ width: `${percent}%`, backgroundColor: section?.accent ?? "hsl(var(--primary))" }}
+        />
+      </div>
+    </div>
+  );
+}
 
 /**
  * One sentence explaining what this page is, in plain language. Placed under

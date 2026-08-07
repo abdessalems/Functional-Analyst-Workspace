@@ -112,5 +112,5 @@ Both are SVG components keyed by id, so they need a small amount of code:
 ```bash
 npm run typecheck   # the domain model catches missing or misspelled fields
 npm run build       # confirms every page still prerenders
-npm run build:fa    # static export for https://www.saadaoui.it.com/FA
+npm run build:fa    # static export for https://www.saadaoui.it.com/fa
 ```

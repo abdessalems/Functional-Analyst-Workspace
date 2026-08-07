@@ -13,7 +13,7 @@ import { spawn } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 
-const BASE_PATH = "/FA";
+const BASE_PATH = "/fa";
 const TARGET =
   process.env.PORTFOLIO_PATH ??
   "C:/Users/User/ghwork/Saadaoui-Personal-Portfolio-ReactJs-Template";
@@ -68,7 +68,7 @@ if (!source) {
   process.exit(1);
 }
 
-const destination = path.join(publicDir, "FA");
+const destination = path.join(publicDir, "fa");
 fs.rmSync(destination, { recursive: true, force: true });
 copyDir(source, destination);
 
@@ -81,4 +81,4 @@ if (!html.includes(`${BASE_PATH}/_next/`)) {
 console.log(`\nCopied ${countFiles(destination)} files from ${path.basename(source)} to ${destination}`);
 console.log("Base path verified. Now commit and push the portfolio:\n");
 console.log(`  cd ${TARGET}`);
-console.log("  git add public/FA && git commit -m \"Update workspace\" && git push origin main");
+console.log("  git add public/fa && git commit -m \"Update workspace\" && git push origin main");

@@ -6,7 +6,7 @@
  * can be dropped onto any web host.
  *
  *   node scripts/build-static.mjs                 → hosted at the domain root
- *   node scripts/build-static.mjs --base=/FA      → hosted at example.com/FA
+ *   node scripts/build-static.mjs --base=/fa      → hosted at example.com/fa
  *
  * The base path must match the subfolder the site is served from, otherwise
  * CSS, JS and internal links resolve to the wrong URLs.

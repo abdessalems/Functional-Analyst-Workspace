@@ -10,6 +10,7 @@ import {
   FolderKanban,
   ListChecks,
   ShieldCheck,
+  Sparkles,
   UserRound,
 } from "lucide-react";
 
@@ -88,11 +89,45 @@ export function PortfolioView() {
     [],
   );
 
+  const walkthroughProject =
+    projects.find((item) => item.id === "PRJ-EPH-001") ?? projects[0];
+
   return (
     <div className="space-y-6">
+      {/*
+        A visitor arriving here had to choose from seven cards before anything
+        was explained. The hero says who this is and offers one obvious way in.
+      */}
+      <Card className="brand-wash overflow-hidden border-primary/25">
+        <div className="flex flex-col gap-5 p-6 sm:p-8 lg:flex-row lg:items-center lg:justify-between">
+          <div className="max-w-2xl space-y-3">
+            <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-[11px] font-medium uppercase tracking-wide text-primary">
+              <Sparkles className="size-3" /> Functional analysis portfolio
+            </span>
+            <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+              Saadaoui Abdessalem — Functional Analyst
+            </h1>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              Real project documentation, from the first business conversation through to the test
+              that proves it was delivered. Follow the fifteen steps of one project and you will
+              have seen how the whole discipline fits together.
+            </p>
+          </div>
+
+          <div className="flex shrink-0 flex-col gap-2 sm:flex-row lg:flex-col">
+            <Button size="lg" onClick={() => open(walkthroughProject.id)}>
+              Start the walkthrough <ArrowRight />
+            </Button>
+            <span className="text-center text-[11px] text-muted-foreground lg:text-right">
+              {walkthroughProject.shortName} · 15 steps
+            </span>
+          </div>
+        </div>
+      </Card>
+
       <PageHeader
-        title="Projects"
-        description="Banking change initiatives owned by this analysis practice. Open a project to work on its requirements, models, interfaces, validation evidence and traceability."
+        title="All Projects"
+        description="Every project is documented the same way. Open one to see its requirements, rules, models, interfaces, validation evidence and traceability."
         meta={[
           { label: "Portfolio", value: "Payments, Compliance & Lending" },
           { label: "Projects", value: projects.length },

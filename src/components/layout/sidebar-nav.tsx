@@ -65,7 +65,11 @@ export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
             <div className="mx-2 my-1 h-px bg-border" role="presentation" />
           ) : (
             <p className="flex items-center gap-2 px-2 pb-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-              <span aria-hidden className={cn("h-3 w-0.5 rounded-full", section.accent)} />
+              <span
+                aria-hidden
+                className="h-3 w-0.5 rounded-full"
+                style={{ backgroundColor: section.accent }}
+              />
               {section.label}
             </p>
           )}
