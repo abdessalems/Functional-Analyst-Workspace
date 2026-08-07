@@ -8,12 +8,12 @@ import { WorkspaceProvider } from "@/components/providers/workspace-provider";
 
 export const metadata: Metadata = {
   title: {
-    default: "Business Analyst Workspace",
-    template: "%s · Business Analyst Workspace",
+    default: "Analyst Workspace · Saadaoui Abdessalem",
+    template: "%s · Analyst Workspace",
   },
   description:
-    "Internal workspace for Business and Functional Analysts to create, review and trace banking project documentation across the delivery lifecycle.",
-  applicationName: "Business Analyst Workspace",
+    "Functional analysis workspace: requirements, business rules, process and UML models, interface contracts, validation evidence and end-to-end traceability, project by project.",
+  applicationName: "Analyst Workspace",
 };
 
 export const viewport: Viewport = {

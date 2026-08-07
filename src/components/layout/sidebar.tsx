@@ -2,11 +2,12 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { PanelLeftClose, PanelLeftOpen, Landmark } from "lucide-react";
+import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { SidebarNav } from "@/components/layout/sidebar-nav";
+import { WorkspaceLogo } from "@/components/layout/workspace-logo";
 
 interface SidebarProps {
   collapsed: boolean;
@@ -31,9 +32,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           href="/"
           className="flex items-center gap-2.5 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
-          <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground">
-            <Landmark className="size-4" />
-          </span>
+          <WorkspaceLogo className="size-8 shrink-0 rounded-md" />
           {!collapsed && (
             <span className="flex flex-col leading-tight">
               <span className="text-[13px] font-semibold tracking-tight">Analyst Workspace</span>

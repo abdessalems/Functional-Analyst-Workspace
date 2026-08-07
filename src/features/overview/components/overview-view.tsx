@@ -6,7 +6,7 @@ import {
   CircleCheck,
   CircleSlash,
   GitFork,
-  Landmark,
+  Scale,
   ScrollText,
   ShieldAlert,
   Target,
@@ -113,7 +113,7 @@ export function OverviewView() {
 
           <SectionCard
             title="Regulatory drivers"
-            icon={Landmark}
+            icon={Scale}
             description="External obligations shaping the scope."
           >
             <ul className="space-y-2">
