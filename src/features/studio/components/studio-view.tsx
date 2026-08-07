@@ -38,6 +38,7 @@ import {
   rowsToRequirements,
   rowsToRules,
   rowsToTestCases,
+  sniffSheet,
   type ParsedProject,
   type SheetRow,
 } from "@/features/studio/lib/parse-workbook";
@@ -240,7 +241,8 @@ function Studio() {
 
         for (const name of workbook.SheetNames) {
           const rows = XLSX.utils.sheet_to_json<SheetRow>(workbook.Sheets[name], { defval: "" });
-          const kind = matchSheet(name);
+          // The name is trusted first; the columns only speak when it stays silent.
+          const kind = matchSheet(name) ?? sniffSheet(rows);
           if (kind === "requirements") result.requirements = rowsToRequirements(rows, owner);
           else if (kind === "businessRules") result.businessRules = rowsToRules(rows, owner);
           else if (kind === "testCases") result.testCases = rowsToTestCases(rows, owner);

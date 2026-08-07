@@ -140,3 +140,26 @@ export function matchSheet(name: string): keyof Omit<ParsedProject, "ignoredShee
   }
   return null;
 }
+
+/**
+ * Last resort when the sheet name says nothing — a CSV carries no sheet name
+ * but "Scenario, Steps, Expected Result" is unmistakably a test catalogue.
+ * Only used after `matchSheet` declines, and only when the columns are decisive.
+ */
+export function sniffSheet(rows: SheetRow[]): keyof Omit<ParsedProject, "ignoredSheets"> | null {
+  const first = rows[0];
+  if (!first) return null;
+
+  const columns = new Set(Object.keys(first).map(normalise));
+  const has = (...names: string[]) => names.some((name) => columns.has(normalise(name)));
+
+  if (has("scenario", "expectedResult", "steps")) return "testCases";
+  if (has("logic", "expression")) return "businessRules";
+  if (has("businessNeed", "moscow", "acceptanceCriteria")) return "requirements";
+
+  // A bare id + title + description sheet is a requirements list far more often
+  // than anything else, but only claim it when there is an id to hang on to.
+  if (has("id", "ref") && has("title", "name", "summary")) return "requirements";
+
+  return null;
+}
