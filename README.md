@@ -1,8 +1,31 @@
+<div align="center">
+
 # Functional Analyst Workspace
 
-**How a banking project gets analysed — requirement by requirement, all the way to the test that proves it.**
+### How a banking project gets analysed — requirement by requirement, all the way to the test that proves it
 
-Live: **[saadaoui.it.com/fa](https://www.saadaoui.it.com/fa)** · Built by **[Saadaoui Abdessalem](https://www.saadaoui.it.com/)**, Functional Analyst & Java Developer
+**[Open the workspace →](https://www.saadaoui.it.com/fa)**
+
+[![Live](https://img.shields.io/badge/live-saadaoui.it.com%2Ffa-14b8a6?style=for-the-badge)](https://www.saadaoui.it.com/fa)
+[![Portfolio](https://img.shields.io/badge/portfolio-saadaoui.it.com-0f766e?style=for-the-badge)](https://www.saadaoui.it.com/)
+
+[![Next.js](https://img.shields.io/badge/Next.js%2015-000000?style=flat-square&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React%2019-20232a?style=flat-square&logo=react&logoColor=61dafb)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178c6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-38bdf8?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Radix UI](https://img.shields.io/badge/Radix%20UI-161618?style=flat-square&logo=radixui&logoColor=white)](https://www.radix-ui.com/)
+[![PlantUML](https://img.shields.io/badge/PlantUML-1f425f?style=flat-square)](https://plantuml.com/)
+[![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=vercel&logoColor=white)](https://vercel.com/)
+
+![Static export](https://img.shields.io/badge/static%20export-no%20backend-14b8a6?style=flat-square)
+![No auth](https://img.shields.io/badge/no%20auth-no%20database-0f766e?style=flat-square)
+![TypeScript strict](https://img.shields.io/badge/typescript-strict-3178c6?style=flat-square)
+![Projects](https://img.shields.io/badge/projects-2-64748b?style=flat-square)
+![Artefacts](https://img.shields.io/badge/artefacts-250%2B-64748b?style=flat-square)
+
+**Saadaoui Abdessalem** — Functional Analyst & Java Developer
+
+</div>
 
 ---
 
@@ -186,8 +209,23 @@ src/
 
 ## Author
 
-**Saadaoui Abdessalem** — Functional Analyst & Java Developer
+<div align="center">
 
-- Portfolio · [saadaoui.it.com](https://www.saadaoui.it.com/)
-- This workspace · [saadaoui.it.com/fa](https://www.saadaoui.it.com/fa)
-- Email · [abdessalemsaa@gmail.com](mailto:abdessalemsaa@gmail.com)
+### Saadaoui Abdessalem
+
+**Functional Analyst & Java Developer**
+
+Requirements engineering · process modelling · interface specification · data validation · traceability
+
+[![Portfolio](https://img.shields.io/badge/Portfolio-saadaoui.it.com-0f766e?style=for-the-badge&logo=googlechrome&logoColor=white)](https://www.saadaoui.it.com/)
+[![Workspace](https://img.shields.io/badge/Workspace-%2Ffa-14b8a6?style=for-the-badge)](https://www.saadaoui.it.com/fa)
+[![GitHub](https://img.shields.io/badge/GitHub-abdessalems-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/abdessalems)
+[![Email](https://img.shields.io/badge/Email-abdessalemsaa%40gmail.com-ea4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:abdessalemsaa@gmail.com)
+
+</div>
+
+---
+
+<div align="center">
+<sub>Built to be read, not just deployed. Every reference in this workspace resolves, or the build says so.</sub>
+</div>
