@@ -203,3 +203,67 @@
 .tok-boolean {
   @apply text-[#a5460f] dark:text-[#ffab70];
 }
+
+/*
+ * Printing.
+ *
+ * The workspace chrome — sidebar, top bar, filters, buttons — is navigation,
+ * and navigation on paper is just ink. Everything marked `print:hidden` goes,
+ * the shell's scroll containers are unwound so the content can flow across
+ * pages, and colours are forced to black on white so a saved PDF is readable
+ * when it is printed again by someone else.
+ */
+@media print {
+  html,
+  body {
+    height: auto !important;
+    overflow: visible !important;
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  /* The shell fixes its height to the viewport and scrolls inside; on paper
+     that would print one screenful and stop. */
+  body * {
+    overflow: visible !important;
+  }
+
+  aside,
+  header[data-app-topbar],
+  nav[data-app-sidebar] {
+    display: none !important;
+  }
+
+  main {
+    max-width: none !important;
+    padding: 0 !important;
+  }
+
+  a {
+    color: #000 !important;
+    text-decoration: none !important;
+  }
+
+  /* Keep a heading with what follows it, and never split a row or a card. */
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  tr,
+  article,
+  .break-inside-avoid {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  table {
+    width: 100% !important;
+  }
+
+  @page {
+    margin: 16mm 14mm;
+  }
+}

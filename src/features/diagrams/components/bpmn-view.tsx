@@ -18,6 +18,7 @@ import { PageHeader } from "@/components/common/page-header";
 import { EmptyState } from "@/components/common/states";
 import { useDownload } from "@/hooks/use-download";
 import { PlantUmlImage, PlantUmlPngLink } from "@/features/diagrams/components/plantuml-image";
+import { DiagramViewer, ZoomableDiagram } from "@/features/diagrams/components/diagram-viewer";
 
 /** Business process models, kept as BPMN-notation sources and rendered as diagrams. */
 export function BpmnView() {
@@ -111,9 +112,15 @@ export function BpmnView() {
             </TabsList>
 
             <TabsContent value="diagram">
-              <div className="app-scrollbar overflow-auto rounded-lg border border-border bg-surface-muted p-5">
-                <PlantUmlImage source={model.source} alt={`BPMN model — ${model.title}`} />
-              </div>
+              <ZoomableDiagram
+                source={model.source}
+                title={`${model.id} — ${model.title}`}
+                subtitle={`BPMN · v${model.version}`}
+              >
+                <div className="app-scrollbar overflow-auto rounded-lg border border-border bg-surface-muted p-5">
+                  <PlantUmlImage source={model.source} alt={`BPMN model — ${model.title}`} />
+                </div>
+              </ZoomableDiagram>
             </TabsContent>
 
             <TabsContent value="source">
@@ -129,22 +136,14 @@ export function BpmnView() {
         </Card>
       ))}
 
-      <Dialog open={fullscreen !== null} onOpenChange={(open) => !open && setFullscreen(null)}>
-        <DialogContent className="h-[92dvh] max-w-[96vw]">
-          {fullscreen && (
-            <>
-              <DialogHeader>
-                <DialogTitle>
-                  {fullscreen.id} — {fullscreen.title}
-                </DialogTitle>
-              </DialogHeader>
-              <div className="app-scrollbar flex-1 overflow-auto bg-surface-muted p-8">
-                <PlantUmlImage source={fullscreen.source} alt={fullscreen.title} />
-              </div>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
+      {fullscreen && (
+        <DiagramViewer
+          source={fullscreen.source}
+          title={`${fullscreen.id} — ${fullscreen.title}`}
+          subtitle={`BPMN · v${fullscreen.version} · ${fullscreen.description}`}
+          onClose={() => setFullscreen(null)}
+        />
+      )}
     </div>
   );
 }

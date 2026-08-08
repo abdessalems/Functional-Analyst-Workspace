@@ -5,6 +5,7 @@ import {
   CalendarClock,
   CircleCheck,
   CircleSlash,
+  FileText,
   GitFork,
   Scale,
   ScrollText,
@@ -13,9 +14,12 @@ import {
   Users,
 } from "lucide-react";
 
+import Link from "next/link";
+
 import { formatDate, initials } from "@/lib/utils";
 import { useWorkspace } from "@/components/providers/workspace-provider";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -56,10 +60,17 @@ export function OverviewView() {
           { label: "Last updated", value: formatDate(project.lastUpdated) },
         ]}
         actions={
-          <SecureLinkDialog
-            resourceName={`${project.name} — project overview`}
-            resourcePath="/overview"
-          />
+          <>
+            <Button variant="outline" size="sm" asChild>
+              <Link href="/document">
+                <FileText /> Read as a document
+              </Link>
+            </Button>
+            <SecureLinkDialog
+              resourceName={`${project.name} — project overview`}
+              resourcePath="/overview"
+            />
+          </>
         }
       />
 

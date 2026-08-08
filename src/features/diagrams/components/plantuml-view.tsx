@@ -22,6 +22,7 @@ import { useArtifactFilters } from "@/hooks/use-artifact-filters";
 import { useHighlight } from "@/hooks/use-highlight";
 import { useDownload } from "@/hooks/use-download";
 import { PlantUmlImage, PlantUmlPngLink } from "@/features/diagrams/components/plantuml-image";
+import { DiagramViewer, ZoomableDiagram } from "@/features/diagrams/components/diagram-viewer";
 
 const INITIAL_FILTERS = { type: "all" };
 
@@ -167,9 +168,18 @@ export function PlantUmlView() {
                 </TabsList>
 
                 <TabsContent value="preview">
-                  <div className="app-scrollbar overflow-auto rounded-lg border border-border bg-surface-muted p-5">
-                    <PlantUmlImage source={diagram.source} alt={`${diagram.type} diagram — ${diagram.title}`} />
-                  </div>
+                  <ZoomableDiagram
+                    source={diagram.source}
+                    title={`${diagram.id} — ${diagram.title}`}
+                    subtitle={`${diagram.type} · v${diagram.version}`}
+                  >
+                    <div className="app-scrollbar overflow-auto rounded-lg border border-border bg-surface-muted p-5">
+                      <PlantUmlImage
+                        source={diagram.source}
+                        alt={`${diagram.type} diagram — ${diagram.title}`}
+                      />
+                    </div>
+                  </ZoomableDiagram>
                 </TabsContent>
 
                 <TabsContent value="source">
@@ -187,24 +197,16 @@ export function PlantUmlView() {
         </div>
       )}
 
-      <Dialog open={fullscreen !== null} onOpenChange={(open) => !open && setFullscreen(null)}>
-        <DialogContent className="h-[92dvh] max-w-[96vw]">
-          {fullscreen && (
-            <>
-              <DialogHeader>
-                <DialogTitle>
-                  {fullscreen.id} — {fullscreen.title}
-                </DialogTitle>
-              </DialogHeader>
-              <div className="app-scrollbar flex-1 overflow-auto bg-surface-muted p-8">
-                <div className="mx-auto w-fit">
-                  <PlantUmlImage source={fullscreen.source} alt={fullscreen.title} />
-                </div>
-              </div>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
+      {fullscreen && (
+        <DiagramViewer
+          source={fullscreen.source}
+          title={`${fullscreen.id} — ${fullscreen.title}`}
+          subtitle={`${fullscreen.type} · v${fullscreen.version} · covers ${
+            fullscreen.relatedRequirements.join(", ") || "no requirement yet"
+          }`}
+          onClose={() => setFullscreen(null)}
+        />
+      )}
     </div>
   );
 }
