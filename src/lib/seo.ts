@@ -88,6 +88,17 @@ export function pageMetadata({ path, title, description, noindex }: PageSeo): Me
       description,
       images: [OG_IMAGE.url],
     },
-    ...(noindex ? { robots: { index: false, follow: true } } : {}),
+    robots: noindex
+      ? { index: false, follow: true }
+      : {
+          index: true,
+          follow: true,
+          googleBot: {
+            index: true,
+            follow: true,
+            "max-image-preview": "large",
+            "max-snippet": -1,
+          },
+        },
   };
 }

@@ -26,17 +26,6 @@ export const metadata: Metadata = {
   authors: [{ name: "Saadaoui Abdessalem", url: "https://www.saadaoui.it.com/" }],
   creator: "Saadaoui Abdessalem",
   alternates: { canonical: "/" },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-      "max-video-preview": -1,
-    },
-  },
   openGraph: {
     type: "website",
     siteName: "Analyst Workspace",
