@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 
 import { StudioView } from "@/features/studio/components/studio-view";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Studio",
-  // Not linked from the navigation and not worth indexing.
-  robots: { index: false, follow: false },
-};
+export const metadata: Metadata = pageMetadata({
+  path: "/studio",
+  title: "Import Studio",
+  description:
+    "Import a project from a spreadsheet and watch the checks run: duplicate identifiers, references that resolve to nothing, orphan artefacts and requirement coverage.",
+});
 
 export default function StudioPage() {
   return <StudioView />;
