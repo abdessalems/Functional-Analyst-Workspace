@@ -568,13 +568,21 @@ function Studio() {
         </>
       )}
 
-      {drafts.length > 0 && (
+      {/* Always rendered, even with nothing in it: a section that disappears
+          cannot tell you whether the last Add actually worked. */}
+      {CAN_AUTHOR && (
         <SectionCard
           title="Projects added in this browser"
           description="Visible to you, on this machine. Nobody else sees them until the file is committed."
           icon={FolderPlus}
         >
           <div className="space-y-3">
+            {drafts.length === 0 && (
+              <p className="text-sm text-muted-foreground">
+                Nothing stored yet. Import a file above, then use Add … to the workspace — the
+                project appears here and in the project list straight away.
+              </p>
+            )}
             {drafts.map((draft) => (
               <div
                 key={draft.project.id}
