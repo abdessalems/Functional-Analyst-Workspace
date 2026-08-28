@@ -57,10 +57,16 @@ import {
 } from "@/features/studio/lib/parse-workbook";
 import {
   generateBundleFile,
+  bundleNames,
   generateProjectRecord,
   registrySnippet,
 } from "@/features/studio/lib/generate-bundle";
-import { deleteDraft, draftProjectRecord, saveDraft } from "@/features/studio/lib/draft-store";
+import {
+  deleteDraft,
+  draftProjectRecord,
+  saveDraft,
+  type DraftProject,
+} from "@/features/studio/lib/draft-store";
 import { useWorkspace } from "@/components/providers/workspace-provider";
 
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -194,6 +200,8 @@ function Studio() {
   const [publishing, setPublishing] = React.useState(false);
   const [published, setPublished] = React.useState<string[] | null>(null);
   const [removingDraft, setRemovingDraft] = React.useState<string | null>(null);
+  const [publishingDraft, setPublishingDraft] = React.useState<string | null>(null);
+  const [draftPublished, setDraftPublished] = React.useState<string | null>(null);
   const { drafts, refreshDrafts, openProject } = useWorkspace();
 
   // The password is remembered for the tab, so it is asked for once.
@@ -263,6 +271,56 @@ function Studio() {
       }
     },
     [owner],
+  );
+
+  /**
+   * Publishes a project straight from the stored list.
+   *
+   * The draft already holds the whole bundle, so publishing does not need the
+   * spreadsheet again — which is what made it unreachable before: section 4
+   * only exists while a file is loaded, so coming back to the studio later
+   * left no way to publish what had been added.
+   */
+  const publishDraft = React.useCallback(
+    (draft: DraftProject) => {
+      const { fileName, exportName } = bundleNames(draft.project.id);
+      setPublishingDraft(draft.project.id);
+      setError(null);
+      setDraftPublished(null);
+
+      void fetch("/api/studio/publish", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          password,
+          fileName,
+          exportName,
+          projectId: draft.project.id,
+          // The bundle carries the same collections the parser produces, so it
+          // can be written out directly.
+          bundleSource: generateBundleFile(
+            draft.project.id,
+            exportName,
+            draft.bundle as unknown as ParsedProject,
+          ),
+          projectSource: generateProjectRecord(draft.project),
+        }),
+      })
+        .then(async (response) => {
+          const result = (await response.json()) as {
+            ok: boolean;
+            written?: string[];
+            message?: string;
+          };
+          if (!result.ok) throw new Error(result.message ?? "Publishing failed.");
+          setDraftPublished(
+            `${draft.project.name} written to ${(result.written ?? []).join(", ")}. Commit to put it on the site.`,
+          );
+        })
+        .catch((cause: Error) => setError(cause.message))
+        .finally(() => setPublishingDraft(null));
+    },
+    [password],
   );
 
   const previewBundle: ProjectDataBundle | null = React.useMemo(() => {
@@ -577,6 +635,11 @@ function Studio() {
           icon={FolderPlus}
         >
           <div className="space-y-3">
+            {draftPublished && (
+              <p className="flex items-start gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/[0.06] p-3 text-sm text-emerald-700 dark:text-emerald-400">
+                <CheckCircle2 className="mt-0.5 size-4 shrink-0" /> {draftPublished}
+              </p>
+            )}
             {drafts.length === 0 && (
               <p className="text-sm text-muted-foreground">
                 Nothing stored yet. Import a file above, then use Add … to the workspace — the
@@ -598,6 +661,13 @@ function Studio() {
                 <div className="flex items-center gap-2">
                   <Button variant="outline" size="sm" onClick={() => openProject(draft.project.id)}>
                     Open it
+                  </Button>
+                  <Button
+                    size="sm"
+                    disabled={publishingDraft !== null}
+                    onClick={() => publishDraft(draft)}
+                  >
+                    <Download /> {publishingDraft === draft.project.id ? "Publishing…" : "Publish"}
                   </Button>
                   {removingDraft === draft.project.id ? (
                     // Confirmation, not a second password: the studio was
@@ -687,7 +757,7 @@ function PublishedProjects({ password }: { password: string }) {
   const published = projects.filter((project) => hasProjectBundle(project.id));
 
   const remove = (projectId: string) => {
-    const fileName = projectId.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    const { fileName, exportName } = bundleNames(projectId);
     setBusy(true);
     setFailed(null);
     void fetch("/api/studio/publish", {
@@ -695,7 +765,7 @@ function PublishedProjects({ password }: { password: string }) {
       headers: { "Content-Type": "application/json" },
       // The export name is not knowable from the id alone, so the generated
       // convention is assumed and the server reports it if that is wrong.
-      body: JSON.stringify({ projectId, fileName, exportName: "myProjectBundle", password }),
+      body: JSON.stringify({ projectId, fileName, exportName, password }),
     })
       .then(async (response) => {
         const body = (await response.json()) as {

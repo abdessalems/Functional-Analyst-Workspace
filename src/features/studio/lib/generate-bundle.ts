@@ -84,3 +84,25 @@ const BUNDLES: ProjectDataBundle[] = [
   ${exportName},
 ];`;
 }
+
+/**
+ * The file and export name a project is published under.
+ *
+ * Derived from the project id so two projects can never collide in the
+ * registry — `myProjectBundle` twice is a duplicate identifier and the build
+ * stops. It also means deleting a project can find the same names again
+ * without being told them.
+ */
+export function bundleNames(projectId: string) {
+  const fileName = projectId.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  const exportName =
+    fileName
+      .split("-")
+      .filter(Boolean)
+      .map((part, index) =>
+        index === 0 ? part : part.charAt(0).toUpperCase() + part.slice(1),
+      )
+      .join("") + "Bundle";
+
+  return { fileName, exportName };
+}
