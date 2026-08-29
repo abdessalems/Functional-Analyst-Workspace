@@ -286,7 +286,7 @@ export function PortfolioView() {
 
                 {item.tags.length > 0 && (
                   <div className="flex flex-wrap gap-1.5">
-                    {item.tags.slice(0, 8).map((tag) => (
+                    {item.tags.slice(0, 12).map((tag) => (
                       <Badge key={tag} variant="outline" className="font-normal">
                         {tag}
                       </Badge>

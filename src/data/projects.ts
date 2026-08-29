@@ -1399,7 +1399,7 @@ export const projects: Project[] = [
         "owner": "Business Analyst"
       }
     ],
-    "tags": ["Risk Management","Energy","Functional specification","UAT","Regression testing","Integration testing","API testing","Defect management"],
+    "tags": ["Risk Management","Energy","Agile","Scrum","Functional specification","UAT","Regression testing","Integration testing","API testing","Test automation","Defect management"],
     "startDate": "2026-08-29",
     "targetDate": "",
     "lastUpdated": "2026-08-29",
@@ -1415,7 +1415,7 @@ export const projects: Project[] = [
       "actors": 6,
       "diagrams": 22
     },
-    "stack": ["REST API","Swagger","OpenAPI","SQL","Visio","Excel","OAuth 2.0"],
+    "stack": ["REST API","Swagger","OpenAPI","SQL","ALM","SpiraTest","Visio","Excel"],
   },
 ];
 
