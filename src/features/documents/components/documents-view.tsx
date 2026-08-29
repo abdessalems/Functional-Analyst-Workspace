@@ -126,7 +126,7 @@ export function DocumentsView() {
       {marker}
       <PageHeader
         title="Documents"
-        brands={["jira", "confluence"]}
+        brands={["jira", "confluence", "postman", "excel"]}
         description="Controlled document register for the release. Every artefact carries its version, owner, classification and the requirements it evidences."
         meta={[
           { label: "Documents", value: documents.length },
