@@ -1499,6 +1499,410 @@ export const projects: Project[] = [
       "diagrams": 11
     }
   },
+  {
+    "code": "EVE-1.0",
+    "name": "Everience BA Functional Analyst Tester Energy Risk Projects",
+    "shortName": "Everience BA Functional",
+    "domain": "Banking",
+    "subDomain": "Imported",
+    "status": "In Progress",
+    "version": "1.0",
+    "release": "—",
+    "owner": {
+      "id": "USR-DRAFT",
+      "name": "Saadaoui Abdessalem",
+      "role": "Functional Analyst",
+      "email": "",
+      "department": ""
+    },
+    "businessOwner": "",
+    "programme": "",
+    "summary": "Imported into this browser from a spreadsheet on 2026-08-29. It is a draft: it is not on the published site until its bundle is committed.",
+    "businessObjective": "",
+    "inScope": [
+      "Portfolio exposure calculation",
+      "Risk limit and threshold configuration",
+      "Intraday risk monitoring dashboard",
+      "Risk breach alert generation",
+      "Trade and position search",
+      "Functional validation of REST APIs",
+      "Audit trail for risk decisions",
+      "Role-based access",
+      "Regression and integration testing",
+      "AS-IS process mapping",
+      "TO-BE process design",
+      "Business process exceptions",
+      "UAT preparation",
+      "Defect lifecycle and triage",
+      "Requirements traceability",
+      "Non-functional acceptance checks"
+    ],
+    "outOfScope": [
+      "Execution of energy trades",
+      "Pricing model development",
+      "Replacement of the enterprise identity provider",
+      "Production infrastructure implementation",
+      "Financial accounting and settlement",
+      "Actual production deployment",
+      "Real client confidential data"
+    ],
+    "stakeholders": [
+      {
+        "id": "STK-001",
+        "name": "Sophie Martin",
+        "role": "Risk Manager",
+        "email": "sophie.martin@example.com",
+        "department": "Risk Management",
+        "raci": "Consulted"
+      },
+      {
+        "id": "STK-002",
+        "name": "Lucas Bernard",
+        "role": "Business Owner",
+        "email": "lucas.bernard@example.com",
+        "department": "Energy Trading",
+        "raci": "Consulted"
+      },
+      {
+        "id": "STK-003",
+        "name": "Nadia Karim",
+        "role": "Senior Risk Analyst",
+        "email": "nadia.karim@example.com",
+        "department": "Risk Management",
+        "raci": "Consulted"
+      },
+      {
+        "id": "STK-004",
+        "name": "Thomas Leroy",
+        "role": "Product Owner",
+        "email": "thomas.leroy@example.com",
+        "department": "Digital Products",
+        "raci": "Consulted"
+      },
+      {
+        "id": "STK-005",
+        "name": "Amine Haddad",
+        "role": "Developer",
+        "email": "amine.haddad@example.com",
+        "department": "IT Delivery",
+        "raci": "Consulted"
+      },
+      {
+        "id": "STK-006",
+        "name": "Emma Rossi",
+        "role": "QA/Test Lead",
+        "email": "emma.rossi@example.com",
+        "department": "Quality Assurance",
+        "raci": "Consulted"
+      },
+      {
+        "id": "STK-007",
+        "name": "Marc Dupont",
+        "role": "Operations Manager",
+        "email": "marc.dupont@example.com",
+        "department": "Operations",
+        "raci": "Consulted"
+      },
+      {
+        "id": "STK-008",
+        "name": "IT Support Team",
+        "role": "Application Support",
+        "email": "support@example.com",
+        "department": "IT Operations",
+        "raci": "Consulted"
+      },
+      {
+        "id": "STK-009",
+        "name": "Scrum Master",
+        "role": "Scrum Master",
+        "email": "scrum.master@example.com",
+        "department": "Digital Products",
+        "raci": "Consulted"
+      },
+      {
+        "id": "STK-010",
+        "name": "Security Architect",
+        "role": "Security Architect",
+        "email": "security@example.com",
+        "department": "Security",
+        "raci": "Consulted"
+      },
+      {
+        "id": "STK-011",
+        "name": "Data Engineer",
+        "role": "Data Engineer",
+        "email": "data@example.com",
+        "department": "Data Platform",
+        "raci": "Consulted"
+      },
+      {
+        "id": "STK-012",
+        "name": "Business Tester",
+        "role": "UAT Lead",
+        "email": "uat@example.com",
+        "department": "Risk Management",
+        "raci": "Consulted"
+      }
+    ],
+    "timeline": [
+      {
+        "id": "TL-001",
+        "label": "Discovery & stakeholder interviews",
+        "date": "2026-09-01",
+        "status": "Upcoming",
+        "description": "Interview Risk Manager, Risk Analysts and Trading stakeholders; document current pain points."
+      },
+      {
+        "id": "TL-002",
+        "label": "AS-IS process analysis",
+        "date": "2026-09-04",
+        "status": "Upcoming",
+        "description": "Map current manual exposure calculation and breach review process."
+      },
+      {
+        "id": "TL-003",
+        "label": "Requirements workshop",
+        "date": "2026-09-08",
+        "status": "Upcoming",
+        "description": "Prioritize functional and non-functional requirements."
+      },
+      {
+        "id": "TL-004",
+        "label": "Functional specification",
+        "date": "2026-09-15",
+        "status": "Upcoming",
+        "description": "Produce process flows, rules, API expectations and acceptance criteria."
+      },
+      {
+        "id": "TL-005",
+        "label": "Development sprint",
+        "date": "2026-09-28",
+        "status": "Upcoming",
+        "description": "Development team implements prioritized stories."
+      },
+      {
+        "id": "TL-006",
+        "label": "System / integration testing",
+        "date": "2026-10-12",
+        "status": "Upcoming",
+        "description": "Execute functional, regression and integration test suites."
+      },
+      {
+        "id": "TL-007",
+        "label": "Sprint 1 - Exposure",
+        "date": "2026-09-28",
+        "status": "Upcoming",
+        "description": "Implement portfolio exposure calculation and core API."
+      },
+      {
+        "id": "TL-008",
+        "label": "Sprint 2 - Breaches",
+        "date": "2026-10-12",
+        "status": "Upcoming",
+        "description": "Implement threshold evaluation, breach workflow and notifications."
+      },
+      {
+        "id": "TL-009",
+        "label": "Sprint 3 - Search & Reporting",
+        "date": "2026-10-26",
+        "status": "Upcoming",
+        "description": "Implement filtering, pagination and export."
+      },
+      {
+        "id": "TL-010",
+        "label": "UAT preparation",
+        "date": "2026-11-09",
+        "status": "Upcoming",
+        "description": "Prepare UAT scenarios, data and entry/exit criteria."
+      },
+      {
+        "id": "TL-011",
+        "label": "UAT execution",
+        "date": "2026-11-16",
+        "status": "Upcoming",
+        "description": "Business users validate end-to-end workflows."
+      },
+      {
+        "id": "TL-012",
+        "label": "Release readiness",
+        "date": "2026-11-23",
+        "status": "Upcoming",
+        "description": "Review defects, traceability, regression results and acceptance."
+      }
+    ],
+    "dependencies": [
+      {
+        "id": "DEP-001",
+        "name": "Market Data API",
+        "type": "Internal System",
+        "owner": "Market Data Team",
+        "status": "On Track",
+        "description": "Provides latest approved market prices used in exposure calculation."
+      },
+      {
+        "id": "DEP-002",
+        "name": "Trade Position API",
+        "type": "Internal System",
+        "owner": "Trading IT",
+        "status": "On Track",
+        "description": "Provides validated trade and position information."
+      },
+      {
+        "id": "DEP-003",
+        "name": "Identity & Access Management",
+        "type": "Internal System",
+        "owner": "Security Team",
+        "status": "On Track",
+        "description": "Provides user authentication and role claims."
+      },
+      {
+        "id": "DEP-004",
+        "name": "Notification Service",
+        "type": "Internal System",
+        "owner": "Platform Team",
+        "status": "On Track",
+        "description": "Sends email/in-app notifications for critical risk breaches."
+      },
+      {
+        "id": "DEP-005",
+        "name": "Email Notification Provider",
+        "type": "Internal System",
+        "owner": "Notification Platform Team",
+        "status": "On Track",
+        "description": "Required for external critical-breach email delivery."
+      },
+      {
+        "id": "DEP-006",
+        "name": "Reference Risk Limit Store",
+        "type": "Internal System",
+        "owner": "Risk Data Team",
+        "status": "On Track",
+        "description": "Provides approved portfolio risk limits."
+      },
+      {
+        "id": "DEP-007",
+        "name": "Synthetic Test Data Set",
+        "type": "Internal System",
+        "owner": "QA/Test Lead",
+        "status": "On Track",
+        "description": "Representative portfolios, positions, limits and market prices are required."
+      },
+      {
+        "id": "DEP-008",
+        "name": "UAT Business Availability",
+        "type": "Internal System",
+        "owner": "Risk Management",
+        "status": "On Track",
+        "description": "Risk users must be available to validate scenarios and accept outcomes."
+      },
+      {
+        "id": "DEP-009",
+        "name": "API Contract Approval",
+        "type": "Internal System",
+        "owner": "Architecture Team",
+        "status": "On Track",
+        "description": "API contracts must be reviewed before integration testing."
+      }
+    ],
+    "risks": [
+      {
+        "id": "RSK-001",
+        "description": "Market data may arrive late or contain stale prices.",
+        "likelihood": "Medium",
+        "impact": "High",
+        "mitigation": "Display data timestamp; block calculation when data freshness exceeds configured threshold.",
+        "owner": "Risk Manager"
+      },
+      {
+        "id": "RSK-002",
+        "description": "Different stakeholders may interpret exposure thresholds differently.",
+        "likelihood": "Medium",
+        "impact": "High",
+        "mitigation": "Run requirement workshops; document rules and obtain business-owner approval.",
+        "owner": "Business Analyst"
+      },
+      {
+        "id": "RSK-003",
+        "description": "Duplicate events could create duplicate breach alerts.",
+        "likelihood": "Medium",
+        "impact": "High",
+        "mitigation": "Use event identifier and idempotency rule; add integration tests.",
+        "owner": "Functional Analyst"
+      },
+      {
+        "id": "RSK-004",
+        "description": "Manual legacy spreadsheet results may differ from the new calculation.",
+        "likelihood": "High",
+        "impact": "Medium",
+        "mitigation": "Run parallel reconciliation with representative historical portfolios.",
+        "owner": "QA/Test Lead"
+      },
+      {
+        "id": "RSK-005",
+        "description": "Notification delivery may fail after a critical breach is persisted.",
+        "likelihood": "Medium",
+        "impact": "High",
+        "mitigation": "Decouple breach persistence from notification; retry failed notifications and monitor DLQ.",
+        "owner": "Operations Manager"
+      },
+      {
+        "id": "RSK-006",
+        "description": "Exporting large result sets may impact API performance.",
+        "likelihood": "Medium",
+        "impact": "Medium",
+        "mitigation": "Use asynchronous export for large datasets and enforce maximum filters/page sizes.",
+        "owner": "Product Owner"
+      },
+      {
+        "id": "RSK-007",
+        "description": "Requirements change after development begins.",
+        "likelihood": "Medium",
+        "impact": "Medium",
+        "mitigation": "Use backlog refinement, change impact analysis and Product Owner approval.",
+        "owner": "Product Owner"
+      },
+      {
+        "id": "RSK-008",
+        "description": "Critical defect discovered late in UAT.",
+        "likelihood": "Medium",
+        "impact": "High",
+        "mitigation": "Define critical-path tests early and execute regression continuously.",
+        "owner": "QA/Test Lead"
+      },
+      {
+        "id": "RSK-009",
+        "description": "Insufficient representative test data.",
+        "likelihood": "Medium",
+        "impact": "High",
+        "mitigation": "Create controlled synthetic portfolios covering normal, boundary and breach scenarios.",
+        "owner": "Business Tester"
+      },
+      {
+        "id": "RSK-010",
+        "description": "Ambiguous ownership of risk-limit changes.",
+        "likelihood": "Low",
+        "impact": "High",
+        "mitigation": "Document RACI and enforce authorization rules.",
+        "owner": "Business Analyst"
+      }
+    ],
+    "tags": [],
+    "startDate": "2026-08-29",
+    "targetDate": "",
+    "lastUpdated": "2026-08-29",
+    "completion": 0,
+    "regulatoryDrivers": [],
+    "id": "PRJ-EVE-003",
+    "metrics": {
+      "requirements": 20,
+      "businessRules": 22,
+      "apis": 9,
+      "documents": 12,
+      "testCases": 50,
+      "actors": 6,
+      "diagrams": 22
+    }
+  },
 ];
 
 /** The project the workspace opens on. */

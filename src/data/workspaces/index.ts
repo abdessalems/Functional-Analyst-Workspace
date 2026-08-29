@@ -5,13 +5,14 @@ import { instantPaymentsBundle } from "@/data/workspaces/instant-payments";
 import { prjTax001Bundle } from "@/data/workspaces/prj-tax-001";
 import { prjTax002Bundle } from "@/data/workspaces/prj-tax-002";
 import { prjEve004Bundle } from "@/data/workspaces/prj-eve-004";
+import { prjEve003Bundle } from "@/data/workspaces/prj-eve-003";
 
 /**
  * Registry of every project whose documentation set has been migrated into the
  * workspace. Adding a project is a new entry here plus its bundle file — no
  * component, route or navigation change.
  */
-const BUNDLES: ProjectDataBundle[] = [instantPaymentsBundle, europayHubBundle, prjTax001Bundle, prjTax002Bundle, prjEve004Bundle];
+const BUNDLES: ProjectDataBundle[] = [instantPaymentsBundle, europayHubBundle, prjTax001Bundle, prjTax002Bundle, prjEve004Bundle, prjEve003Bundle];
 
 const BY_ID = new Map(BUNDLES.map((bundle) => [bundle.projectId, bundle]));
 
