@@ -82,13 +82,25 @@ export function draftProjectRecord(
   meta: Partial<Project> = {},
 ): Project {
   const today = new Date().toISOString().slice(0, 10);
+
+  /*
+   * The code comes from the id, which was itself derived from the name and made
+   * unique — taking it from the first word instead produced "1-1.0" for a file
+   * named "1 AS IS …", and two projects sharing a code when two names started
+   * with the same word.
+   */
+  const [, letters = "PRJ", number = "1"] = projectId.split("-");
+  const code = `${letters}-${Number(number) || 1}.0`;
+
+  // The short name is what a sidebar and a card show, so it drops the AS-IS /
+  // TO-BE marker only when there is something left to identify the project by.
   const words = name.split(/\s+/).filter(Boolean);
-  const code = (words[0] ?? "PRJ").slice(0, 3).toUpperCase() + "-1.0";
+  const meaningful = words.filter((word) => !/^(AS-IS|TO-BE|—|-)$/i.test(word));
 
   return {
     code,
     name,
-    shortName: words.slice(0, 3).join(" ") || name,
+    shortName: (meaningful.length >= 2 ? meaningful : words).slice(0, 4).join(" ") || name,
     domain: "Banking",
     subDomain: "Imported",
     status: "In Progress",

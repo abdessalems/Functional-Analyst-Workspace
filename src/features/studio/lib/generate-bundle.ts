@@ -108,6 +108,34 @@ export function bundleNames(projectId: string) {
 }
 
 /**
+ * Turns a file name or a sheet value into the project's name.
+ *
+ * The same file imported twice has to produce the same name, or it produces a
+ * different id and publishes a second project instead of replacing the first.
+ * That is exactly what happened: "…Project.xlsx" and "…Project (1).xlsx"
+ * became two projects, and the numbering in front of the name leaked into the
+ * code as "1-1.0".
+ */
+export function tidyProjectName(raw: string | undefined): string {
+  if (!raw) return "";
+
+  return (
+    raw
+      .replace(/\.(xlsx|xlsm|xls|csv)$/i, "")
+      // "(1)", "(2)" — the copy marker a browser adds on a second download.
+      .replace(/\s*\(\d+\)\s*$/, "")
+      // Leading "1", "1.", "1 -" — the file's position in a folder, not a name.
+      .replace(/^\s*\d+\s*[.)-]?\s+/, "")
+      .replace(/[_]+/g, " ")
+      // Spreadsheet names are full of runs of spaces where a dash was meant.
+      .replace(/\s{2,}/g, " — ")
+      .replace(/\bAS\s*IS\b/gi, "AS-IS")
+      .replace(/\bTO\s*BE\b/gi, "TO-BE")
+      .trim()
+  );
+}
+
+/**
  * Proposes the next free project id.
  *
  * The code comes from the project's own name — "Tax Declaration & Refund"

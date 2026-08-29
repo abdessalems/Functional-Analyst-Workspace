@@ -1915,7 +1915,7 @@ const documents: WorkspaceDocument[] = [
     {
       "id": "DOC-006",
       "name": "Postman collection - happy path, retry, idempotency scenarios",
-      "format": "Word",
+      "format": "Swagger",
       "description": "Three demonstration flows: full happy path, payment retry to success, and duplicate Idempotency-Key returning the original result.",
       "category": "Testing",
       "version": "1.0",

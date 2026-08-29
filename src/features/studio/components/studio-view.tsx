@@ -64,6 +64,7 @@ import {
   bundleNames,
   generateProjectRecord,
   suggestProjectId,
+  tidyProjectName,
   registrySnippet,
 } from "@/features/studio/lib/generate-bundle";
 import {
@@ -283,13 +284,7 @@ function Studio() {
         // default — importing twice without renaming produced two projects
         // called the same thing.
         if (!nameTouched) {
-          const fromSheet = meta.name?.trim();
-          const fromFile = file.name
-            .replace(/.(xlsx|xls|csv)$/i, "")
-            .replace(/s*(d+)s*$/, "")
-            .replace(/[_-]+/g, " ")
-            .trim();
-          setProjectName(fromSheet || fromFile || "Imported project");
+          setProjectName(tidyProjectName(meta.name) || tidyProjectName(file.name));
         }
 
         const imported = Object.entries(result).reduce(
