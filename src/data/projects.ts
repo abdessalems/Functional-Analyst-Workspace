@@ -1008,6 +1008,239 @@ export const projects: Project[] = [
       "diagrams": 11
     }
   },
+  {
+    "code": "BA-1.0",
+    "name": "BA Functional Analyst Tester Energy Risk Project",
+    "shortName": "BA Functional Analyst",
+    "domain": "Banking",
+    "subDomain": "Imported",
+    "status": "In Progress",
+    "version": "1.0",
+    "release": "—",
+    "owner": {
+      "id": "USR-DRAFT",
+      "name": "Saadaoui Abdessalem",
+      "role": "Functional Analyst",
+      "email": "",
+      "department": ""
+    },
+    "businessOwner": "",
+    "programme": "",
+    "summary": "Imported into this browser from a spreadsheet on 2026-08-29. It is a draft: it is not on the published site until its bundle is committed.",
+    "businessObjective": "",
+    "inScope": [
+      "Portfolio exposure calculation",
+      "Risk limit and threshold configuration",
+      "Intraday risk monitoring dashboard",
+      "Risk breach alert generation",
+      "Trade and position search",
+      "Functional validation of REST APIs",
+      "Audit trail for risk decisions",
+      "Role-based access",
+      "Regression and integration testing"
+    ],
+    "outOfScope": [
+      "Execution of energy trades",
+      "Pricing model development",
+      "Replacement of the enterprise identity provider",
+      "Production infrastructure implementation",
+      "Financial accounting and settlement"
+    ],
+    "stakeholders": [
+      {
+        "id": "STK-001",
+        "name": "Sophie Martin",
+        "role": "Risk Manager",
+        "email": "sophie.martin@example.com",
+        "department": "Risk Management",
+        "raci": "Consulted"
+      },
+      {
+        "id": "STK-002",
+        "name": "Lucas Bernard",
+        "role": "Business Owner",
+        "email": "lucas.bernard@example.com",
+        "department": "Energy Trading",
+        "raci": "Consulted"
+      },
+      {
+        "id": "STK-003",
+        "name": "Nadia Karim",
+        "role": "Senior Risk Analyst",
+        "email": "nadia.karim@example.com",
+        "department": "Risk Management",
+        "raci": "Consulted"
+      },
+      {
+        "id": "STK-004",
+        "name": "Thomas Leroy",
+        "role": "Product Owner",
+        "email": "thomas.leroy@example.com",
+        "department": "Digital Products",
+        "raci": "Consulted"
+      },
+      {
+        "id": "STK-005",
+        "name": "Amine Haddad",
+        "role": "Developer",
+        "email": "amine.haddad@example.com",
+        "department": "IT Delivery",
+        "raci": "Consulted"
+      },
+      {
+        "id": "STK-006",
+        "name": "Emma Rossi",
+        "role": "QA/Test Lead",
+        "email": "emma.rossi@example.com",
+        "department": "Quality Assurance",
+        "raci": "Consulted"
+      },
+      {
+        "id": "STK-007",
+        "name": "Marc Dupont",
+        "role": "Operations Manager",
+        "email": "marc.dupont@example.com",
+        "department": "Operations",
+        "raci": "Consulted"
+      },
+      {
+        "id": "STK-008",
+        "name": "IT Support Team",
+        "role": "Application Support",
+        "email": "support@example.com",
+        "department": "IT Operations",
+        "raci": "Consulted"
+      }
+    ],
+    "timeline": [
+      {
+        "id": "TL-001",
+        "label": "Discovery & stakeholder interviews",
+        "date": "2026-09-01",
+        "status": "Upcoming",
+        "description": "Interview Risk Manager, Risk Analysts and Trading stakeholders; document current pain points."
+      },
+      {
+        "id": "TL-002",
+        "label": "AS-IS process analysis",
+        "date": "2026-09-04",
+        "status": "Upcoming",
+        "description": "Map current manual exposure calculation and breach review process."
+      },
+      {
+        "id": "TL-003",
+        "label": "Requirements workshop",
+        "date": "2026-09-08",
+        "status": "Upcoming",
+        "description": "Prioritize functional and non-functional requirements."
+      },
+      {
+        "id": "TL-004",
+        "label": "Functional specification",
+        "date": "2026-09-15",
+        "status": "Upcoming",
+        "description": "Produce process flows, rules, API expectations and acceptance criteria."
+      },
+      {
+        "id": "TL-005",
+        "label": "Development sprint",
+        "date": "2026-09-28",
+        "status": "Upcoming",
+        "description": "Development team implements prioritized stories."
+      },
+      {
+        "id": "TL-006",
+        "label": "System / integration testing",
+        "date": "2026-10-12",
+        "status": "Upcoming",
+        "description": "Execute functional, regression and integration test suites."
+      }
+    ],
+    "dependencies": [
+      {
+        "id": "DEP-001",
+        "name": "Market Data API",
+        "type": "Internal System",
+        "owner": "Market Data Team",
+        "status": "On Track",
+        "description": "Provides latest approved market prices used in exposure calculation."
+      },
+      {
+        "id": "DEP-002",
+        "name": "Trade Position API",
+        "type": "Internal System",
+        "owner": "Trading IT",
+        "status": "On Track",
+        "description": "Provides validated trade and position information."
+      },
+      {
+        "id": "DEP-003",
+        "name": "Identity & Access Management",
+        "type": "Internal System",
+        "owner": "Security Team",
+        "status": "On Track",
+        "description": "Provides user authentication and role claims."
+      },
+      {
+        "id": "DEP-004",
+        "name": "Notification Service",
+        "type": "Internal System",
+        "owner": "Platform Team",
+        "status": "On Track",
+        "description": "Sends email/in-app notifications for critical risk breaches."
+      }
+    ],
+    "risks": [
+      {
+        "id": "RSK-001",
+        "description": "Market data may arrive late or contain stale prices.",
+        "likelihood": "Medium",
+        "impact": "High",
+        "mitigation": "Display data timestamp; block calculation when data freshness exceeds configured threshold.",
+        "owner": "Risk Manager"
+      },
+      {
+        "id": "RSK-002",
+        "description": "Different stakeholders may interpret exposure thresholds differently.",
+        "likelihood": "Medium",
+        "impact": "High",
+        "mitigation": "Run requirement workshops; document rules and obtain business-owner approval.",
+        "owner": "Business Analyst"
+      },
+      {
+        "id": "RSK-003",
+        "description": "Duplicate events could create duplicate breach alerts.",
+        "likelihood": "Medium",
+        "impact": "High",
+        "mitigation": "Use event identifier and idempotency rule; add integration tests.",
+        "owner": "Functional Analyst"
+      },
+      {
+        "id": "RSK-004",
+        "description": "Manual legacy spreadsheet results may differ from the new calculation.",
+        "likelihood": "High",
+        "impact": "Medium",
+        "mitigation": "Run parallel reconciliation with representative historical portfolios.",
+        "owner": "QA/Test Lead"
+      }
+    ],
+    "tags": [],
+    "startDate": "2026-08-29",
+    "targetDate": "",
+    "lastUpdated": "2026-08-29",
+    "completion": 0,
+    "regulatoryDrivers": [],
+    "id": "PRJ-EXA-003",
+    "metrics": {
+      "requirements": 8,
+      "businessRules": 10,
+      "apis": 6,
+      "documents": 5,
+      "testCases": 10,
+      "actors": 6,
+      "diagrams": 3
+    }
+  },
 ];
 
 /** The project the workspace opens on. */
