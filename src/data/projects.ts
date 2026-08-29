@@ -760,7 +760,7 @@ export const projects: Project[] = [
         "owner": "Noureddine Ouzoubair"
       }
     ],
-    "tags": [],
+    "tags": ["AS-IS analysis","Legacy","Idempotency","INVEST"],
     "startDate": "2026-01-05",
     "targetDate": "",
     "lastUpdated": "2026-08-29",
@@ -776,7 +776,7 @@ export const projects: Project[] = [
       "actors": 6,
       "diagrams": 9
     },
-    "stack": ["Oracle WebLogic","EJB","Java","Oracle DB","Excel"],
+    "stack": ["Oracle WebLogic","EJB","Java","DB2","Excel"],
   },
   {
     "code": "TAX-2.0",
@@ -994,7 +994,7 @@ export const projects: Project[] = [
         "owner": "Nicolas Leroy"
       }
     ],
-    "tags": [],
+    "tags": ["TO-BE architecture","Event-driven","Saga","Idempotency","INVEST","Scrum"],
     "startDate": "2026-03-03",
     "targetDate": "",
     "lastUpdated": "2026-08-29",
@@ -1010,7 +1010,7 @@ export const projects: Project[] = [
       "actors": 7,
       "diagrams": 11
     },
-    "stack": ["Java","Microservices","Kubernetes","Docker","Artemis","REST","OpenAPI","Postman","OAuth 2.0"],
+    "stack": ["Java","Microservices","Kubernetes","Docker","Artemis","DB2","REST","OpenAPI","Belgif","Postman"],
   },
   {
     "code": "EVE-1.0",
