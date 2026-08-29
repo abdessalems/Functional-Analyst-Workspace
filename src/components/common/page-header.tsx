@@ -34,22 +34,23 @@ export function PageHeader({ title, description, meta, actions, brands, classNam
         {actions && <div className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div>}
       </div>
 
-      {(meta?.length || brands?.length) && (
+      {/*
+        The tools these artefacts are written in, on their own line above the
+        metadata. Sharing the metadata row buried them: a recruiter scanning for
+        "Swagger" was reading past a 16px mark set in a line of dates and owners.
+      */}
+      {brands && brands.length > 0 && (
+        <BrandMarks names={brands} className="flex flex-wrap items-center gap-2" />
+      )}
+
+      {meta && meta.length > 0 && (
         <dl className="flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-border pt-3 text-sm">
-          {meta?.map((entry) => (
+          {meta.map((entry) => (
             <div key={entry.label} className="flex items-center gap-1.5">
               <dt className="text-muted-foreground">{entry.label}</dt>
               <dd className="font-medium">{entry.value}</dd>
             </div>
           ))}
-          {/*
-            The tools this page's artefacts are actually written in. Sat beside
-            the metadata rather than beside the title, because it is the same
-            kind of fact — who owns it, when it changed, what it is written in.
-          */}
-          {brands && brands.length > 0 && (
-            <BrandMarks names={brands} className="flex flex-wrap items-center gap-x-4 gap-y-1.5" />
-          )}
         </dl>
       )}
     </div>

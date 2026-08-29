@@ -157,14 +157,24 @@ export function BrandMark({
   );
 }
 
-/** A row of marks with their names, for a page header. */
+/**
+ * A row of marks, as chips.
+ *
+ * At sixteen pixels in a line of metadata these were decoration nobody saw. A
+ * chip gives each mark a surface of its own, so the row reads as "written in
+ * these tools" rather than as another metadata pair, and the mark is large
+ * enough to be recognised — which is the only reason it is there.
+ */
 export function BrandMarks({ names, className }: { names: BrandName[]; className?: string }) {
   return (
     <span className={className}>
       {names.map((name) => (
-        <span key={name} className="inline-flex items-center gap-1.5">
-          <BrandMark name={name} className="size-4" />
-          <span className="text-micro text-muted-foreground">{MARKS[name]?.label}</span>
+        <span
+          key={name}
+          className="inline-flex items-center gap-2 rounded-md border border-border bg-surface-muted px-2.5 py-1.5"
+        >
+          <BrandMark name={name} className="size-6 shrink-0" />
+          <span className="text-xs font-medium">{MARKS[name]?.label}</span>
         </span>
       ))}
     </span>
