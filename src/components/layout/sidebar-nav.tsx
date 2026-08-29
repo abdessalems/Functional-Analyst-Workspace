@@ -128,15 +128,25 @@ export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
                     style={{ backgroundColor: section.accent }}
                   />
                 )}
-                {/* The step number teaches the order; the icon aids recognition. */}
-                {!collapsed && step !== undefined && (
+                {/*
+                  The step number teaches the order; the icon aids recognition.
+                  The column is reserved even when a page has no step, so the
+                  icons and labels stay in one straight line — two of the
+                  seventeen items sit outside the reading path, and without this
+                  they pulled the whole row left.
+                */}
+                {!collapsed && (
                   <span
+                    aria-hidden={step === undefined}
                     className={cn(
-                      "w-4 shrink-0 text-right text-micro font-semibold tabular-nums",
-                      isActive ? "text-primary" : "text-muted-foreground/70",
+                      "w-4 shrink-0 text-right text-micro tabular-nums",
+                      // Lighter than the label and never bold: this is the
+                      // quietest thing in the row, so it cannot be mistaken for
+                      // the count on the right.
+                      isActive ? "text-foreground/70" : "text-muted-foreground/50",
                     )}
                   >
-                    {step}
+                    {step ?? ""}
                   </span>
                 )}
                 <Icon
@@ -148,14 +158,24 @@ export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
                     <span className="flex-1 truncate">{item.label}</span>
                     {chip && (
                       <span
+                        /*
+                          A pill, not a number. Each row can show two figures —
+                          the step on the left and how many artefacts on the
+                          right — and "4 Functional Specification 4" was
+                          unreadable while both looked the same. The pill shape,
+                          the border and the weight now say "this is a quantity".
+                        */
+                        title={count !== undefined ? `${count} in this project` : undefined}
                         className={cn(
-                          "rounded px-1.5 py-0.5 text-micro font-medium tabular-nums",
-                          !isActive && "bg-muted text-muted-foreground group-hover:bg-background",
+                          "min-w-[1.375rem] rounded-full border px-1.5 py-px text-center text-micro font-semibold tabular-nums",
+                          !isActive &&
+                            "border-border bg-muted text-muted-foreground group-hover:bg-background",
                         )}
                         style={
                           isActive
                             ? {
                                 color: section.accent,
+                                borderColor: `color-mix(in srgb, ${section.accent} 35%, transparent)`,
                                 backgroundColor: `color-mix(in srgb, ${section.accent} 16%, transparent)`,
                               }
                             : undefined
