@@ -1010,7 +1010,7 @@ export const projects: Project[] = [
       "actors": 7,
       "diagrams": 11
     },
-    "stack": ["Kubernetes","Docker","Artemis","REST","OpenAPI","Postman","OAuth 2.0"],
+    "stack": ["Java","Microservices","Kubernetes","Docker","Artemis","REST","OpenAPI","Postman","OAuth 2.0"],
   },
   {
     "code": "EVE-1.0",
