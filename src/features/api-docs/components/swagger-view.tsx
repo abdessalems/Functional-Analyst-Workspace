@@ -69,6 +69,7 @@ export function SwaggerView() {
       {marker}
       <PageHeader
         title="Swagger API"
+        brands={["swagger", "openapi"]}
         description="REST contract documentation for the services supporting the payment journey. Each operation lists its headers, request body, responses and the requirements it satisfies."
         meta={[
           { label: "Services", value: apiServices.length },
