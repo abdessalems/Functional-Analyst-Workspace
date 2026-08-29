@@ -128,6 +128,7 @@ export function TestCasesView() {
       {marker}
       <PageHeader
         title="Test Cases"
+        brands={["junit"]}
         description="SIT and UAT catalogue for the release. Every case is linked to the requirement it verifies and records its latest execution result."
         meta={[
           { label: "Cycle", value: "UAT — closed 16 May 2025" },

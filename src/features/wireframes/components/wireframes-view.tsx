@@ -54,6 +54,7 @@ export function WireframesView() {
       {marker}
       <PageHeader
         title="Wireframes"
+        brands={["figma"]}
         description="Screen designs supporting the customer and back-office journeys. Select a screen to view it full size together with its annotations and requirement links."
         meta={[
           { label: "Screens", value: wireframes.length },

@@ -87,6 +87,7 @@ export function RequirementsView() {
       {marker}
       <PageHeader
         title="Business Requirements"
+        brands={["jira", "confluence"]}
         description="Baselined business requirements for the current release. Each requirement carries its business need, acceptance criteria and traceability links to rules, APIs, tests and documents."
         meta={[
           { label: "Baseline", value: "v2.3" },

@@ -103,6 +103,7 @@ export function BusinessRulesView() {
       {marker}
       <PageHeader
         title="Business Rules"
+        brands={["confluence"]}
         description="Catalogue of the rules governing the payment decision path. Every rule states its source of authority and the requirements it constrains."
         meta={[
           { label: "Catalogue", value: "v2.3" },

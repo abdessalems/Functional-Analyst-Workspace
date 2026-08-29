@@ -116,6 +116,7 @@ export function FunctionalSpecView() {
     <div className="space-y-6">
       <PageHeader
         title="Functional Specification"
+        brands={["confluence"]}
         description="Detailed functional design for the release: orchestration logic, validation rules, error handling, field definitions and edge cases. Each section traces back to the requirements it satisfies."
         meta={[
           { label: "Document", value: "FS v2.3" },
