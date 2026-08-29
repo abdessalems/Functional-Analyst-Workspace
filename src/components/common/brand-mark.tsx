@@ -120,6 +120,16 @@ const MARKS: Record<string, { label: string; viewBox: string; body: string }> = 
     viewBox: "0 0 256 256",
     body: "<path fill=\"#de4c36\" d=\"M251.172 116.594L139.4 4.828c-6.433-6.437-16.873-6.437-23.314 0l-23.21 23.21l29.443 29.443c6.842-2.312 14.688-.761 20.142 4.693c5.48 5.489 7.02 13.402 4.652 20.266l28.375 28.376c6.865-2.365 14.786-.835 20.269 4.657c7.663 7.66 7.663 20.075 0 27.74c-7.665 7.666-20.08 7.666-27.749 0c-5.764-5.77-7.188-14.235-4.27-21.336l-26.462-26.462l-.003 69.637a19.8 19.8 0 0 1 5.188 3.71c7.663 7.66 7.663 20.076 0 27.747c-7.665 7.662-20.086 7.662-27.74 0c-7.663-7.671-7.663-20.086 0-27.746a19.7 19.7 0 0 1 6.421-4.281V94.196a19.4 19.4 0 0 1-6.421-4.281c-5.806-5.798-7.202-14.317-4.227-21.446L81.47 39.442L4.83 116.077c-6.44 6.443-6.44 16.884 0 23.322l111.774 111.768c6.435 6.438 16.873 6.438 23.316 0l111.251-111.249c6.438-6.44 6.438-16.887 0-23.324\"/>",
   },
+  uml: {
+    label: "PlantUML",
+    viewBox: "0 0 24 24",
+    body: "<rect width=\"24\" height=\"24\" rx=\"5\" fill=\"#64748b\" opacity=\"0.16\"/><rect x=\"0.6\" y=\"0.6\" width=\"22.8\" height=\"22.8\" rx=\"4.4\" fill=\"none\" stroke=\"#64748b\" stroke-opacity=\"0.5\" stroke-width=\"1.2\"/><text x=\"12\" y=\"12\" text-anchor=\"middle\" dominant-baseline=\"central\" fill=\"#64748b\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"9\" font-weight=\"700\" letter-spacing=\"0.2\">UML</text>",
+  },
+  bpmn: {
+    label: "BPMN 2.0",
+    viewBox: "0 0 24 24",
+    body: "<rect width=\"24\" height=\"24\" rx=\"5\" fill=\"#64748b\" opacity=\"0.16\"/><rect x=\"0.6\" y=\"0.6\" width=\"22.8\" height=\"22.8\" rx=\"4.4\" fill=\"none\" stroke=\"#64748b\" stroke-opacity=\"0.5\" stroke-width=\"1.2\"/><text x=\"12\" y=\"12\" text-anchor=\"middle\" dominant-baseline=\"central\" fill=\"#64748b\" font-family=\"ui-sans-serif, system-ui, sans-serif\" font-size=\"7\" font-weight=\"700\" letter-spacing=\"0.2\">BPMN</text>",
+  },
 };
 
 export type BrandName = keyof typeof MARKS;

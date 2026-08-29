@@ -56,6 +56,7 @@ export function PlantUmlView() {
       {marker}
       <PageHeader
         title="PlantUML"
+        brands={["uml"]}
         description="UML models kept as PlantUML source alongside the specification. Each card shows the source, and a rendered preview where one is maintained."
         meta={[
           { label: "Models", value: diagrams.length },

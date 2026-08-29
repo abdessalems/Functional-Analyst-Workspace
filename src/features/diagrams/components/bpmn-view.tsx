@@ -49,6 +49,7 @@ export function BpmnView() {
     <div className="space-y-6">
       <PageHeader
         title="BPMN"
+        brands={["bpmn"]}
         description="Business process models in BPMN notation — swimlanes, gateways and exception paths. The same process is broken down step by step on the Process Flow page."
         meta={[
           { label: "Models", value: models.length },
