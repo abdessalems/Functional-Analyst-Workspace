@@ -189,12 +189,26 @@ export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
               </Link>
             );
 
-            if (!collapsed) return link;
-
+            /*
+              Expanded, the tooltip explains the label rather than repeating it.
+              "BPMN", "PlantUML" and "SQL Validation" are the words an IT
+              recruiter scans for, so they stay — but they tell a recruiter from
+              HR nothing, and the plain sentence was already written in
+              navigation.ts and shown nowhere. It costs no width.
+            */
             return (
-              <Tooltip key={item.href} delayDuration={120}>
+              <Tooltip key={item.href} delayDuration={collapsed ? 120 : 400}>
                 <TooltipTrigger asChild>{link}</TooltipTrigger>
-                <TooltipContent side="right">{item.label}</TooltipContent>
+                <TooltipContent side="right" className="max-w-64">
+                  {collapsed ? (
+                    <>
+                      <span className="font-medium">{item.label}</span>
+                      <span className="mt-0.5 block text-muted-foreground">{item.description}</span>
+                    </>
+                  ) : (
+                    item.description
+                  )}
+                </TooltipContent>
               </Tooltip>
             );
           })}
