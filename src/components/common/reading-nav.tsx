@@ -29,6 +29,41 @@ export function SectionRule() {
 }
 
 /**
+ * The section this page belongs to, named above its title.
+ *
+ * The hairline above already carries the section's colour, but a colour on its
+ * own only tells someone who has learned the key. Naming the section says where
+ * you are outright, and colouring the name teaches the key at the same time —
+ * after two or three pages the line alone starts to mean something.
+ *
+ * Portfolio-level pages are skipped: "Portfolio" above "All Projects" tells a
+ * reader nothing they cannot already see.
+ */
+export function SectionEyebrow({ className }: { className?: string }) {
+  const pathname = usePathname();
+  const section = findNavSection(pathname);
+
+  if (!section || section.scope === "portfolio") return null;
+
+  return (
+    <p
+      className={cn(
+        "flex items-center gap-2 text-micro font-medium uppercase tracking-[0.08em]",
+        className,
+      )}
+      style={{ color: section.accent }}
+    >
+      <span
+        aria-hidden
+        className="size-1.5 rounded-full"
+        style={{ backgroundColor: section.accent }}
+      />
+      {section.label}
+    </p>
+  );
+}
+
+/**
  * How far through the fifteen steps the reader is. A walkthrough that shows its
  * own length is one people finish.
  */

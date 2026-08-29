@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
-import { PlainLanguageNote, SectionRule } from "@/components/common/reading-nav";
+import { PlainLanguageNote, SectionEyebrow, SectionRule } from "@/components/common/reading-nav";
 
 interface PageHeaderProps {
   title: string;
@@ -20,6 +20,7 @@ export function PageHeader({ title, description, meta, actions, className }: Pag
       <SectionRule />
       <div className="flex flex-col gap-3 pt-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0 space-y-1.5">
+          <SectionEyebrow className="mb-1" />
           <h1 className="text-heading font-semibold sm:text-display">{title}</h1>
           {description && (
             <p className="max-w-measure text-sm leading-relaxed text-muted-foreground">{description}</p>
