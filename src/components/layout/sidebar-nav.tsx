@@ -64,10 +64,26 @@ export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
           {collapsed ? (
             <div className="mx-2 my-1 h-px bg-border" role="presentation" />
           ) : (
-            <p className="flex items-center gap-2 px-2 pb-1 text-micro font-semibold uppercase tracking-wider text-muted-foreground">
+            /*
+             * The group heading carries its own colour rather than a grey label
+             * with a 2px hint beside it. Every section looked identical before,
+             * so the sidebar read as one long list of nineteen items instead of
+             * five groups of three or four.
+             *
+             * The tint is mixed against the surface so it stays a wash rather
+             * than a block; where color-mix is unsupported the rule is dropped
+             * and the heading simply has no background, which is what it had.
+             */
+            <p
+              className="mb-0.5 flex items-center gap-2 rounded-md px-2 py-1 text-micro font-semibold uppercase tracking-wider"
+              style={{
+                color: section.accent,
+                backgroundColor: `color-mix(in srgb, ${section.accent} 10%, transparent)`,
+              }}
+            >
               <span
                 aria-hidden
-                className="h-3 w-0.5 rounded-full"
+                className="size-1.5 shrink-0 rounded-full"
                 style={{ backgroundColor: section.accent }}
               />
               {section.label}
@@ -99,10 +115,17 @@ export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
                     : "text-muted-foreground hover:bg-accent/50 hover:text-foreground",
                 )}
               >
+                {/*
+                  The marker takes the section's colour, not the brand's. Every
+                  page used to highlight in the same teal, so the sidebar never
+                  told you which group you were standing in — only that you were
+                  somewhere.
+                */}
                 {isActive && (
                   <span
                     aria-hidden
-                    className="absolute inset-y-1 left-0 w-0.5 rounded-full bg-primary"
+                    className="absolute inset-y-1 left-0 w-0.5 rounded-full"
+                    style={{ backgroundColor: section.accent }}
                   />
                 )}
                 {/* The step number teaches the order; the icon aids recognition. */}
@@ -116,7 +139,10 @@ export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
                     {step}
                   </span>
                 )}
-                <Icon className={cn("size-4 shrink-0", isActive && "text-primary")} />
+                <Icon
+                  className="size-4 shrink-0"
+                  style={isActive ? { color: section.accent } : undefined}
+                />
                 {!collapsed && (
                   <>
                     <span className="flex-1 truncate">{item.label}</span>
@@ -124,10 +150,16 @@ export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
                       <span
                         className={cn(
                           "rounded px-1.5 py-0.5 text-micro font-medium tabular-nums",
-                          isActive
-                            ? "bg-primary/15 text-primary"
-                            : "bg-muted text-muted-foreground group-hover:bg-background",
+                          !isActive && "bg-muted text-muted-foreground group-hover:bg-background",
                         )}
+                        style={
+                          isActive
+                            ? {
+                                color: section.accent,
+                                backgroundColor: `color-mix(in srgb, ${section.accent} 16%, transparent)`,
+                              }
+                            : undefined
+                        }
                       >
                         {chip}
                       </span>
