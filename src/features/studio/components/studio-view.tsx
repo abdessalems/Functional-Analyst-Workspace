@@ -13,6 +13,7 @@ import {
   Upload,
 } from "lucide-react";
 
+import type { Project } from "@/lib/types";
 import type { ProjectDataBundle } from "@/data/workspaces/types";
 import { EMPTY_BUNDLE } from "@/data/workspaces/types";
 import { validateBundle } from "@/lib/validate-bundle";
@@ -36,8 +37,10 @@ import { CodeBlock } from "@/components/common/code-block";
 import { useDownload } from "@/hooks/use-download";
 import {
   applyAcceptanceCriteria,
+  buildProjectMeta,
   buildSpecSections,
   EMPTY_PARSED,
+  EMPTY_PROJECT_SHEETS,
   EMPTY_SPEC_SHEETS,
   matchSheet,
   rowsToActors,
@@ -53,6 +56,7 @@ import {
   sniffSheet,
   type ParsedProject,
   type SheetRow,
+  type ProjectSheets,
   type SpecSheets,
 } from "@/features/studio/lib/parse-workbook";
 import {
@@ -193,9 +197,14 @@ function Studio() {
   const [error, setError] = React.useState<string | null>(null);
   const [busy, setBusy] = React.useState(false);
   const [projectId, setProjectId] = React.useState("PRJ-NEW-001");
-  const [exportName, setExportName] = React.useState("myProjectBundle");
   const [owner, setOwner] = React.useState("Saadaoui Abdessalem");
   const [projectName, setProjectName] = React.useState("My imported project");
+  // Once either field is typed in, it stops following the other.
+  const [idTouched, setIdTouched] = React.useState(false);
+  const [nameTouched, setNameTouched] = React.useState(false);
+  // The project's own description, read from the Project / Scope / Stakeholders
+  // / Timeline / Dependencies / Risks sheets when the file carries them.
+  const [projectMeta, setProjectMeta] = React.useState<Partial<Project>>({});
   const [added, setAdded] = React.useState<string | null>(null);
   const [publishing, setPublishing] = React.useState(false);
   const [published, setPublished] = React.useState<string[] | null>(null);
@@ -222,6 +231,8 @@ function Studio() {
         let criteriaRows: SheetRow[] = [];
         // The spec is assembled from five sheets, so it is collected then built.
         const spec: SpecSheets = { ...EMPTY_SPEC_SHEETS };
+        // The project's own description: scope, stakeholders, timeline, risks.
+        const projectSheets: ProjectSheets = { ...EMPTY_PROJECT_SHEETS };
 
         for (const name of workbook.SheetNames) {
           const rows = XLSX.utils.sheet_to_json<SheetRow>(workbook.Sheets[name], { defval: "" });
@@ -240,11 +251,15 @@ function Studio() {
           else if (kind === "acceptanceCriteria") criteriaRows = rows;
           else if (kind?.startsWith("spec.")) {
             spec[kind.slice("spec.".length) as keyof SpecSheets] = rows;
+          } else if (kind?.startsWith("project.")) {
+            projectSheets[kind.slice("project.".length) as keyof ProjectSheets] = rows;
           } else result.ignoredSheets.push(name);
         }
 
         result.requirements = applyAcceptanceCriteria(result.requirements, criteriaRows);
         result.functionalSpecSections = buildSpecSections(spec);
+        const meta = buildProjectMeta(projectSheets, owner);
+        setProjectMeta(meta);
 
         const imported = Object.entries(result).reduce(
           (total, [key, value]) =>
@@ -353,26 +368,36 @@ function Studio() {
 
       <SectionCard
         title="1 · Import a spreadsheet"
-        description="One sheet per artefact type: Requirements, Acceptance Criteria, Business Rules, Actors, Process Steps, Spec Sections, Spec Fields, Spec Validations, Spec Errors, Spec Edge Cases, Diagrams, Wireframes, API Endpoints, SQL Validations, Test Cases, Documents. Bring only the sheets you have. Column headings are matched loosely — “Business Need” finds businessNeed."
+        description="Sheets for the project itself — Project, Scope, Stakeholders, Timeline, Dependencies, Risks — and one per artefact type: Requirements, Acceptance Criteria, Business Rules, Actors, Process Steps, the five Spec sheets, Diagrams, Wireframes, API Endpoints, SQL Validations, Test Cases, Documents. Bring only the sheets you have; column headings are matched loosely."
         icon={FileSpreadsheet}
       >
         <div className="space-y-4">
           <div className="grid gap-4 sm:grid-cols-3">
             <div className="space-y-1.5">
+              <Label htmlFor="project-name">Project name</Label>
+              <Input
+                id="project-name"
+                value={projectName}
+                onChange={(event) => {
+                  setNameTouched(true);
+                  setProjectName(event.target.value);
+                }}
+              />
+            </div>
+            <div className="space-y-1.5">
               <Label htmlFor="project-id">Project id</Label>
               <Input
                 id="project-id"
                 value={projectId}
-                onChange={(event) => setProjectId(event.target.value)}
+                onChange={(event) => {
+                  setIdTouched(true);
+                  setProjectId(event.target.value);
+                }}
               />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="export-name">Export name</Label>
-              <Input
-                id="export-name"
-                value={exportName}
-                onChange={(event) => setExportName(event.target.value)}
-              />
+              <p className="text-xs text-muted-foreground">
+                Proposed from the name, and never one that is already taken. Edit it if you
+                would rather choose.
+              </p>
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="owner">Default owner</Label>
@@ -497,12 +522,7 @@ function Studio() {
                 <div className="flex flex-wrap items-center gap-3">
                   <Button
                     onClick={() => {
-                      const record = draftProjectRecord(
-                        projectId,
-                        projectName,
-                        owner,
-                        previewBundle,
-                      );
+                      const record = draftProjectRecord(projectId, projectName, owner, previewBundle, projectMeta);
                       const stored = saveDraft({
                         project: record,
                         bundle: previewBundle,
@@ -546,7 +566,7 @@ function Studio() {
                       setPublishing(true);
                       setPublished(null);
                       setError(null);
-                      const fileName = projectId.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+                      const { fileName, exportName } = bundleNames(projectId);
                       void fetch("/api/studio/publish", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
@@ -555,9 +575,9 @@ function Studio() {
                           fileName,
                           exportName,
                           projectId,
-                          bundleSource: generateBundleFile(projectId, exportName, parsed),
+                          bundleSource: generateBundleFile(projectId, bundleNames(projectId).exportName, parsed),
                           projectSource: generateProjectRecord(
-                            draftProjectRecord(projectId, projectName, owner, previewBundle),
+                            draftProjectRecord(projectId, projectName, owner, previewBundle, projectMeta),
                           ),
                         }),
                       })
@@ -604,7 +624,7 @@ function Studio() {
               <Button
                 onClick={() =>
                   download(
-                    generateBundleFile(projectId, exportName, parsed),
+                    generateBundleFile(projectId, bundleNames(projectId).exportName, parsed),
                     `${projectId.toLowerCase().replace(/[^a-z0-9]+/g, "-")}.ts`,
                     "text/plain",
                   )
@@ -617,8 +637,8 @@ function Studio() {
                 language="text"
                 title="Then add this to src/data/workspaces/index.ts"
                 code={registrySnippet(
-                  exportName,
-                  projectId.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+                  bundleNames(projectId).exportName,
+                  bundleNames(projectId).fileName,
                 )}
               />
             </div>

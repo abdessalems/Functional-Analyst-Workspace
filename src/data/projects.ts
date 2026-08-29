@@ -583,6 +583,7 @@ export const projects: Project[] = [
       "EUR-only scope pending multi-currency assessment",
     ],
   },
+
 ];
 
 /** The project the workspace opens on. */

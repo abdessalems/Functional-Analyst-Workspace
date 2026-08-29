@@ -106,3 +106,37 @@ export function bundleNames(projectId: string) {
 
   return { fileName, exportName };
 }
+
+/**
+ * Proposes the next free project id.
+ *
+ * The code comes from the project's own name — "Tax Declaration & Refund"
+ * becomes TAX — because an id is read far more often than it is typed: it sits
+ * in the URL, the file name and the card. Falling back to NEW only when the
+ * name gives nothing to work with.
+ *
+ * The number is the lowest that is not already taken, so ids stay dense even
+ * after a project is removed.
+ */
+export function suggestProjectId(name: string, taken: readonly string[]): string {
+  const words = name
+    .toUpperCase()
+    .split(/[^A-Z0-9]+/)
+    .filter(Boolean)
+    // "The", "of" and friends carry no meaning in a three-letter code.
+    .filter((word) => !["THE", "AND", "OF", "FOR", "TO", "BE", "AS", "IS"].includes(word));
+
+  const first = words[0] ?? "";
+  const code = (first.length >= 3 ? first.slice(0, 3) : words.join("").slice(0, 3) || "NEW").padEnd(
+    3,
+    "X",
+  );
+
+  const used = new Set(taken.map((id) => id.toUpperCase()));
+  for (let n = 1; n < 1000; n += 1) {
+    const candidate = `PRJ-${code}-${String(n).padStart(3, "0")}`;
+    if (!used.has(candidate)) return candidate;
+  }
+
+  return `PRJ-${code}-${Date.now()}`;
+}

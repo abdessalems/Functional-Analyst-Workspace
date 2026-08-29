@@ -1047,7 +1047,73 @@ const specEdgeCases = [
   },
 ];
 
+
+const projectInfo = [
+  { Field: "Name", Value: "Card Disputes & Chargeback Automation" },
+  { Field: "Code", Value: "CDA-1.0" },
+  { Field: "Domain", Value: "Banking" },
+  { Field: "Sub Domain", Value: "Cards & Disputes" },
+  { Field: "Status", Value: "In Progress" },
+  { Field: "Version", Value: "1.0" },
+  { Field: "Release", Value: "R2026.03" },
+  { Field: "Owner", Value: OWNER },
+  { Field: "Owner Role", Value: "Lead Functional Analyst" },
+  { Field: "Business Owner", Value: "Head of Card Operations" },
+  { Field: "Programme", Value: "Cards Modernisation" },
+  { Field: "Summary", Value: "Automating the card dispute lifecycle from the cardholder raising a case to the chargeback being settled with the scheme." },
+  { Field: "Business Objective", Value: "Cut the cost per dispute by 45% and post every provisional credit within one working day." },
+  { Field: "Start Date", Value: "2026-01-05" },
+  { Field: "Target Date", Value: "2026-06-30" },
+  { Field: "Completion", Value: "55" },
+  { Field: "Regulatory Drivers", Value: "PSD2 Article 74; Scheme rules chapter 11" },
+  { Field: "Tags", Value: "Cards, Disputes, Automation" },
+];
+
+const scope = [
+  { Type: "In", Item: "Raising a dispute from a settled card transaction" },
+  { Type: "In", Item: "Provisional credit and its reversal" },
+  { Type: "In", Item: "Evidence upload while the case is under review" },
+  { Type: "In", Item: "Chargeback submission to the scheme" },
+  { Type: "Out", Item: "Merchant-side representment handling" },
+  { Type: "Out", Item: "Fraud case management (separate programme)" },
+  { Type: "Out", Item: "Cash and cheque disputes" },
+];
+
+const stakeholders = [
+  { ID: "STK-001", Name: "Head of Card Operations", Role: "Business Owner", Email: "card.ops@bank.example", Department: "Card Operations", RACI: "Accountable" },
+  { ID: "STK-002", Name: OWNER, Role: "Lead Functional Analyst", Email: "abdessalemsaa@gmail.com", Department: "Change Delivery", RACI: "Responsible" },
+  { ID: "STK-003", Name: "Disputes Team Lead", Role: "Process Owner", Email: "disputes@bank.example", Department: "Card Operations", RACI: "Consulted" },
+  { ID: "STK-004", Name: "Compliance Officer", Role: "Regulatory Assurance", Email: "compliance@bank.example", Department: "Compliance", RACI: "Consulted" },
+  { ID: "STK-005", Name: "Head of Internal Audit", Role: "Assurance", Email: "audit@bank.example", Department: "Internal Audit", RACI: "Informed" },
+];
+
+const timeline = [
+  { ID: "MS-01", Label: "Business case approved", Date: "2026-01-05", Status: "Completed", Description: "Cards steering committee approved the investment." },
+  { ID: "MS-02", Label: "Requirements baselined", Date: "2026-02-10", Status: "Completed", Description: "Four requirements signed off with Operations and Compliance." },
+  { ID: "MS-03", Label: "Functional specification approved", Date: "2026-03-06", Status: "In Progress", Description: "Field tables and error codes under review." },
+  { ID: "MS-04", Label: "SIT and UAT", Date: "2026-05-15", Status: "Upcoming", Description: "Five test cases, two suites." },
+  { ID: "MS-05", Label: "Go-live", Date: "2026-06-30", Status: "Upcoming", Description: "Pilot cohort first, then full rollout." },
+];
+
+const dependencies = [
+  { ID: "DEP-01", Name: "Card scheme gateway", Type: "External Party", Owner: "Integration Team", Status: "On Track", Description: "Chargeback submission and arbitration messages." },
+  { ID: "DEP-02", Name: "Core banking ledger", Type: "Internal System", Owner: "Core Banking", Status: "Resolved", Description: "Posting API for the provisional credit and its reversal." },
+  { ID: "DEP-03", Name: "Document store", Type: "Vendor", Owner: "Platform Team", Status: "At Risk", Description: "Evidence files; the 10 MB limit is not yet enforced server-side." },
+];
+
+const risks = [
+  { ID: "R-01", Description: "The provisional credit posts twice if the end-of-day run is replayed.", Likelihood: "Medium", Impact: "High", Mitigation: "Idempotency key on the posting instruction, checked by SQL-002.", Owner: OWNER },
+  { ID: "R-02", Description: "The attachment limit is enforced only in the app, not the API.", Likelihood: "High", Impact: "Medium", Mitigation: "Move the check server-side before the March release; tracked by DEF-118.", Owner: OWNER },
+  { ID: "R-03", Description: "Scheme rule changes in chapter 11 could shorten the dispute window.", Likelihood: "Low", Impact: "High", Mitigation: "Window held in configuration, not code.", Owner: "Compliance Officer" },
+];
+
 const SHEETS = [
+  ["Project", projectInfo],
+  ["Scope", scope],
+  ["Stakeholders", stakeholders],
+  ["Timeline", timeline],
+  ["Dependencies", dependencies],
+  ["Risks", risks],
   ["Requirements", requirements],
   ["Acceptance Criteria", acceptanceCriteria],
   ["Business Rules", businessRules],

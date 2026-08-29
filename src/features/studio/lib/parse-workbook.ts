@@ -7,6 +7,7 @@ import type {
   FunctionalSpecSection,
   ProcessFlow,
   ProcessStep,
+  Project,
   Requirement,
   SqlValidationQuery,
   TestCase,
@@ -475,7 +476,18 @@ export function buildSpecSections(sheets: SpecSheets): FunctionalSpecSection[] {
 
 export type SpecSheetKey = `spec.${keyof SpecSheets}`;
 
-const SHEET_MATCHERS: { key: ParsedCollection | "acceptanceCriteria" | SpecSheetKey; names: string[] }[] = [
+const SHEET_MATCHERS: {
+  key: ParsedCollection | "acceptanceCriteria" | SpecSheetKey | ProjectSheetKey;
+  names: string[];
+}[] = [
+  // The project's own description first: these name themselves plainly and must
+  // not be captured by an artefact matcher.
+  { key: "project.stakeholders", names: ["stakeholders", "raci"] },
+  { key: "project.timeline", names: ["timeline", "milestones", "planning"] },
+  { key: "project.dependencies", names: ["dependencies", "dependency"] },
+  { key: "project.risks", names: ["risks", "riskregister"] },
+  { key: "project.scope", names: ["scope", "inscope", "outofscope"] },
+  { key: "project.project", names: ["projectinfo", "projectdetails", "overview", "project"] },
   // Before the spec sheets, because "SQL Validations" contains "validations"
   // and would otherwise be read as the spec's field rules — which cost both
   // collections: the SQL went missing and the spec rules were overwritten.
@@ -495,7 +507,7 @@ const SHEET_MATCHERS: { key: ParsedCollection | "acceptanceCriteria" | SpecSheet
   { key: "wireframes", names: ["wireframes", "screens", "mockups"] },
   { key: "diagrams", names: ["diagrams", "plantuml", "models", "bpmn", "uml"] },
   { key: "documents", names: ["documents", "deliverables", "docs"] },
-  { key: "actors", names: ["actors", "roles", "personas", "stakeholders"] },
+  { key: "actors", names: ["actors", "roles", "personas"] },
   { key: "requirements", names: ["requirements", "requirement", "reqs", "brd"] },
   { key: "businessRules", names: ["businessrules", "rules"] },
   { key: "testCases", names: ["testcases", "tests", "testcatalogue"] },
@@ -503,7 +515,7 @@ const SHEET_MATCHERS: { key: ParsedCollection | "acceptanceCriteria" | SpecSheet
 
 export function matchSheet(
   name: string,
-): ParsedCollection | "acceptanceCriteria" | SpecSheetKey | null {
+): ParsedCollection | "acceptanceCriteria" | SpecSheetKey | ProjectSheetKey | null {
   const normalised = normalise(name);
 
   // Short aliases must match the whole name: "Actors" contains "ac", and a
@@ -526,7 +538,7 @@ export function matchSheet(
  */
 export function sniffSheet(
   rows: SheetRow[],
-): ParsedCollection | "acceptanceCriteria" | SpecSheetKey | null {
+): ParsedCollection | "acceptanceCriteria" | SpecSheetKey | ProjectSheetKey | null {
   const first = rows[0];
   if (!first) return null;
 
@@ -549,3 +561,173 @@ export function sniffSheet(
 
   return null;
 }
+
+/**
+ * The project record itself — scope, stakeholders, timeline, dependencies and
+ * risks.
+ *
+ * These are not artefacts, they are the project's own description, and the
+ * Overview page is built entirely from them. Without these sheets an imported
+ * project opens onto an empty overview while a hand-written one is complete,
+ * which made imported projects look like second-class citizens.
+ */
+export interface ProjectSheets {
+  project: SheetRow[];
+  scope: SheetRow[];
+  stakeholders: SheetRow[];
+  timeline: SheetRow[];
+  dependencies: SheetRow[];
+  risks: SheetRow[];
+}
+
+export const EMPTY_PROJECT_SHEETS: ProjectSheets = {
+  project: [],
+  scope: [],
+  stakeholders: [],
+  timeline: [],
+  dependencies: [],
+  risks: [],
+};
+
+const RACI = ["Responsible", "Accountable", "Consulted", "Informed"] as const;
+const MILESTONE_STATUS = ["Completed", "In Progress", "Upcoming", "At Risk"] as const;
+const DEPENDENCY_TYPES = ["Internal System", "External Party", "Vendor", "Regulatory"] as const;
+const DEPENDENCY_STATUS = ["Resolved", "On Track", "At Risk", "Blocked"] as const;
+const PROJECT_STATUS = ["Completed", "In Progress", "In Review", "Planned", "On Hold"] as const;
+const RISK_LEVELS = ["Low", "Medium", "High"] as const;
+
+/**
+ * Reads the Project sheet, which may be written either way round: one row of
+ * columns, or a two-column list of field and value. Analysts write the second
+ * far more often, because a project has thirty fields and one row.
+ */
+function readProjectFields(rows: SheetRow[]): SheetRow {
+  if (rows.length === 0) return {};
+
+  const first = rows[0];
+  const columns = Object.keys(first).map(normalise);
+  const isKeyValue =
+    columns.some((c) => ["field", "property", "key", "attribute"].includes(c)) &&
+    columns.some((c) => ["value", "content"].includes(c));
+
+  if (!isKeyValue) return first;
+
+  const record: SheetRow = {};
+  for (const row of rows) {
+    const key = field(row, "field", "property", "key", "attribute");
+    if (key) record[key] = field(row, "value", "content");
+  }
+  return record;
+}
+
+export function buildProjectMeta(sheets: ProjectSheets, owner: string): Partial<Project> {
+  const row = readProjectFields(sheets.project);
+
+  const scopeIn: string[] = [];
+  const scopeOut: string[] = [];
+  for (const entry of sheets.scope) {
+    // Either two columns side by side, or one column plus an In/Out marker.
+    const inValue = field(entry, "inScope", "in");
+    const outValue = field(entry, "outOfScope", "outScope", "out");
+    if (inValue) scopeIn.push(inValue);
+    if (outValue) scopeOut.push(outValue);
+
+    const item = field(entry, "item", "scope", "description");
+    if (item) {
+      const kind = field(entry, "type", "kind", "category").toLowerCase();
+      (kind.startsWith("out") ? scopeOut : scopeIn).push(item);
+    }
+  }
+
+  const meta: Partial<Project> = {
+    name: field(row, "name", "project", "title") || undefined,
+    shortName: field(row, "shortName", "short") || undefined,
+    code: field(row, "code", "reference") || undefined,
+    domain: field(row, "domain") || undefined,
+    subDomain: field(row, "subDomain", "subdomain", "area") || undefined,
+    status: field(row, "status")
+      ? oneOf(field(row, "status"), PROJECT_STATUS, "In Progress")
+      : undefined,
+    version: field(row, "version") || undefined,
+    release: field(row, "release") || undefined,
+    businessOwner: field(row, "businessOwner", "sponsor") || undefined,
+    programme: field(row, "programme", "program") || undefined,
+    summary: field(row, "summary", "description") || undefined,
+    businessObjective: field(row, "businessObjective", "objective", "goal") || undefined,
+    startDate: field(row, "startDate", "start") || undefined,
+    targetDate: field(row, "targetDate", "target", "end", "due") || undefined,
+    lastUpdated: field(row, "lastUpdated", "updated") || undefined,
+    completion: field(row, "completion", "progress")
+      ? Number(field(row, "completion", "progress").replace("%", "")) || 0
+      : undefined,
+    regulatoryDrivers: list(field(row, "regulatoryDrivers", "regulation", "drivers")),
+    tags: list(field(row, "tags", "labels")),
+  };
+
+  if (field(row, "owner", "analyst")) {
+    meta.owner = {
+      id: "USR-IMPORTED",
+      name: field(row, "owner", "analyst") || owner,
+      role: field(row, "ownerRole", "role") || "Functional Analyst",
+      email: field(row, "ownerEmail", "email"),
+      department: field(row, "department", "team"),
+    };
+  }
+
+  if (scopeIn.length) meta.inScope = scopeIn;
+  if (scopeOut.length) meta.outOfScope = scopeOut;
+
+  const stakeholders = sheets.stakeholders
+    .filter((entry) => field(entry, "name", "stakeholder", "person"))
+    .map((entry, index) => ({
+      id: field(entry, "id", "ref") || `STK-${String(index + 1).padStart(3, "0")}`,
+      name: field(entry, "name", "stakeholder", "person"),
+      role: field(entry, "role", "title", "position"),
+      email: field(entry, "email", "mail"),
+      department: field(entry, "department", "team", "unit"),
+      raci: oneOf(field(entry, "raci", "responsibility"), RACI, "Consulted"),
+    }));
+  if (stakeholders.length) meta.stakeholders = stakeholders;
+
+  const timeline = sheets.timeline
+    .filter((entry) => field(entry, "label", "milestone", "name"))
+    .map((entry, index) => ({
+      id: field(entry, "id", "ref") || `MS-${String(index + 1).padStart(2, "0")}`,
+      label: field(entry, "label", "milestone", "name"),
+      date: field(entry, "date", "due", "when"),
+      status: oneOf(field(entry, "status"), MILESTONE_STATUS, "Upcoming"),
+      description: field(entry, "description", "detail", "notes"),
+    }));
+  if (timeline.length) meta.timeline = timeline;
+
+  const dependencies = sheets.dependencies
+    .filter((entry) => field(entry, "name", "dependency"))
+    .map((entry, index) => ({
+      id: field(entry, "id", "ref") || `DEP-${String(index + 1).padStart(2, "0")}`,
+      name: field(entry, "name", "dependency"),
+      type: oneOf(field(entry, "type", "kind"), DEPENDENCY_TYPES, "Internal System"),
+      owner: field(entry, "owner", "responsible") || owner,
+      status: oneOf(field(entry, "status"), DEPENDENCY_STATUS, "On Track"),
+      description: field(entry, "description", "detail", "notes"),
+    }));
+  if (dependencies.length) meta.dependencies = dependencies;
+
+  const risks = sheets.risks
+    .filter((entry) => field(entry, "description", "risk", "title"))
+    .map((entry, index) => ({
+      id: field(entry, "id", "ref") || `R-${String(index + 1).padStart(2, "0")}`,
+      description: field(entry, "description", "risk", "title"),
+      likelihood: oneOf(field(entry, "likelihood", "probability"), RISK_LEVELS, "Medium"),
+      impact: oneOf(field(entry, "impact", "severity"), RISK_LEVELS, "Medium"),
+      mitigation: field(entry, "mitigation", "response", "action"),
+      owner: field(entry, "owner", "responsible") || owner,
+    }));
+  if (risks.length) meta.risks = risks;
+
+  // A field the sheet did not carry must not overwrite the default with undefined.
+  return Object.fromEntries(
+    Object.entries(meta).filter(([, value]) => value !== undefined),
+  ) as Partial<Project>;
+}
+
+export type ProjectSheetKey = `project.${keyof ProjectSheets}`;

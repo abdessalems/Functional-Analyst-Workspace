@@ -78,13 +78,14 @@ export function draftProjectRecord(
   name: string,
   owner: string,
   bundle: ProjectDataBundle,
+  /** Whatever the Project / Scope / Stakeholders / Timeline sheets carried. */
+  meta: Partial<Project> = {},
 ): Project {
   const today = new Date().toISOString().slice(0, 10);
   const words = name.split(/\s+/).filter(Boolean);
   const code = (words[0] ?? "PRJ").slice(0, 3).toUpperCase() + "-1.0";
 
   return {
-    id: projectId,
     code,
     name,
     shortName: words.slice(0, 3).join(" ") || name,
@@ -111,6 +112,15 @@ export function draftProjectRecord(
     dependencies: [],
     risks: [],
     tags: ["Draft", "Imported"],
+    startDate: today,
+    targetDate: "",
+    lastUpdated: today,
+    completion: 0,
+    regulatoryDrivers: [],
+    // The sheets win wherever they said something; the defaults only fill gaps.
+    ...meta,
+    // Never overridable: these identify the project and count what arrived.
+    id: projectId,
     metrics: {
       requirements: bundle.requirements.length,
       businessRules: bundle.businessRules.length,
@@ -120,10 +130,5 @@ export function draftProjectRecord(
       actors: bundle.actors.length,
       diagrams: bundle.diagrams.length,
     },
-    startDate: today,
-    targetDate: "",
-    lastUpdated: today,
-    completion: 0,
-    regulatoryDrivers: [],
   };
 }
