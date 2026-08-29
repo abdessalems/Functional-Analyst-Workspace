@@ -115,7 +115,17 @@ export function draftProjectRecord(
     },
     businessOwner: "",
     programme: "",
-    summary: `Imported into this browser from a spreadsheet on ${today}. It is a draft: it is not on the published site until its bundle is committed.`,
+    /*
+     * Empty, not a note about being a draft.
+     *
+     * This field is the paragraph under the project's name on its card and on
+     * its overview — the first thing anyone reads. A sentence explaining the
+     * import mechanism was written here as a placeholder, and it reached the
+     * published site, where it told visitors the project was "not on the
+     * published site". Nothing is better than the wrong thing: the card simply
+     * shows no description until the Project sheet carries a Summary.
+     */
+    summary: "",
     businessObjective: "",
     inScope: [],
     outOfScope: [],

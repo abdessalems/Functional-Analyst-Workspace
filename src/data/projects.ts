@@ -604,8 +604,8 @@ export const projects: Project[] = [
     },
     "businessOwner": "",
     "programme": "",
-    "summary": "Imported into this browser from a spreadsheet on 2026-08-29. It is a draft: it is not on the published site until its bundle is committed.",
-    "businessObjective": "Analyse the functional and technical architecture of a legacy tax declaration and refund platform based on EJB, WebLogic and DB2, identify business processes, integrations, data dependencies, technical constraints and modernization pain points.",
+    "summary": "The tax declaration and refund service as it runs today: synchronous EJB components on Oracle WebLogic, writing to DB2, with the calculation and refund path carried by scheduled batches. The analysis documents what the system does now, where the coupling sits, and which constraints make each change slow and risky.",
+    "businessObjective": "Establish an accurate baseline of the existing service — its requirements, rules, actors, interfaces and data — so that the target architecture can be judged against what it actually replaces.",
     "inScope": [
       "Legacy EJB/WebLogic architecture analysis",
       "DB2 legacy schema documentation (TAXPAYER, DECLARATION, DECLARATION_LINE, REFUND, PAYMENT, AUDIT_LOG)",
@@ -796,8 +796,8 @@ export const projects: Project[] = [
     },
     "businessOwner": "",
     "programme": "",
-    "summary": "Imported into this browser from a spreadsheet on 2026-08-29. It is a draft: it is not on the published site until its bundle is committed.",
-    "businessObjective": "Design a modern microservices architecture for the Tax Declaration & Refund domain, introducing REST APIs, asynchronous messaging through Artemis, independently deployable services, DB2 data modelling, resilience patterns and containerized deployment.",
+    "summary": "The same service re-analysed as Java microservices on Kubernetes: REST contracts written to the Belgif standard, declarations accepted asynchronously with events published to Artemis, and the refund payment orchestrated as a Saga with idempotent retries so a replay can never pay twice.",
+    "businessObjective": "Define the target architecture in enough detail to be built from: the API contracts, the event flows, the data model on DB2, and the acceptance criteria that decide whether each requirement was met.",
     "inScope": [
       "Target microservices architecture: Declaration, Validation, Refund, Payment, Notification",
       "REST / OpenAPI 3.1 contracts, versioned under /v1",
@@ -1014,10 +1014,10 @@ export const projects: Project[] = [
   },
   {
     "code": "EVE-1.0",
-    "name": "Everience BA Functional Analyst Tester Energy Risk Projects",
-    "shortName": "Everience BA Functional",
+    "name": "Energy Risk Management — Functional Analysis & Testing",
+    "shortName": "Energy Risk Management",
     "domain": "Banking",
-    "subDomain": "Imported",
+    "subDomain": "Risk & Compliance",
     "status": "In Progress",
     "version": "1.0",
     "release": "—",
@@ -1030,8 +1030,8 @@ export const projects: Project[] = [
     },
     "businessOwner": "",
     "programme": "",
-    "summary": "Imported into this browser from a spreadsheet on 2026-08-29. It is a draft: it is not on the published site until its bundle is committed.",
-    "businessObjective": "",
+    "summary": "Functional analysis and testing of risk management applications for the energy market. Requirements were elicited with the risk stakeholders and written up as functional specifications with acceptance criteria; the delivered web applications and services were then validated through functional, regression, integration and end-to-end testing, with defects tracked through to resolution.",
+    "businessObjective": "Keep the risk applications aligned with the business as they change: specify each request precisely enough to build, and prove through testing that what was delivered matches what was specified.",
     "inScope": [
       "Portfolio exposure calculation",
       "Risk limit and threshold configuration",
@@ -1399,7 +1399,7 @@ export const projects: Project[] = [
         "owner": "Business Analyst"
       }
     ],
-    "tags": [],
+    "tags": ["Risk Management","Energy","UAT","Regression testing","Integration testing","Defect management"],
     "startDate": "2026-08-29",
     "targetDate": "",
     "lastUpdated": "2026-08-29",
@@ -1415,7 +1415,7 @@ export const projects: Project[] = [
       "actors": 6,
       "diagrams": 22
     },
-    "stack": ["Swagger","OpenAPI","Visio","Excel","OAuth 2.0"],
+    "stack": ["REST API","Swagger","OpenAPI","SQL","Visio","Excel","OAuth 2.0"],
   },
 ];
 
