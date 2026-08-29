@@ -103,7 +103,7 @@ export function GlobalSearch() {
       >
         <Search className="shrink-0" />
         <span className="truncate text-sm">Search requirements, rules, APIs…</span>
-        <kbd className="ml-auto hidden shrink-0 items-center gap-0.5 rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[10px] font-medium md:inline-flex">
+        <kbd className="ml-auto hidden shrink-0 items-center gap-0.5 rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-micro font-medium md:inline-flex">
           Ctrl K
         </kbd>
       </Button>

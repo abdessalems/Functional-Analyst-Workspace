@@ -4,10 +4,15 @@
 
 @layer base {
   :root {
-    /* System font stacks keep the app self-contained — no external font fetch. */
-    --font-sans: "Segoe UI Variable Text", "Segoe UI", -apple-system, BlinkMacSystemFont,
-      "Helvetica Neue", Arial, sans-serif;
-    --font-mono: "Cascadia Mono", "Cascadia Code", Consolas, "SF Mono", "Liberation Mono", monospace;
+    /*
+     * `--font-sans` and `--font-mono` are set on <html> by next/font, which
+     * self-hosts the files at build time — no request leaves the page. These
+     * only matter if that ever fails, or while a font is still loading.
+     */
+    --font-sans-fallback: "Segoe UI Variable Text", "Segoe UI", -apple-system,
+      BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    --font-mono-fallback: "Cascadia Mono", "Cascadia Code", Consolas, "SF Mono",
+      "Liberation Mono", monospace;
 
     /*
      * Brand: portfolio theme #2dd4bf (hsl 172 66% 50%) on near-black #0d0f11.

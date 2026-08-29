@@ -125,7 +125,7 @@ export function SwaggerView() {
                 <div className="space-y-3 border-b border-border bg-surface-muted p-5">
                   <div className="flex flex-wrap items-center gap-2">
                     <FileCode2 className="size-4 text-primary" />
-                    <h2 className="text-[15px] font-semibold tracking-tight">{service.name}</h2>
+                    <h2 className="text-title font-semibold tracking-tight">{service.name}</h2>
                     <Badge variant="outline" className="font-mono">
                       v{service.version}
                     </Badge>

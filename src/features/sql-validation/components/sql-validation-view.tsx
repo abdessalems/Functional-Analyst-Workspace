@@ -118,19 +118,19 @@ export function SqlValidationView() {
                       Last run {formatDate(validation.lastRun)} by {validation.executedBy}
                     </span>
                   </div>
-                  <h3 className="text-[15px] font-semibold tracking-tight">{validation.title}</h3>
+                  <h3 className="text-title font-semibold tracking-tight">{validation.title}</h3>
                   <p className="max-w-4xl text-sm leading-relaxed text-muted-foreground">
                     {validation.purpose}
                   </p>
                   <div className="flex flex-wrap items-center gap-x-5 gap-y-2 pt-1">
                     <span className="flex items-center gap-2">
-                      <span className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                      <span className="text-micro uppercase tracking-wide text-muted-foreground">
                         Requirements
                       </span>
                       <ArtifactLinkList ids={validation.relatedRequirements} />
                     </span>
                     <span className="flex items-center gap-2">
-                      <span className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                      <span className="text-micro uppercase tracking-wide text-muted-foreground">
                         Rules
                       </span>
                       <ArtifactLinkList ids={validation.relatedRules} />
@@ -149,7 +149,7 @@ export function SqlValidationView() {
 
                   <section className="space-y-2">
                     <div className="flex items-center justify-between gap-3">
-                      <h4 className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                      <h4 className="text-micro font-semibold uppercase tracking-wide text-muted-foreground">
                         Result set
                       </h4>
                       <Badge variant={validation.rows.length === 0 ? "success" : "warning"}>
@@ -182,7 +182,7 @@ export function SqlValidationView() {
                             {validation.rows.map((row, rowIndex) => (
                               <TableRow key={rowIndex}>
                                 {row.map((cell, cellIndex) => (
-                                  <TableCell key={cellIndex} className="font-mono text-[12px]">
+                                  <TableCell key={cellIndex} className="font-mono text-xs">
                                     {cell}
                                   </TableCell>
                                 ))}
@@ -195,7 +195,7 @@ export function SqlValidationView() {
                   </section>
 
                   <section className="space-y-2">
-                    <h4 className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                    <h4 className="text-micro font-semibold uppercase tracking-wide text-muted-foreground">
                       Validation notes
                     </h4>
                     <ul className="space-y-2">
@@ -239,10 +239,10 @@ export function SqlValidationView() {
                 <TableBody>
                   {table.columns.map((column) => (
                     <TableRow key={column.name}>
-                      <TableCell className="font-mono text-[12px] font-medium">
+                      <TableCell className="font-mono text-xs font-medium">
                         {column.name}
                       </TableCell>
-                      <TableCell className="font-mono text-[12px] text-muted-foreground">
+                      <TableCell className="font-mono text-xs text-muted-foreground">
                         {column.type}
                       </TableCell>
                       <TableCell>

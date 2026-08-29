@@ -29,7 +29,7 @@ export function DefinitionList({
     >
       {items.map((item) => (
         <div key={item.label} className="min-w-0 space-y-1">
-          <dt className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+          <dt className="text-micro font-semibold uppercase tracking-wide text-muted-foreground">
             {item.label}
           </dt>
           <dd className="text-sm leading-relaxed">{item.value}</dd>

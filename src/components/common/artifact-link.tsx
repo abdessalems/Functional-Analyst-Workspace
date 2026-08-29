@@ -17,7 +17,7 @@ export function ArtifactLink({ id, className }: { id: string; className?: string
     return (
       <span
         className={cn(
-          "inline-flex items-center rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[11px] text-muted-foreground",
+          "inline-flex items-center rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-micro text-muted-foreground",
           className,
         )}
       >
@@ -32,7 +32,7 @@ export function ArtifactLink({ id, className }: { id: string; className?: string
         <Link
           href={artifact.href}
           className={cn(
-            "inline-flex items-center rounded border border-border bg-surface px-1.5 py-0.5 font-mono text-[11px] font-medium text-primary transition-colors hover:border-primary/40 hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+            "inline-flex items-center rounded border border-border bg-surface px-1.5 py-0.5 font-mono text-micro font-medium text-primary transition-colors hover:border-primary/40 hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
             className,
           )}
         >
@@ -40,7 +40,7 @@ export function ArtifactLink({ id, className }: { id: string; className?: string
         </Link>
       </TooltipTrigger>
       <TooltipContent side="top" className="max-w-xs">
-        <span className="block text-[10px] uppercase tracking-wide opacity-70">{artifact.kind}</span>
+        <span className="block text-micro uppercase tracking-wide opacity-70">{artifact.kind}</span>
         <span className="block">{artifact.label}</span>
       </TooltipContent>
     </Tooltip>

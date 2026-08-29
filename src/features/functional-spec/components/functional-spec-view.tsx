@@ -182,7 +182,7 @@ export function FunctionalSpecView() {
                       <Badge variant="outline" className="font-mono">
                         {section.id}
                       </Badge>
-                      <span className="text-[15px] font-semibold">{section.title}</span>
+                      <span className="text-title font-semibold">{section.title}</span>
                     </div>
                     <p className="text-sm font-normal leading-relaxed text-muted-foreground">
                       {section.summary}
@@ -213,7 +213,7 @@ function SectionDetail({ section }: { section: FunctionalSpecSection }) {
   return (
     <div className="space-y-6 border-t border-border pt-5">
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+        <span className="text-micro font-semibold uppercase tracking-wide text-muted-foreground">
           Satisfies
         </span>
         <ArtifactLinkList ids={section.requirementRefs} />
@@ -223,7 +223,7 @@ function SectionDetail({ section }: { section: FunctionalSpecSection }) {
         <ol className="space-y-2.5">
           {section.businessLogic.map((line, index) => (
             <li key={index} className="flex gap-3 text-sm leading-relaxed">
-              <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded bg-muted text-[11px] font-semibold tabular-nums text-muted-foreground">
+              <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded bg-muted text-micro font-semibold tabular-nums text-muted-foreground">
                 {index + 1}
               </span>
               <span>{line}</span>
@@ -245,9 +245,9 @@ function SectionDetail({ section }: { section: FunctionalSpecSection }) {
           <TableBody>
             {section.validations.map((rule) => (
               <TableRow key={`${rule.field}-${rule.errorCode}`}>
-                <TableCell className="font-mono text-[12px]">{rule.field}</TableCell>
+                <TableCell className="font-mono text-xs">{rule.field}</TableCell>
                 <TableCell className="text-sm">{rule.rule}</TableCell>
-                <TableCell className="font-mono text-[12px] text-primary">{rule.errorCode}</TableCell>
+                <TableCell className="font-mono text-xs text-primary">{rule.errorCode}</TableCell>
                 <TableCell>
                   <Badge variant={rule.severity === "Blocking" ? "danger" : "warning"}>
                     {rule.severity}
@@ -264,7 +264,7 @@ function SectionDetail({ section }: { section: FunctionalSpecSection }) {
           {section.errors.map((error) => (
             <div key={error.code} className="rounded-lg border border-border bg-surface-muted p-3.5">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="font-mono text-[12px] font-semibold text-primary">{error.code}</span>
+                <span className="font-mono text-xs font-semibold text-primary">{error.code}</span>
                 <Badge variant={error.httpStatus >= 500 ? "danger" : "warning"}>
                   HTTP {error.httpStatus}
                 </Badge>
@@ -294,7 +294,7 @@ function SectionDetail({ section }: { section: FunctionalSpecSection }) {
           <TableBody>
             {section.fields.map((field) => (
               <TableRow key={field.name}>
-                <TableCell className="font-mono text-[12px]">{field.name}</TableCell>
+                <TableCell className="font-mono text-xs">{field.name}</TableCell>
                 <TableCell className="text-sm">{field.type}</TableCell>
                 <TableCell className="tabular-nums text-sm">{field.length}</TableCell>
                 <TableCell>
@@ -303,7 +303,7 @@ function SectionDetail({ section }: { section: FunctionalSpecSection }) {
                   </Badge>
                 </TableCell>
                 <TableCell className="text-sm">{field.description}</TableCell>
-                <TableCell className="font-mono text-[12px] text-muted-foreground">
+                <TableCell className="font-mono text-xs text-muted-foreground">
                   {field.example}
                 </TableCell>
               </TableRow>
@@ -316,7 +316,7 @@ function SectionDetail({ section }: { section: FunctionalSpecSection }) {
         <div className="grid gap-3 lg:grid-cols-2">
           {section.edgeCases.map((edge) => (
             <div key={edge.id} className="rounded-lg border border-border p-3.5">
-              <p className="font-mono text-[11px] text-muted-foreground">{edge.id}</p>
+              <p className="font-mono text-micro text-muted-foreground">{edge.id}</p>
               <p className="mt-1.5 text-sm font-medium leading-relaxed">{edge.scenario}</p>
               <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
                 {edge.expectedBehaviour}

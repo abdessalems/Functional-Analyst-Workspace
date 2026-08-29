@@ -142,7 +142,7 @@ export function ProcessFlowView() {
                 >
                   <div className="flex items-center gap-1.5">
                     <Icon className="size-3.5 shrink-0 text-muted-foreground" />
-                    <span className="font-mono text-[10px] text-muted-foreground">{step.id}</span>
+                    <span className="font-mono text-micro text-muted-foreground">{step.id}</span>
                   </div>
                   <p className="text-sm font-medium leading-snug">{step.name}</p>
                 </div>
@@ -184,7 +184,7 @@ export function ProcessFlowView() {
                     </span>
                     <div className="min-w-0 flex-1 space-y-1.5">
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="font-mono text-[11px] text-muted-foreground">
+                        <span className="font-mono text-micro text-muted-foreground">
                           {step.id}
                         </span>
                         <span className="text-sm font-medium">{step.name}</span>
@@ -198,14 +198,14 @@ export function ProcessFlowView() {
                       <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 pt-0.5">
                         {step.rules.length > 0 && (
                           <span className="flex items-center gap-1.5">
-                            <span className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                            <span className="text-micro uppercase tracking-wide text-muted-foreground">
                               Rules
                             </span>
                             <ArtifactLinkList ids={step.rules} />
                           </span>
                         )}
                         {step.next.length > 0 && (
-                          <span className="text-[11px] text-muted-foreground">
+                          <span className="text-micro text-muted-foreground">
                             Next · {step.next.join(", ")}
                           </span>
                         )}

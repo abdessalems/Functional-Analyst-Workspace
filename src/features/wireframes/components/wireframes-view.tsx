@@ -137,8 +137,8 @@ export function WireframesView() {
                 </div>
 
                 <div className="space-y-1">
-                  <h3 className="text-[14px] font-semibold leading-snug">{wireframe.title}</h3>
-                  <p className="font-mono text-[11px] text-muted-foreground">{wireframe.screenId}</p>
+                  <h3 className="text-sm font-semibold leading-snug">{wireframe.title}</h3>
+                  <p className="font-mono text-micro text-muted-foreground">{wireframe.screenId}</p>
                 </div>
 
                 <p className="flex-1 text-sm leading-relaxed text-muted-foreground">
@@ -147,7 +147,7 @@ export function WireframesView() {
 
                 <div className="flex flex-wrap items-center gap-2 border-t border-border pt-2.5">
                   <ArtifactLinkList ids={wireframe.relatedRequirements} />
-                  <span className="ml-auto text-[11px] text-muted-foreground">
+                  <span className="ml-auto text-micro text-muted-foreground">
                     v{wireframe.version} · {formatDate(wireframe.lastUpdated)}
                   </span>
                 </div>
@@ -180,20 +180,20 @@ export function WireframesView() {
 
                 <div className="space-y-5">
                   <section className="space-y-2">
-                    <h4 className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                    <h4 className="text-micro font-semibold uppercase tracking-wide text-muted-foreground">
                       Description
                     </h4>
                     <p className="text-sm leading-relaxed">{selected.description}</p>
                   </section>
 
                   <section className="space-y-2">
-                    <h4 className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                    <h4 className="text-micro font-semibold uppercase tracking-wide text-muted-foreground">
                       Design annotations
                     </h4>
                     <ol className="space-y-2.5">
                       {selected.annotations.map((annotation, index) => (
                         <li key={annotation} className="flex gap-2.5 text-sm leading-relaxed">
-                          <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[10px] font-semibold text-primary">
+                          <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-micro font-semibold text-primary">
                             {index + 1}
                           </span>
                           {annotation}
@@ -203,7 +203,7 @@ export function WireframesView() {
                   </section>
 
                   <section className="space-y-2">
-                    <h4 className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                    <h4 className="text-micro font-semibold uppercase tracking-wide text-muted-foreground">
                       Requirements
                     </h4>
                     <ArtifactLinkList ids={selected.relatedRequirements} />

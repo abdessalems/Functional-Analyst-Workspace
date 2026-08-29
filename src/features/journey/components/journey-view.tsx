@@ -246,7 +246,7 @@ export function JourneyView() {
 
             <div className="min-w-0 flex-1 space-y-3 pb-4">
               <div className="space-y-1">
-                <h2 className="text-[15px] font-semibold tracking-tight">{phase.title}</h2>
+                <h2 className="text-title font-semibold tracking-tight">{phase.title}</h2>
                 <p className="text-sm italic leading-relaxed text-muted-foreground">
                   {phase.question}
                 </p>

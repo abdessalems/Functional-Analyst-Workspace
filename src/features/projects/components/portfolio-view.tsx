@@ -103,7 +103,7 @@ export function PortfolioView() {
       <Card className="brand-wash overflow-hidden border-primary/25">
         <div className="flex flex-col gap-5 p-6 sm:p-8 lg:flex-row lg:items-center lg:justify-between">
           <div className="max-w-2xl space-y-3">
-            <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-[11px] font-medium uppercase tracking-wide text-primary">
+            <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-micro font-medium uppercase tracking-wide text-primary">
               <Sparkles className="size-3" /> Functional analysis portfolio
             </span>
             <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
@@ -120,7 +120,7 @@ export function PortfolioView() {
             <Button size="lg" onClick={() => open(walkthroughProject.id)}>
               Start the walkthrough <ArrowRight />
             </Button>
-            <span className="text-center text-[11px] text-muted-foreground lg:text-right">
+            <span className="text-center text-micro text-muted-foreground lg:text-right">
               {walkthroughProject.shortName} · 15 steps
             </span>
           </div>
@@ -228,7 +228,7 @@ export function PortfolioView() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <h2 className="text-[15px] font-semibold leading-snug tracking-tight">
+                  <h2 className="text-title font-semibold leading-snug tracking-tight">
                     {item.name}
                   </h2>
                   <p className="line-clamp-3 text-sm leading-relaxed text-muted-foreground">
@@ -306,7 +306,7 @@ export function PortfolioView() {
 function Stat({ label, value }: { label: string; value: number }) {
   return (
     <div className="min-w-0">
-      <dt className="truncate text-[11px] text-muted-foreground">{label}</dt>
+      <dt className="truncate text-micro text-muted-foreground">{label}</dt>
       <dd className="text-base font-semibold tabular-nums">{value}</dd>
     </div>
   );

@@ -87,7 +87,7 @@ export function EndpointPanel({
               </span>
               <span>Tag · {endpoint.tag}</span>
             </div>
-            <div className="rounded-md border border-border bg-surface-muted px-3 py-2 font-mono text-[12px]">
+            <div className="rounded-md border border-border bg-surface-muted px-3 py-2 font-mono text-xs">
               <span className="text-muted-foreground">{basePath}</span>
               <span className="font-semibold">{endpoint.path}</span>
             </div>
@@ -153,7 +153,7 @@ export function EndpointPanel({
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="space-y-2">
-      <h4 className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+      <h4 className="text-micro font-semibold uppercase tracking-wide text-muted-foreground">
         {title}
       </h4>
       {children}
@@ -182,9 +182,9 @@ function ParameterTable({ parameters }: { parameters: ApiEndpoint["parameters"] 
         <TableBody>
           {parameters.map((parameter) => (
             <TableRow key={parameter.name}>
-              <TableCell className="font-mono text-[12px]">{parameter.name}</TableCell>
+              <TableCell className="font-mono text-xs">{parameter.name}</TableCell>
               <TableCell className="text-sm">{parameter.in}</TableCell>
-              <TableCell className="font-mono text-[12px] text-muted-foreground">
+              <TableCell className="font-mono text-xs text-muted-foreground">
                 {parameter.type}
               </TableCell>
               <TableCell>
@@ -193,7 +193,7 @@ function ParameterTable({ parameters }: { parameters: ApiEndpoint["parameters"] 
                 </Badge>
               </TableCell>
               <TableCell className="text-sm">{parameter.description}</TableCell>
-              <TableCell className="max-w-[16rem] truncate font-mono text-[11px] text-muted-foreground">
+              <TableCell className="max-w-[16rem] truncate font-mono text-micro text-muted-foreground">
                 {parameter.example}
               </TableCell>
             </TableRow>

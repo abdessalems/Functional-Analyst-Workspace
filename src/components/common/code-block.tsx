@@ -49,7 +49,7 @@ export function CodeBlock({
         <div className="flex items-center justify-between gap-2 border-b border-border bg-surface px-3 py-2">
           <div className="flex min-w-0 items-center gap-2">
             {title && <span className="truncate text-sm font-medium">{title}</span>}
-            <span className="shrink-0 rounded bg-muted px-1.5 py-0.5 font-mono text-[10px] uppercase text-muted-foreground">
+            <span className="shrink-0 rounded bg-muted px-1.5 py-0.5 font-mono text-micro uppercase text-muted-foreground">
               {language}
             </span>
           </div>

@@ -114,7 +114,7 @@ export function Topbar() {
           </Avatar>
           <span className="hidden flex-col items-start leading-tight xl:flex">
             <span className="text-sm font-medium">{ANALYST.name}</span>
-            <span className="text-[11px] text-muted-foreground">{ANALYST.role}</span>
+            <span className="text-micro text-muted-foreground">{ANALYST.role}</span>
           </span>
         </span>
       </div>

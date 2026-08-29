@@ -29,7 +29,7 @@ export function ProjectSelector() {
           <FolderKanban className="text-muted-foreground" />
           <span className="flex min-w-0 flex-col items-start leading-tight">
             <span className="w-full truncate text-sm font-medium">{project.shortName}</span>
-            <span className="text-[11px] text-muted-foreground">
+            <span className="text-micro text-muted-foreground">
               {project.code} · v{project.version}
             </span>
           </span>
@@ -56,7 +56,7 @@ export function ProjectSelector() {
                 <span className="truncate text-sm font-medium">{item.shortName}</span>
                 <StatusBadge status={item.status} />
               </span>
-              <span className="truncate text-[11px] text-muted-foreground">
+              <span className="truncate text-micro text-muted-foreground">
                 {item.code} · {item.subDomain} · {item.owner.name}
               </span>
             </span>

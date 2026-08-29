@@ -92,7 +92,7 @@ export function MethodBadge({ method, className }: { method: string; className?:
   return (
     <span
       className={cn(
-        "inline-flex min-w-[3.75rem] shrink-0 items-center justify-center rounded px-2 py-1 text-[11px] font-bold tracking-wide text-white",
+        "inline-flex min-w-[3.75rem] shrink-0 items-center justify-center rounded px-2 py-1 text-micro font-bold tracking-wide text-white",
         METHOD_TONE[method] ?? "bg-slate-600",
         className,
       )}

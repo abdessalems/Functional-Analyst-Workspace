@@ -52,12 +52,12 @@ export function RequirementCard({
           <PriorityBadge priority={requirement.priority} />
         </div>
 
-        <h3 className="text-[15px] font-semibold leading-snug tracking-tight">
+        <h3 className="text-title font-semibold leading-snug tracking-tight">
           {requirement.title}
         </h3>
 
         <div className="space-y-2 rounded-lg border border-border bg-surface-muted p-3.5">
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+          <p className="text-micro font-semibold uppercase tracking-wide text-muted-foreground">
             Business need
           </p>
           <p className="max-w-measure text-sm leading-relaxed">{requirement.businessNeed}</p>
@@ -114,7 +114,7 @@ export function RequirementCard({
               </div>
 
               <div className="space-y-2.5">
-                <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                <p className="text-micro font-semibold uppercase tracking-wide text-muted-foreground">
                   Acceptance criteria
                 </p>
                 <ul className="space-y-2.5">
@@ -123,7 +123,7 @@ export function RequirementCard({
                       key={criterion.id}
                       className="rounded-lg border border-border bg-surface-muted p-3.5 text-sm leading-relaxed"
                     >
-                      <p className="mb-1.5 font-mono text-[11px] text-muted-foreground">
+                      <p className="mb-1.5 font-mono text-micro text-muted-foreground">
                         {criterion.id}
                       </p>
                       <p>
@@ -157,7 +157,7 @@ export function RequirementCard({
 function LinkGroup({ label, ids }: { label: string; ids: string[] }) {
   return (
     <div className="space-y-1.5">
-      <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+      <p className="text-micro font-semibold uppercase tracking-wide text-muted-foreground">
         {label}
       </p>
       <ArtifactLinkList ids={ids} emptyLabel="Not linked" />

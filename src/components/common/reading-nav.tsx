@@ -42,7 +42,7 @@ export function ReadingProgress() {
 
   return (
     <div className="space-y-1.5">
-      <div className="flex items-baseline justify-between text-[11px] text-muted-foreground">
+      <div className="flex items-baseline justify-between text-micro text-muted-foreground">
         <span className="uppercase tracking-wide">{section?.label ?? "Analysis"}</span>
         <span className="tabular-nums">
           Step {position.step} of {position.total}
@@ -109,7 +109,7 @@ export function ReadingNav({ className }: { className?: string }) {
         >
           <ArrowLeft className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:-translate-x-0.5" />
           <span className="min-w-0">
-            <span className="block text-[11px] uppercase tracking-wide text-muted-foreground">
+            <span className="block text-micro uppercase tracking-wide text-muted-foreground">
               Previous
             </span>
             <span className="block truncate text-sm font-medium">{previous.label}</span>
@@ -129,7 +129,7 @@ export function ReadingNav({ className }: { className?: string }) {
           className="group flex min-w-0 flex-1 items-center justify-end gap-3 rounded-xl border border-primary/30 bg-primary/[0.05] p-3.5 text-right transition-colors hover:border-primary/50 hover:bg-primary/[0.09] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <span className="min-w-0">
-            <span className="block text-[11px] uppercase tracking-wide text-muted-foreground">
+            <span className="block text-micro uppercase tracking-wide text-muted-foreground">
               Next
             </span>
             <span className="block truncate text-sm font-medium">{next.label}</span>

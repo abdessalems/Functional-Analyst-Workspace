@@ -1,6 +1,32 @@
 import type { Metadata, Viewport } from "next";
+import { Inter, JetBrains_Mono } from "next/font/google";
 
 import "./globals.css";
+
+/*
+ * The interface typeface, self-hosted at build time.
+ *
+ * A system stack meant the workspace rendered in Segoe on Windows, in San
+ * Francisco on a Mac and in Roboto on Android — three different products to
+ * three different readers, and the Windows one reading as a desktop utility
+ * rather than as a tool. Inter is drawn for interfaces at small sizes, which is
+ * what almost every line here is.
+ *
+ * `display: swap` keeps text visible while the font loads; the fallback metrics
+ * Next generates keep it from jumping when it arrives.
+ */
+const sans = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-sans",
+});
+
+/** Ids, rule logic, SQL and PlantUML — everything that must align in a column. */
+const mono = JetBrains_Mono({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-mono",
+});
 
 import { AppShell } from "@/components/layout/app-shell";
 import { ThemeProvider } from "@/components/providers/theme-provider";
@@ -54,7 +80,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={`${sans.variable} ${mono.variable}`} suppressHydrationWarning>
       {/* Grammarly and similar extensions add attributes to the body before
           React hydrates; that difference is theirs, not ours. */}
       <body suppressHydrationWarning>

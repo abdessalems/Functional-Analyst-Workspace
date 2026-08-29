@@ -200,12 +200,12 @@ export function BusinessRulesView() {
                   )}
                   onClick={() => setSelected(rule)}
                 >
-                  <TableCell data-label="Rule" className="font-mono text-[12px] font-medium text-primary">
+                  <TableCell data-label="Rule" className="font-mono text-xs font-medium text-primary">
                     {rule.id}
                   </TableCell>
                   <TableCell data-label="Description" className="max-md:flex-col max-md:items-start">
                     <p className="text-sm leading-relaxed">{rule.description}</p>
-                    <p className="mt-1.5 font-mono text-[11px] text-muted-foreground line-clamp-1">
+                    <p className="mt-1.5 font-mono text-micro text-muted-foreground line-clamp-1">
                       {rule.logic}
                     </p>
                   </TableCell>
@@ -244,7 +244,7 @@ export function BusinessRulesView() {
               </DialogHeader>
               <DialogBody className="space-y-5">
                 <div className="space-y-2">
-                  <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                  <p className="text-micro font-semibold uppercase tracking-wide text-muted-foreground">
                     Rule logic
                   </p>
                   <CodeBlock code={selected.logic} language="text" maxHeightClass="max-h-40" />
@@ -261,7 +261,7 @@ export function BusinessRulesView() {
                 />
 
                 <div className="space-y-2">
-                  <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                  <p className="text-micro font-semibold uppercase tracking-wide text-muted-foreground">
                     Impacted requirements
                   </p>
                   <ArtifactLinkList ids={selected.impactedRequirements} />

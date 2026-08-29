@@ -202,7 +202,7 @@ export function DocumentsView() {
                       <Badge variant="neutral">{item.format}</Badge>
                       <StatusBadge status={item.status} />
                     </div>
-                    <h3 className="text-[14px] font-semibold leading-snug">{item.name}</h3>
+                    <h3 className="text-sm font-semibold leading-snug">{item.name}</h3>
                   </div>
                 </div>
 
@@ -228,12 +228,12 @@ export function DocumentsView() {
                   </div>
 
                   <div className="space-y-1.5">
-                    <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                    <p className="text-micro font-semibold uppercase tracking-wide text-muted-foreground">
                       Evidences
                     </p>
                     <ArtifactLinkList ids={item.relatedRequirements.slice(0, 5)} />
                     {item.relatedRequirements.length > 5 && (
-                      <span className="text-[11px] text-muted-foreground">
+                      <span className="text-micro text-muted-foreground">
                         +{item.relatedRequirements.length - 5} more
                       </span>
                     )}
@@ -297,14 +297,14 @@ export function DocumentsView() {
                 />
 
                 <section className="space-y-2">
-                  <h4 className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                  <h4 className="text-micro font-semibold uppercase tracking-wide text-muted-foreground">
                     Requirements evidenced
                   </h4>
                   <ArtifactLinkList ids={preview.relatedRequirements} />
                 </section>
 
                 <section className="space-y-2">
-                  <h4 className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                  <h4 className="flex items-center gap-1.5 text-micro font-semibold uppercase tracking-wide text-muted-foreground">
                     <History className="size-3.5" /> Version history
                   </h4>
                   <ul className="divide-y divide-border overflow-hidden rounded-lg border border-border">

@@ -55,7 +55,7 @@ export function OnThisPage({
       className={cn("hidden xl:block", className)}
     >
       <div className="sticky top-20 space-y-2">
-        <p className="px-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+        <p className="px-2 text-micro font-semibold uppercase tracking-wide text-muted-foreground">
           On this page
         </p>
         <ul className="space-y-0.5 border-l border-border">
@@ -72,7 +72,7 @@ export function OnThisPage({
               >
                 <span className="min-w-0 flex-1 truncate">{target.label}</span>
                 {target.count !== undefined && (
-                  <span className="shrink-0 text-[11px] tabular-nums text-muted-foreground">
+                  <span className="shrink-0 text-micro tabular-nums text-muted-foreground">
                     {target.count}
                   </span>
                 )}

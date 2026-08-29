@@ -38,12 +38,12 @@ export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
     <nav aria-label="Workspace sections" className="flex flex-col gap-5 px-3 pb-6">
       {isProjectOpen && !collapsed && (
         <div className="space-y-2 rounded-lg border border-border bg-surface-muted p-3">
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+          <p className="text-micro font-semibold uppercase tracking-wider text-muted-foreground">
             Current project
           </p>
           <p className="text-sm font-semibold leading-snug">{project.shortName}</p>
           <div className="flex flex-wrap items-center gap-1.5">
-            <span className="font-mono text-[10px] text-muted-foreground">{project.code}</span>
+            <span className="font-mono text-micro text-muted-foreground">{project.code}</span>
             <StatusBadge status={project.status} />
           </div>
           <Link
@@ -52,7 +52,7 @@ export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
               closeProject();
               onNavigate?.();
             }}
-            className="inline-flex items-center gap-1 text-[11px] font-medium text-primary underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="inline-flex items-center gap-1 text-micro font-medium text-primary underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <ChevronLeft className="size-3" /> All projects
           </Link>
@@ -64,7 +64,7 @@ export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
           {collapsed ? (
             <div className="mx-2 my-1 h-px bg-border" role="presentation" />
           ) : (
-            <p className="flex items-center gap-2 px-2 pb-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+            <p className="flex items-center gap-2 px-2 pb-1 text-micro font-semibold uppercase tracking-wider text-muted-foreground">
               <span
                 aria-hidden
                 className="h-3 w-0.5 rounded-full"
@@ -109,7 +109,7 @@ export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
                 {!collapsed && step !== undefined && (
                   <span
                     className={cn(
-                      "w-4 shrink-0 text-right text-[10px] font-semibold tabular-nums",
+                      "w-4 shrink-0 text-right text-micro font-semibold tabular-nums",
                       isActive ? "text-primary" : "text-muted-foreground/70",
                     )}
                   >
@@ -123,7 +123,7 @@ export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
                     {chip && (
                       <span
                         className={cn(
-                          "rounded px-1.5 py-0.5 text-[11px] font-medium tabular-nums",
+                          "rounded px-1.5 py-0.5 text-micro font-medium tabular-nums",
                           isActive
                             ? "bg-primary/15 text-primary"
                             : "bg-muted text-muted-foreground group-hover:bg-background",

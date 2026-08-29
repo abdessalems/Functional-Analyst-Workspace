@@ -124,12 +124,12 @@ export function PlantUmlView() {
                       v{diagram.version} · {diagram.author} · {formatDate(diagram.lastUpdated)}
                     </span>
                   </div>
-                  <h3 className="text-[15px] font-semibold tracking-tight">{diagram.title}</h3>
+                  <h3 className="text-title font-semibold tracking-tight">{diagram.title}</h3>
                   <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
                     {diagram.description}
                   </p>
                   <div className="flex flex-wrap items-center gap-2 pt-1">
-                    <span className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                    <span className="text-micro uppercase tracking-wide text-muted-foreground">
                       Supports
                     </span>
                     <ArtifactLinkList ids={diagram.relatedRequirements} />

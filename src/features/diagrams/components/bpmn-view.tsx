@@ -70,12 +70,12 @@ export function BpmnView() {
                   v{model.version} · {model.author} · {formatDate(model.lastUpdated)}
                 </span>
               </div>
-              <h2 className="text-[15px] font-semibold tracking-tight">{model.title}</h2>
+              <h2 className="text-title font-semibold tracking-tight">{model.title}</h2>
               <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
                 {model.description}
               </p>
               <div className="flex flex-wrap items-center gap-2 pt-1">
-                <span className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                <span className="text-micro uppercase tracking-wide text-muted-foreground">
                   Supports
                 </span>
                 <ArtifactLinkList ids={model.relatedRequirements} />

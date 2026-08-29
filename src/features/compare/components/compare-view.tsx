@@ -228,7 +228,7 @@ function ComparisonSection({
 
               <span className="font-mono text-xs text-muted-foreground">{item.detail}</span>
 
-              <span className="text-[11px] uppercase tracking-wide text-muted-foreground">
+              <span className="text-micro uppercase tracking-wide text-muted-foreground">
                 {item.side === "both"
                   ? "unchanged"
                   : item.side === "changed"

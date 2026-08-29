@@ -10,22 +10,39 @@ const config: Config = {
       screens: { "2xl": "1400px" },
     },
     extend: {
+      /*
+       * One scale, five steps.
+       *
+       * The workspace had almost everything at `sm` with 10px and 11px sprinkled
+       * around, so a page title, a card title and a table cell all carried
+       * roughly the same weight and nothing led the eye. Each step below is a
+       * clear jump from the one under it, and there is now a single small size
+       * rather than two that differ by a pixel.
+       */
       fontSize: {
+        /* Chips, table headers, timestamps — anything that labels rather than reads. */
+        micro: ["0.6875rem", { lineHeight: "1.45", letterSpacing: "0.02em" }],
+        /* Secondary text: metadata rows, helper lines under a field. */
+        xs: ["0.75rem", { lineHeight: "1.55" }],
         /*
          * Body copy is prose here — business needs, rule logic, descriptions —
-         * so `sm` carries a reading line-height rather than the tight UI
-         * default. 13px was a control size being asked to do a paragraph's job.
+         * so it carries a reading line-height rather than the tight UI default.
          */
         sm: ["0.875rem", { lineHeight: "1.65" }],
         base: ["1rem", { lineHeight: "1.7" }],
+        /* Card and section titles. */
+        title: ["1.0625rem", { lineHeight: "1.4", letterSpacing: "-0.01em" }],
+        /* Page headings. */
+        heading: ["1.5rem", { lineHeight: "1.25", letterSpacing: "-0.02em" }],
+        display: ["1.875rem", { lineHeight: "1.2", letterSpacing: "-0.025em" }],
       },
       maxWidth: {
         /* Roughly 70 characters: the span the eye can track back reliably. */
         measure: "68ch",
       },
       fontFamily: {
-        sans: ["var(--font-sans)", "Segoe UI", "system-ui", "sans-serif"],
-        mono: ["var(--font-mono)", "Cascadia Mono", "Consolas", "monospace"],
+        sans: ["var(--font-sans)", "var(--font-sans-fallback)", "system-ui", "sans-serif"],
+        mono: ["var(--font-mono)", "var(--font-mono-fallback)", "monospace"],
       },
       colors: {
         border: "hsl(var(--border))",

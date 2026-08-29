@@ -99,7 +99,7 @@ export function OverviewView() {
               ]}
             />
             <div className="space-y-2">
-              <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+              <p className="text-micro font-semibold uppercase tracking-wide text-muted-foreground">
                 Tags
               </p>
               <div className="flex flex-wrap gap-1.5">
@@ -193,7 +193,7 @@ export function OverviewView() {
               <TableRow key={stakeholder.id}>
                 <TableCell>
                   <div className="flex items-center gap-2.5">
-                    <span className="flex size-7 shrink-0 items-center justify-center rounded-full border border-border bg-surface-muted text-[10px] font-semibold text-muted-foreground">
+                    <span className="flex size-7 shrink-0 items-center justify-center rounded-full border border-border bg-surface-muted text-micro font-semibold text-muted-foreground">
                       {initials(stakeholder.name)}
                     </span>
                     <span className="font-medium">{stakeholder.name}</span>

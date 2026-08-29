@@ -20,7 +20,7 @@ export function PageHeader({ title, description, meta, actions, className }: Pag
       <SectionRule />
       <div className="flex flex-col gap-3 pt-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0 space-y-1.5">
-          <h1 className="text-[22px] font-semibold tracking-tight sm:text-[26px]">{title}</h1>
+          <h1 className="text-heading font-semibold sm:text-display">{title}</h1>
           {description && (
             <p className="max-w-measure text-sm leading-relaxed text-muted-foreground">{description}</p>
           )}

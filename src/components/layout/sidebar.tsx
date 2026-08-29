@@ -36,7 +36,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           {!collapsed && (
             <span className="flex flex-col leading-tight">
               <span className="text-sm font-semibold tracking-tight">Analyst Workspace</span>
-              <span className="text-[11px] text-muted-foreground">Saadaoui Abdessalem</span>
+              <span className="text-micro text-muted-foreground">Saadaoui Abdessalem</span>
             </span>
           )}
         </Link>
@@ -54,8 +54,8 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       >
         {!collapsed && (
           <div className="flex flex-1 flex-col leading-tight">
-            <span className="text-[11px] font-medium">Workspace v2.3.0</span>
-            <span className="text-[11px] text-muted-foreground">Environment · UAT</span>
+            <span className="text-micro font-medium">Workspace v2.3.0</span>
+            <span className="text-micro text-muted-foreground">Environment · UAT</span>
           </div>
         )}
         <Button

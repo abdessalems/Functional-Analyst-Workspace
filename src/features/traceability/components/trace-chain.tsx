@@ -78,10 +78,10 @@ export function TraceChain({ link }: { link: TraceabilityLink }) {
 
             <div className="min-w-0 flex-1 space-y-1.5 pt-1">
               <div className="flex items-center gap-2">
-                <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                <p className="text-micro font-semibold uppercase tracking-wide text-muted-foreground">
                   {level.label}
                 </p>
-                <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] font-medium tabular-nums text-muted-foreground">
+                <span className="rounded bg-muted px-1.5 py-0.5 text-micro font-medium tabular-nums text-muted-foreground">
                   {level.ids.length}
                 </span>
               </div>
@@ -96,7 +96,7 @@ export function TraceChain({ link }: { link: TraceabilityLink }) {
                     level.plain ? (
                       <span
                         key={id}
-                        className="inline-flex items-center rounded border border-border bg-surface px-1.5 py-0.5 font-mono text-[11px] text-muted-foreground"
+                        className="inline-flex items-center rounded border border-border bg-surface px-1.5 py-0.5 font-mono text-micro text-muted-foreground"
                       >
                         {id}
                       </span>

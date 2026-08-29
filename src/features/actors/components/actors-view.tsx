@@ -177,7 +177,7 @@ export function ActorsView() {
                     >
                       <TableCell>
                         <div className="space-y-1.5">
-                          <p className="font-mono text-[11px] text-muted-foreground">{actor.id}</p>
+                          <p className="font-mono text-micro text-muted-foreground">{actor.id}</p>
                           <p className="font-medium leading-snug">{actor.name}</p>
                           <Badge variant={TYPE_TONE[actor.type]}>{actor.type}</Badge>
                         </div>
@@ -236,7 +236,7 @@ export function ActorsView() {
                       <Badge variant={TYPE_TONE[actor.type]}>{actor.type}</Badge>
                       <Badge variant="neutral">{actor.channel}</Badge>
                     </div>
-                    <h3 className="text-[15px] font-semibold tracking-tight">{actor.name}</h3>
+                    <h3 className="text-title font-semibold tracking-tight">{actor.name}</h3>
                     <p className="text-sm leading-relaxed text-muted-foreground">
                       {actor.description}
                     </p>
@@ -248,7 +248,7 @@ export function ActorsView() {
                   </div>
 
                   <div className="space-y-1.5 border-t border-border pt-3">
-                    <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                    <p className="text-micro font-semibold uppercase tracking-wide text-muted-foreground">
                       Systems used
                     </p>
                     <div className="flex flex-wrap gap-1.5">
@@ -272,7 +272,7 @@ export function ActorsView() {
 function ListBlock({ title, items }: { title: string; items: string[] }) {
   return (
     <div className="space-y-1.5">
-      <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+      <p className="text-micro font-semibold uppercase tracking-wide text-muted-foreground">
         {title}
       </p>
       <ul className="space-y-1.5">

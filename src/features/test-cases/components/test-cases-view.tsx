@@ -229,7 +229,7 @@ export function TestCasesView() {
                   )}
                   onClick={() => setSelected(testCase)}
                 >
-                  <TableCell data-label="Test" className="font-mono text-[12px] font-medium text-primary">
+                  <TableCell data-label="Test" className="font-mono text-xs font-medium text-primary">
                     {testCase.id}
                   </TableCell>
                   <TableCell data-label="Scenario" className="max-md:flex-col max-md:items-start">
@@ -302,7 +302,7 @@ export function TestCasesView() {
 
               <DialogBody className="space-y-5">
                 <section className="space-y-2">
-                  <h4 className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                  <h4 className="text-micro font-semibold uppercase tracking-wide text-muted-foreground">
                     Preconditions
                   </h4>
                   <ul className="space-y-1.5">
@@ -316,7 +316,7 @@ export function TestCasesView() {
                 </section>
 
                 <section className="space-y-2">
-                  <h4 className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                  <h4 className="text-micro font-semibold uppercase tracking-wide text-muted-foreground">
                     Test steps
                   </h4>
                   <div className="overflow-hidden rounded-lg border border-border">
@@ -344,7 +344,7 @@ export function TestCasesView() {
                 </section>
 
                 <section className="space-y-2">
-                  <h4 className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                  <h4 className="text-micro font-semibold uppercase tracking-wide text-muted-foreground">
                     Expected result
                   </h4>
                   <p className="rounded-lg border border-border bg-surface-muted p-3.5 text-sm leading-relaxed">
