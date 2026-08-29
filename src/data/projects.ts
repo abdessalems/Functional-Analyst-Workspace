@@ -1399,7 +1399,7 @@ export const projects: Project[] = [
         "owner": "Business Analyst"
       }
     ],
-    "tags": ["Risk Management","Energy","UAT","Regression testing","Integration testing","Defect management"],
+    "tags": ["Risk Management","Energy","Functional specification","UAT","Regression testing","Integration testing","API testing","Defect management"],
     "startDate": "2026-08-29",
     "targetDate": "",
     "lastUpdated": "2026-08-29",
