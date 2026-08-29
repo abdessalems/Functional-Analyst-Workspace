@@ -775,6 +775,239 @@ export const projects: Project[] = [
       "diagrams": 9
     }
   },
+  {
+    "code": "2-1.0",
+    "name": "2 TO BE   Tax Declaration & Refund   Cloud Native Modernization",
+    "shortName": "2 TO BE",
+    "domain": "Banking",
+    "subDomain": "Imported",
+    "status": "In Progress",
+    "version": "1.0",
+    "release": "—",
+    "owner": {
+      "id": "USR-DRAFT",
+      "name": "Saadaoui Abdessalem",
+      "role": "Functional Analyst",
+      "email": "",
+      "department": ""
+    },
+    "businessOwner": "",
+    "programme": "",
+    "summary": "Imported into this browser from a spreadsheet on 2026-08-29. It is a draft: it is not on the published site until its bundle is committed.",
+    "businessObjective": "Design a modern microservices architecture for the Tax Declaration & Refund domain, introducing REST APIs, asynchronous messaging through Artemis, independently deployable services, DB2 data modelling, resilience patterns and containerized deployment.",
+    "inScope": [
+      "Target microservices architecture: Declaration, Validation, Refund, Payment, Notification",
+      "REST / OpenAPI 3.1 contracts, versioned under /v1",
+      "Artemis event/command catalogue (commands vs events)",
+      "Saga orchestration, Retry policy, Idempotency and DLQ design",
+      "DB2 logical data ownership model per service",
+      "Docker/Kubernetes deployment view (design only)",
+      "Belgif-aligned API governance checklist",
+      "Postman test scenario definitions (happy path, retry, idempotency, DLQ)",
+      "Non-functional requirements: performance, availability, scalability, security, observability"
+    ],
+    "outOfScope": [
+      "Actual implementation/coding of the microservices (optional bonus, see Phase 3 plan)",
+      "Production deployment or real Kubernetes cluster operation",
+      "Data migration from the legacy DB2 schema",
+      "Formal Belgif certification (a governance checklist is produced, not a certification)",
+      "Execution of load/performance tests (scenarios are defined, not run)"
+    ],
+    "stakeholders": [
+      {
+        "id": "STK-001",
+        "name": "Saadaoui Abdessalem",
+        "role": "Technical Analyst",
+        "email": "abdessalem.saadaoui@case-study.example",
+        "department": "IT Architecture",
+        "raci": "Consulted"
+      },
+      {
+        "id": "STK-002",
+        "name": "Jean-Philippe Collin",
+        "role": "Business Sponsor",
+        "email": "jean-philippe.collin@case-study.example",
+        "department": "Business Operations",
+        "raci": "Consulted"
+      },
+      {
+        "id": "STK-003",
+        "name": "Nicolas Leroy",
+        "role": "Product Owner",
+        "email": "nicolas.leroy@case-study.example",
+        "department": "Digital Strategy",
+        "raci": "Consulted"
+      },
+      {
+        "id": "STK-004",
+        "name": "Noureddine Ouzoubair",
+        "role": "Senior Business Analyst",
+        "email": "noureddine.ouzoubair@case-study.example",
+        "department": "Business Operations",
+        "raci": "Consulted"
+      },
+      {
+        "id": "STK-005",
+        "name": "Tax Administration Agent (business representative)",
+        "role": "Business SME",
+        "email": "tax-agent-rep@case-study.example",
+        "department": "Front Office",
+        "raci": "Consulted"
+      },
+      {
+        "id": "STK-006",
+        "name": "Payment Operations Lead",
+        "role": "Operations",
+        "email": "payment-ops-lead@case-study.example",
+        "department": "Operations",
+        "raci": "Consulted"
+      },
+      {
+        "id": "STK-007",
+        "name": "Site Reliability Engineer",
+        "role": "Infrastructure",
+        "email": "sre-lead@case-study.example",
+        "department": "IT Infrastructure",
+        "raci": "Consulted"
+      },
+      {
+        "id": "STK-008",
+        "name": "IT Security Officer",
+        "role": "Security & Compliance",
+        "email": "security-officer@case-study.example",
+        "department": "Security & Compliance",
+        "raci": "Consulted"
+      }
+    ],
+    "timeline": [
+      {
+        "id": "TL-001",
+        "label": "Target architecture design",
+        "date": "2026-03-05",
+        "status": "Upcoming",
+        "description": "Defined the five-service decomposition and the overall component/context diagram."
+      },
+      {
+        "id": "TL-002",
+        "label": "API and event contract definition",
+        "date": "2026-03-16",
+        "status": "Upcoming",
+        "description": "OpenAPI 3.1 contracts for Declaration/Refund/Payment/Ops APIs; Artemis command/event catalogue."
+      },
+      {
+        "id": "TL-003",
+        "label": "Resilience pattern design",
+        "date": "2026-03-21",
+        "status": "Upcoming",
+        "description": "Saga state machine, retry policy with exponential backoff, idempotency, and DLQ design."
+      },
+      {
+        "id": "TL-004",
+        "label": "Belgif governance checklist review",
+        "date": "2026-03-24",
+        "status": "Upcoming",
+        "description": "Reviewed the ten public/service endpoints against the API governance checklist."
+      },
+      {
+        "id": "TL-005",
+        "label": "TO-BE sign-off",
+        "date": "2026-03-27",
+        "status": "Upcoming",
+        "description": "Business sign-off by the Business Sponsor and Product Owner, reviewed by the Business Analyst."
+      },
+      {
+        "id": "TL-006",
+        "label": "Optional proof-of-concept (Phase 3)",
+        "date": "2026-04-15",
+        "status": "Upcoming",
+        "description": "Bonus scope: a small runnable vertical slice on Docker/kind, not required for the case study."
+      }
+    ],
+    "dependencies": [
+      {
+        "id": "DEP-001",
+        "name": "AS-IS analysis frozen and signed off",
+        "type": "Internal System",
+        "owner": "Nicolas Leroy",
+        "status": "Resolved",
+        "description": "The TO-BE design formally depends on the approved AS-IS baseline and its pain-points register."
+      },
+      {
+        "id": "DEP-002",
+        "name": "Applicable Belgif guideline documentation",
+        "type": "Internal System",
+        "owner": "Jean-Philippe Collin",
+        "status": "Resolved",
+        "description": "Needed to build the API governance checklist; final validation against the project's actual guidelines remains a real-project follow-up."
+      },
+      {
+        "id": "DEP-003",
+        "name": "Artemis broker reference documentation",
+        "type": "Internal System",
+        "owner": "Saadaoui Abdessalem",
+        "status": "Resolved",
+        "description": "Needed to define the command/event catalogue and the JMS-based service contracts."
+      },
+      {
+        "id": "DEP-004",
+        "name": "Db2 Community Edition Docker image (optional PoC only)",
+        "type": "Internal System",
+        "owner": "Saadaoui Abdessalem",
+        "status": "On Track",
+        "description": "Only needed if the optional Phase 3 proof-of-concept proceeds; the default local profile uses Postgres."
+      }
+    ],
+    "risks": [
+      {
+        "id": "RISK-001",
+        "description": "Belgif guidelines used in the checklist are inspired by public-sector principles but not verified against a specific real project standard.",
+        "likelihood": "Medium",
+        "impact": "Medium",
+        "mitigation": "Explicitly frame the checklist as a starting point to validate against the actual applicable standard on a real engagement.",
+        "owner": "Saadaoui Abdessalem"
+      },
+      {
+        "id": "RISK-002",
+        "description": "Saga complexity is underestimated for a five-service system, making the orchestration hard to reason about.",
+        "likelihood": "Low",
+        "impact": "High",
+        "mitigation": "Keep orchestration centralized in the Refund Service rather than choreography across all services.",
+        "owner": "Saadaoui Abdessalem"
+      },
+      {
+        "id": "RISK-003",
+        "description": "A real DB2 instance is too resource-heavy to run alongside five services and Kubernetes on a laptop for the optional PoC.",
+        "likelihood": "Medium",
+        "impact": "Low",
+        "mitigation": "Default to Postgres locally and keep a documented Db2 profile as a stretch option (see Phase 3 plan).",
+        "owner": "Saadaoui Abdessalem"
+      },
+      {
+        "id": "RISK-004",
+        "description": "Scope creep into full implementation reduces the depth of the analysis and design deliverables.",
+        "likelihood": "Medium",
+        "impact": "High",
+        "mitigation": "Freeze the AS-IS and TO-BE Excel files as the primary deliverable; treat implementation as optional bonus scope only.",
+        "owner": "Nicolas Leroy"
+      }
+    ],
+    "tags": [],
+    "startDate": "2026-03-03",
+    "targetDate": "",
+    "lastUpdated": "2026-08-29",
+    "completion": 0,
+    "regulatoryDrivers": [],
+    "id": "PRJ-TAX-002",
+    "metrics": {
+      "requirements": 15,
+      "businessRules": 14,
+      "apis": 10,
+      "documents": 8,
+      "testCases": 16,
+      "actors": 7,
+      "diagrams": 11
+    }
+  },
 ];
 
 /** The project the workspace opens on. */
