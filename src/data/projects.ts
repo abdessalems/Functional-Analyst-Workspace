@@ -584,6 +584,197 @@ export const projects: Project[] = [
     ],
   },
 
+  {
+    "code": "1-1.0",
+    "name": "1 AS IS   Tax Declaration & Refund   Legacy EJB WebLogic",
+    "shortName": "1 AS IS",
+    "domain": "Banking",
+    "subDomain": "Imported",
+    "status": "In Progress",
+    "version": "1.0",
+    "release": "—",
+    "owner": {
+      "id": "USR-DRAFT",
+      "name": "Saadaoui Abdessalem",
+      "role": "Functional Analyst",
+      "email": "",
+      "department": ""
+    },
+    "businessOwner": "",
+    "programme": "",
+    "summary": "Imported into this browser from a spreadsheet on 2026-08-29. It is a draft: it is not on the published site until its bundle is committed.",
+    "businessObjective": "Analyse the functional and technical architecture of a legacy tax declaration and refund platform based on EJB, WebLogic and DB2, identify business processes, integrations, data dependencies, technical constraints and modernization pain points.",
+    "inScope": [
+      "Legacy EJB/WebLogic architecture analysis",
+      "DB2 legacy schema documentation (TAXPAYER, DECLARATION, DECLARATION_LINE, REFUND, PAYMENT, AUDIT_LOG)",
+      "BPMN and sequence diagrams of the current declaration/refund process",
+      "Legacy EJB interface inventory (documented as pseudo-API endpoints)",
+      "Pain-points register motivating the future TO-BE modernization",
+      "Functional test cases against the legacy behaviour"
+    ],
+    "outOfScope": [
+      "Any code change to the legacy EJB/WebLogic application",
+      "Production data migration or extraction",
+      "New feature development on the legacy platform",
+      "Performance tuning or capacity planning of the legacy platform",
+      "Design of the TO-BE target architecture (covered by the separate TO-BE project)"
+    ],
+    "stakeholders": [
+      {
+        "id": "STK-001",
+        "name": "Saadaoui Abdessalem",
+        "role": "Technical Analyst",
+        "email": "abdessalem.saadaoui@case-study.example",
+        "department": "IT Architecture",
+        "raci": "Consulted"
+      },
+      {
+        "id": "STK-002",
+        "name": "Jean-Philippe Collin",
+        "role": "Business Sponsor",
+        "email": "jean-philippe.collin@case-study.example",
+        "department": "Business Operations",
+        "raci": "Consulted"
+      },
+      {
+        "id": "STK-003",
+        "name": "Nicolas Leroy",
+        "role": "Product Owner",
+        "email": "nicolas.leroy@case-study.example",
+        "department": "Digital Strategy",
+        "raci": "Consulted"
+      },
+      {
+        "id": "STK-004",
+        "name": "Noureddine Ouzoubair",
+        "role": "Senior Business Analyst",
+        "email": "noureddine.ouzoubair@case-study.example",
+        "department": "Business Operations",
+        "raci": "Consulted"
+      },
+      {
+        "id": "STK-005",
+        "name": "Tax Administration Agent (business representative)",
+        "role": "Business SME",
+        "email": "tax-agent-rep@case-study.example",
+        "department": "Front Office",
+        "raci": "Consulted"
+      },
+      {
+        "id": "STK-006",
+        "name": "Payment Operations Lead",
+        "role": "Operations",
+        "email": "payment-ops-lead@case-study.example",
+        "department": "Operations",
+        "raci": "Consulted"
+      },
+      {
+        "id": "STK-007",
+        "name": "System Administrator (WebLogic/DB2)",
+        "role": "Infrastructure",
+        "email": "sysadmin@case-study.example",
+        "department": "IT Infrastructure",
+        "raci": "Consulted"
+      }
+    ],
+    "timeline": [
+      {
+        "id": "TL-001",
+        "label": "Kickoff and stakeholder interviews",
+        "date": "2026-01-05",
+        "status": "Upcoming",
+        "description": "Initial interviews with the Business Sponsor, Product Owner and Business Analyst to frame the AS-IS analysis."
+      },
+      {
+        "id": "TL-002",
+        "label": "Legacy architecture discovery",
+        "date": "2026-01-12",
+        "status": "Upcoming",
+        "description": "EJB interface inventory, WebLogic domain review, DB2 schema extraction."
+      },
+      {
+        "id": "TL-003",
+        "label": "Business process and BPMN modelling",
+        "date": "2026-01-17",
+        "status": "Upcoming",
+        "description": "Documented the declaration, validation, calculation, refund and payment flow as BPMN and sequence diagrams."
+      },
+      {
+        "id": "TL-004",
+        "label": "Pain points workshop",
+        "date": "2026-01-22",
+        "status": "Upcoming",
+        "description": "Consolidated the eight legacy pain points that motivate the TO-BE modernization business case."
+      },
+      {
+        "id": "TL-005",
+        "label": "AS-IS sign-off",
+        "date": "2026-01-27",
+        "status": "Upcoming",
+        "description": "Business sign-off by the Business Sponsor and Product Owner, reviewed by the Business Analyst."
+      }
+    ],
+    "dependencies": [
+      {
+        "id": "DEP-001",
+        "name": "Access to the legacy WebLogic admin console",
+        "type": "Internal System",
+        "owner": "System Administrator (WebLogic/DB2)",
+        "status": "Resolved",
+        "description": "Needed to inspect the EJB deployment descriptors and the WebLogic domain configuration."
+      },
+      {
+        "id": "DEP-002",
+        "name": "DB2 schema export",
+        "type": "Internal System",
+        "owner": "System Administrator (WebLogic/DB2)",
+        "status": "Resolved",
+        "description": "Needed to document the TAXPAYER/DECLARATION/REFUND/PAYMENT/AUDIT_LOG tables accurately."
+      },
+      {
+        "id": "DEP-003",
+        "name": "Business SME availability for interviews",
+        "type": "Internal System",
+        "owner": "Noureddine Ouzoubair",
+        "status": "Resolved",
+        "description": "Legacy business rules (eligibility, refund calculation) could only be confirmed through interviews with the domain SME."
+      }
+    ],
+    "risks": [
+      {
+        "id": "RISK-001",
+        "description": "Legacy documentation is incomplete or outdated compared to the actual EJB code and DB2 schema.",
+        "likelihood": "Medium",
+        "impact": "High",
+        "mitigation": "Cross-check the EJB deployment descriptors and DB2 DDL directly rather than relying on outdated documentation.",
+        "owner": "Saadaoui Abdessalem"
+      },
+      {
+        "id": "RISK-002",
+        "description": "The legacy business SME is unavailable during the discovery window, delaying validation of tax eligibility rules.",
+        "likelihood": "Low",
+        "impact": "Medium",
+        "mitigation": "Schedule interviews early in the timeline and record sessions for later reference.",
+        "owner": "Noureddine Ouzoubair"
+      }
+    ],
+    "tags": [],
+    "startDate": "2026-01-05",
+    "targetDate": "",
+    "lastUpdated": "2026-08-29",
+    "completion": 0,
+    "regulatoryDrivers": [],
+    "id": "PRJ-TAX-001",
+    "metrics": {
+      "requirements": 9,
+      "businessRules": 8,
+      "apis": 6,
+      "documents": 6,
+      "testCases": 11,
+      "actors": 6,
+      "diagrams": 9
+    }
+  },
 ];
 
 /** The project the workspace opens on. */
