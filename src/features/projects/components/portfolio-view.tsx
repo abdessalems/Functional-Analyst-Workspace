@@ -24,6 +24,7 @@ import { Progress } from "@/components/ui/progress";
 import { FilterBar } from "@/components/common/filter-bar";
 import { MetricCard } from "@/components/common/metric-card";
 import { PageHeader } from "@/components/common/page-header";
+import { StackMarks } from "@/components/common/brand-mark";
 import { StatusBadge } from "@/components/common/status-badge";
 import { NoResultsState } from "@/components/common/states";
 import { useArtifactFilters } from "@/hooks/use-artifact-filters";
@@ -270,13 +271,28 @@ export function PortfolioView() {
                   )}
                 </div>
 
-                <div className="flex flex-wrap gap-1.5">
-                  {item.tags.slice(0, 4).map((tag) => (
-                    <Badge key={tag} variant="outline" className="font-normal">
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
+                {/*
+                  The stack, on the card. Put an AS-IS card beside its TO-BE and
+                  the migration is legible without opening either — WebLogic and
+                  EJB on one, Kubernetes and Docker on the other. It is the one
+                  thing a reader can take from this page in a second.
+                */}
+                {item.stack && item.stack.length > 0 && (
+                  <StackMarks
+                    stack={item.stack}
+                    className="flex flex-wrap items-center gap-1.5"
+                  />
+                )}
+
+                {item.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5">
+                    {item.tags.slice(0, 4).map((tag) => (
+                      <Badge key={tag} variant="outline" className="font-normal">
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
               </button>
 
               <div className="flex items-center justify-between gap-2 border-t border-border px-5 py-3">

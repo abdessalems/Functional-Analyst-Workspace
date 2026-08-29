@@ -661,6 +661,8 @@ export function buildProjectMeta(sheets: ProjectSheets, owner: string): Partial<
       ? Number(field(row, "completion", "progress").replace("%", "")) || 0
       : undefined,
     regulatoryDrivers: list(field(row, "regulatoryDrivers", "regulation", "drivers")),
+    // Shown on the project card, so a reader sees the stack before opening it.
+    stack: list(field(row, "stack", "technologies", "tech", "technology")),
     tags: list(field(row, "tags", "labels")),
   };
 

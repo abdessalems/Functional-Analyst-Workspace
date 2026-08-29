@@ -1067,6 +1067,7 @@ const projectInfo = [
   { Field: "Completion", Value: "55" },
   { Field: "Regulatory Drivers", Value: "PSD2 Article 74; Scheme rules chapter 11" },
   { Field: "Tags", Value: "Cards, Disputes, Automation" },
+  { Field: "Stack", Value: "Java, Spring Boot, PostgreSQL, Swagger, Postman, Docker" },
 ];
 
 const scope = [

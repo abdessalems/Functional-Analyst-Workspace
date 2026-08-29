@@ -287,6 +287,7 @@ export const projects: Project[] = [
       "PSD2 — Strong Customer Authentication (RTS)",
       "EU Funds Transfer Regulation 2015/847",
     ],
+    stack: ["Java", "Spring Boot", "ISO 20022", "TIPS"],
   },
   {
     id: "PRJ-EPH-001",
@@ -582,6 +583,7 @@ export const projects: Project[] = [
       "PSD2 — strong authentication and auditability principles",
       "EUR-only scope pending multi-currency assessment",
     ],
+    stack: ["Java", "Spring Boot", "PostgreSQL", "Swagger", "OpenAPI"],
   },
 
   {
@@ -773,7 +775,8 @@ export const projects: Project[] = [
       "testCases": 11,
       "actors": 6,
       "diagrams": 9
-    }
+    },
+    "stack": ["Oracle WebLogic","EJB","Java","Oracle DB","Excel"],
   },
   {
     "code": "TAX-2.0",
@@ -1006,7 +1009,8 @@ export const projects: Project[] = [
       "testCases": 16,
       "actors": 7,
       "diagrams": 11
-    }
+    },
+    "stack": ["Kubernetes","Docker","Artemis","REST","OpenAPI","Postman","OAuth 2.0"],
   },
   {
     "code": "EVE-1.0",
@@ -1410,7 +1414,8 @@ export const projects: Project[] = [
       "testCases": 50,
       "actors": 6,
       "diagrams": 22
-    }
+    },
+    "stack": ["Swagger","OpenAPI","Visio","Excel","OAuth 2.0"],
   },
 ];
 

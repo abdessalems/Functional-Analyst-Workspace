@@ -123,6 +123,14 @@ export interface Project {
   lastUpdated: string;
   completion: number;
   regulatoryDrivers: string[];
+  /**
+   * The technologies this project was actually built on, named as a reader
+   * would say them — "Kubernetes", "Oracle WebLogic". Shown on the project
+   * card so the stack is visible before anything is opened; a name with no
+   * mark simply renders as text, so the list is never limited to the logos
+   * that happen to exist.
+   */
+  stack?: string[];
 }
 
 export interface AcceptanceCriterion {
