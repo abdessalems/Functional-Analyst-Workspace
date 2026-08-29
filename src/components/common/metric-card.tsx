@@ -64,7 +64,7 @@ export function MetricCard({
   return (
     <Link
       href={href}
-      className="rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      className="rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
     >
       {content}
     </Link>

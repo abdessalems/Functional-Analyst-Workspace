@@ -105,7 +105,7 @@ export function ReadingNav({ className }: { className?: string }) {
       {previous ? (
         <Link
           href={previous.href}
-          className="group flex min-w-0 flex-1 items-center gap-3 rounded-xl border border-border bg-surface p-3.5 transition-colors hover:border-primary/40 hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="group flex min-w-0 flex-1 items-center gap-3 rounded-lg border border-border bg-surface p-3.5 transition-colors hover:border-primary/40 hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <ArrowLeft className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:-translate-x-0.5" />
           <span className="min-w-0">
@@ -126,7 +126,7 @@ export function ReadingNav({ className }: { className?: string }) {
       {next ? (
         <Link
           href={next.href}
-          className="group flex min-w-0 flex-1 items-center justify-end gap-3 rounded-xl border border-primary/30 bg-primary/[0.05] p-3.5 text-right transition-colors hover:border-primary/50 hover:bg-primary/[0.09] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="group flex min-w-0 flex-1 items-center justify-end gap-3 rounded-lg border border-primary/30 bg-primary/[0.05] p-3.5 text-right transition-colors hover:border-primary/50 hover:bg-primary/[0.09] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <span className="min-w-0">
             <span className="block text-micro uppercase tracking-wide text-muted-foreground">

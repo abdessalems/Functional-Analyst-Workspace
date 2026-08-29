@@ -447,7 +447,7 @@ function Studio() {
             </div>
           </div>
 
-          <label className="flex cursor-pointer flex-col items-center gap-2 rounded-xl border border-dashed border-border bg-surface-muted px-6 py-10 text-center transition-colors hover:border-primary/40 hover:bg-accent/40">
+          <label className="flex cursor-pointer flex-col items-center gap-2 rounded-lg border border-dashed border-border bg-surface-muted px-6 py-10 text-center transition-colors hover:border-primary/40 hover:bg-accent/40">
             <Upload className="size-5 text-muted-foreground" />
             <span className="text-sm font-medium">
               {busy ? "Reading…" : "Choose an .xlsx, .xls or .csv file"}

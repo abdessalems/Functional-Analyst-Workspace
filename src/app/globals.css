@@ -50,12 +50,36 @@
     --input: 175 15% 87%;
     --ring: 174 66% 36%;
 
-    --radius: 0.625rem;
+    /*
+     * 8px. Ten and twelve read as consumer software; the tools this workspace
+     * sits beside — Azure Portal, Jira, Linear — sit at six to eight, and a
+     * tighter corner is what makes a dense screen look deliberate.
+     */
+    --radius: 0.5rem;
+
+    /*
+     * Elevation. On a light page a shadow is cast darkness, and there is no
+     * highlight along the top edge to add.
+     */
+    --shadow: 222 47% 11%;
+    --edge-light: 0 0% 100%;
+    --edge-light-alpha: 0;
   }
 
   /* Dark mode mirrors the portfolio exactly: #0d0f11 surfaces, #2dd4bf brand,
      #e4eaf2 headings, #8a9ab0 secondary text. */
   .dark {
+    /*
+     * On a near-black page there is no darkness left to cast, so a shadow alone
+     * cannot lift a card off the background. The shadow goes to true black and
+     * a single pixel of light is drawn along the top edge — the way a real
+     * surface catches the light above it. Without this every card on the dark
+     * theme read as flat, which is most of the time, since dark is the default.
+     */
+    --shadow: 0 0% 0%;
+    --edge-light: 0 0% 100%;
+    --edge-light-alpha: 0.04;
+
     --background: 210 13% 6%;
     --foreground: 216 41% 92%;
 

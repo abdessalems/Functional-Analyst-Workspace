@@ -53,7 +53,7 @@ export function FilterBar({
   return (
     <div
       className={cn(
-        "flex flex-col gap-3 rounded-xl border border-border bg-surface p-3 lg:flex-row lg:items-center",
+        "flex flex-col gap-3 rounded-lg border border-border bg-surface p-3 lg:flex-row lg:items-center",
         className,
       )}
     >

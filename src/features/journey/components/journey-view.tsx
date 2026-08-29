@@ -264,7 +264,7 @@ export function JourneyView() {
                     <Link
                       key={deliverable.href}
                       href={deliverable.href}
-                      className="group rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      className="group rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     >
                       <Card className="flex h-full flex-col gap-2 p-4 transition-shadow hover:border-primary/40 hover:shadow-raised">
                         <div className="flex items-center gap-2">

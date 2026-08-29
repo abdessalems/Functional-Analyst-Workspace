@@ -88,10 +88,21 @@ const config: Config = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      /*
+       * Elevation, in three steps: resting, lifted, floating.
+       *
+       * The colour comes from a variable because a shadow tuned for a white
+       * page is invisible on a dark one — the workspace defaults to dark, so
+       * every card was reading as flat. On dark the shadow deepens and a hair
+       * of light is added along the top edge, which is what actually separates
+       * a surface from its background when there is no darkness left to cast.
+       */
       boxShadow: {
-        card: "0 1px 2px 0 rgb(16 24 40 / 0.04), 0 1px 3px 0 rgb(16 24 40 / 0.06)",
-        raised: "0 4px 12px -2px rgb(16 24 40 / 0.08), 0 2px 4px -2px rgb(16 24 40 / 0.04)",
-        flyout: "0 12px 32px -8px rgb(16 24 40 / 0.16)",
+        card: "0 1px 2px 0 hsl(var(--shadow) / 0.05), 0 1px 3px 0 hsl(var(--shadow) / 0.08), inset 0 1px 0 0 hsl(var(--edge-light) / var(--edge-light-alpha))",
+        raised:
+          "0 4px 12px -2px hsl(var(--shadow) / 0.12), 0 2px 4px -2px hsl(var(--shadow) / 0.06), inset 0 1px 0 0 hsl(var(--edge-light) / var(--edge-light-alpha))",
+        flyout:
+          "0 16px 40px -10px hsl(var(--shadow) / 0.28), 0 4px 12px -4px hsl(var(--shadow) / 0.14)",
       },
       keyframes: {
         "accordion-down": {
