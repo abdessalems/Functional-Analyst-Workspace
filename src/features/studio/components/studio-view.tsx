@@ -405,6 +405,7 @@ function Studio() {
     <div className="space-y-6">
       <PageHeader
         title="Authoring studio"
+        brands={["excel"]}
         description="Import a project from a spreadsheet, check it, and download the file to commit. Nothing here changes the published site until you push."
       />
 

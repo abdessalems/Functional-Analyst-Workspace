@@ -129,6 +129,7 @@ export function TraceabilityView() {
       {marker}
       <PageHeader
         title="Traceability Matrix"
+        brands={["excel", "jira"]}
         description="End-to-end chain from business requirement through rules, design, interfaces, data, validation evidence, tests and documents. Every reference is clickable and resolves to the artefact it points at."
         meta={[
           { label: "Requirements", value: traceabilitySummary.total },

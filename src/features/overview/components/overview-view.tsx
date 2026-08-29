@@ -51,6 +51,7 @@ export function OverviewView() {
     <div className="space-y-6">
       <PageHeader
         title="Project Overview"
+        brands={["jira", "confluence"]}
         description={project.name}
         meta={[
           { label: "Code", value: project.code },

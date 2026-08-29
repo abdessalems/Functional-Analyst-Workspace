@@ -93,6 +93,7 @@ export function ActorsView() {
       {marker}
       <PageHeader
         title="Actors"
+        brands={["confluence"]}
         description="Human, internal system and external actors participating in the process, with their responsibilities, permissions and the systems they operate."
         meta={[
           { label: "Actors", value: actors.length },
