@@ -123,14 +123,19 @@ export function suggestProjectId(name: string, taken: readonly string[]): string
     .toUpperCase()
     .split(/[^A-Z0-9]+/)
     .filter(Boolean)
-    // "The", "of" and friends carry no meaning in a three-letter code.
-    .filter((word) => !["THE", "AND", "OF", "FOR", "TO", "BE", "AS", "IS"].includes(word));
+    // A leading "1." or "2." numbers the file, it does not name the project —
+    // without this, "1. Tax Declaration" became PRJ-1TA-001.
+    .filter((word) => !/^\d+$/.test(word))
+    // "The", "of" and friends carry no meaning in a three-letter code, and
+    // "AS-IS" / "TO-BE" describe the variant rather than the subject.
+    .filter(
+      (word) => !["THE", "AND", "OF", "FOR", "TO", "BE", "AS", "IS", "A", "AN"].includes(word),
+    );
 
-  const first = words[0] ?? "";
-  const code = (first.length >= 3 ? first.slice(0, 3) : words.join("").slice(0, 3) || "NEW").padEnd(
-    3,
-    "X",
-  );
+  // The first word long enough to stand on its own, otherwise the words run
+  // together — "IT Ops" gives ITO rather than ITX.
+  const first = words.find((word) => word.length >= 3) ?? "";
+  const code = (first ? first.slice(0, 3) : words.join("").slice(0, 3) || "NEW").padEnd(3, "X");
 
   const used = new Set(taken.map((id) => id.toUpperCase()));
   for (let n = 1; n < 1000; n += 1) {

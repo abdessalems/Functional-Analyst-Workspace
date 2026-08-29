@@ -165,6 +165,40 @@ async function commitFiles(paths: string[], message: string) {
   }
 }
 
+/**
+ * Locates a project inside the register.
+ *
+ * A generated record writes `"id": "X"`, a hand-written one `id: "X"` — the two
+ * look alike but do not match as substrings, which is how publishing the same
+ * project three times appended it three times.
+ *
+ * Returns the entry's extent so it can be replaced, "handwritten" for an entry
+ * this route must not touch, or null when the project is new.
+ */
+function findRecord(
+  register: string,
+  projectId: string,
+): { start: number; end: number } | "handwritten" | null {
+  const generated = register.indexOf(`"id": "${projectId}"`);
+  if (generated === -1) {
+    return register.includes(`id: "${projectId}"`) ? "handwritten" : null;
+  }
+
+  const start = register.lastIndexOf("{", generated);
+  let depth = 0;
+  for (let i = start; i < register.length; i += 1) {
+    if (register[i] === "{") depth += 1;
+    else if (register[i] === "}") {
+      depth -= 1;
+      if (depth === 0) {
+        const end = register[i + 1] === "," ? i + 2 : i + 1;
+        return { start, end };
+      }
+    }
+  }
+  return null;
+}
+
 export async function POST(request: Request) {
   if (process.env.NODE_ENV !== "development") {
     return bad("Publishing is only available on a development machine.", 403);
@@ -193,6 +227,7 @@ export async function POST(request: Request) {
   if (!/^[a-zA-Z][a-zA-Z0-9]*$/.test(exportName)) {
     return bad(`"${exportName}" is not a usable export name.`);
   }
+
 
   const written: string[] = [];
 
@@ -234,19 +269,32 @@ export async function POST(request: Request) {
 
     // 3 — the project register, so it appears in the portfolio.
     const register = await readFile(REGISTER, "utf8");
-    if (!register.includes(`id: "${projectId}"`)) {
-      // Anchored on the declaration, not on the file's last "];" — anything
-      // added below the register would otherwise capture the insert.
-      const declaration = register.indexOf("export const projects: Project[] = [");
-      const closing = declaration === -1 ? -1 : register.indexOf("\n];", declaration);
-      if (closing === -1) {
-        return bad("Could not find the end of the projects list — add the project by hand.", 500);
-      }
-      const updated = `${register.slice(0, closing)}\n${projectSource}${register.slice(closing)}`;
-      await writeFile(REGISTER, updated, "utf8");
-      written.push(path.relative(ROOT, REGISTER));
+    const declaration = register.indexOf("export const projects: Project[] = [");
+    // The array's own closing bracket, at the start of a line — anything added
+    // below the register would otherwise capture the insert.
+    const closing = declaration === -1 ? -1 : register.indexOf("\n];", declaration);
+    if (closing === -1) {
+      return bad("Could not find the end of the projects list — add the project by hand.", 500);
     }
 
+    const existing = findRecord(register, projectId);
+    if (existing === "handwritten") {
+      return bad(
+        `${projectId} already exists and was written by hand. Give the project a different id, or remove that entry yourself.`,
+      );
+    }
+
+    // Publishing the same project again replaces its entry rather than adding
+    // a second one — correcting a spreadsheet and re-publishing is normal, and
+    // appending would leave two projects sharing an id.
+    const updated =
+      existing === null
+        ? `${register.slice(0, closing)}
+${projectSource}${register.slice(closing)}`
+        : register.slice(0, existing.start) + projectSource.replace(/^s+/, "  ") + register.slice(existing.end);
+
+    await writeFile(REGISTER, updated, "utf8");
+    written.push(path.relative(ROOT, REGISTER));
     // Committing here is the point of the button: the analyst never opens a
     // terminal, and the history records the project rather than a file list.
     const git = await commitFiles(written, `Add ${projectName} to the workspace`);
