@@ -63,6 +63,7 @@ import {
   generateBundleFile,
   bundleNames,
   generateProjectRecord,
+  suggestProjectId,
   registrySnippet,
 } from "@/features/studio/lib/generate-bundle";
 import {
@@ -217,6 +218,23 @@ function Studio() {
   React.useEffect(() => setPassword(readPassword()), []);
   const authorised = CAN_AUTHOR && password !== "";
 
+  /**
+   * The id follows the name until the analyst types one of their own.
+   *
+   * It is checked against every project that already exists — committed or
+   * still a draft — so importing a second file can never quietly overwrite
+   * the first, which is what a shared default id used to do.
+   */
+  const takenIds = React.useMemo(
+    () => [...projects.map((item) => item.id), ...drafts.map((draft) => draft.project.id)],
+    [drafts],
+  );
+
+  React.useEffect(() => {
+    if (idTouched) return;
+    setProjectId(suggestProjectId(projectName, takenIds));
+  }, [projectName, takenIds, idTouched]);
+
   const handleFile = React.useCallback(
     async (file: File) => {
       setBusy(true);
@@ -260,6 +278,19 @@ function Studio() {
         result.functionalSpecSections = buildSpecSections(spec);
         const meta = buildProjectMeta(projectSheets, owner);
         setProjectMeta(meta);
+
+        // Name the project from what the file says, not from a leftover
+        // default — importing twice without renaming produced two projects
+        // called the same thing.
+        if (!nameTouched) {
+          const fromSheet = meta.name?.trim();
+          const fromFile = file.name
+            .replace(/.(xlsx|xls|csv)$/i, "")
+            .replace(/s*(d+)s*$/, "")
+            .replace(/[_-]+/g, " ")
+            .trim();
+          setProjectName(fromSheet || fromFile || "Imported project");
+        }
 
         const imported = Object.entries(result).reduce(
           (total, [key, value]) =>
@@ -311,6 +342,7 @@ function Studio() {
           fileName,
           exportName,
           projectId: draft.project.id,
+          projectName: draft.project.name,
           // The bundle carries the same collections the parser produces, so it
           // can be written out directly.
           bundleSource: generateBundleFile(
@@ -325,11 +357,17 @@ function Studio() {
           const result = (await response.json()) as {
             ok: boolean;
             written?: string[];
+            committed?: string | null;
+            commitError?: string;
             message?: string;
           };
           if (!result.ok) throw new Error(result.message ?? "Publishing failed.");
           setDraftPublished(
-            `${draft.project.name} written to ${(result.written ?? []).join(", ")}. Commit to put it on the site.`,
+            result.committed
+              ? `${draft.project.name} published and committed as ${result.committed}. Push to put it on the site.`
+              : `${draft.project.name} written to ${(result.written ?? []).join(", ")}.${
+                  result.commitError ? ` Not committed: ${result.commitError}` : ""
+                }`,
           );
         })
         .catch((cause: Error) => setError(cause.message))
@@ -483,16 +521,10 @@ function Studio() {
             icon={FolderPlus}
           >
             <div className="space-y-4">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-1.5">
-                  <Label htmlFor="project-name">Project name</Label>
-                  <Input
-                    id="project-name"
-                    value={projectName}
-                    onChange={(event) => setProjectName(event.target.value)}
-                  />
-                </div>
-              </div>
+              <p className="text-sm text-muted-foreground">
+                Adding <span className="font-medium text-foreground">{projectName}</span> as{" "}
+                <span className="font-mono text-xs">{projectId}</span>. Change either in step 1.
+              </p>
 
               {report.errors.length > 0 ? (
                 // The check is the gate: a project with dead links looks

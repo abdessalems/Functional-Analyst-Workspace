@@ -1,4 +1,6 @@
+import { execFile } from "node:child_process";
 import { readFile, rm, writeFile } from "node:fs/promises";
+import { promisify } from "node:util";
 import path from "node:path";
 
 /**
@@ -22,8 +24,10 @@ interface PublishRequest {
   bundleSource: string;
   projectSource: string;
   projectId: string;
-  /** Required to delete; checked against STUDIO_DELETE_PASSWORD. */
+  /** Checked against STUDIO_PASSWORD. */
   password: string;
+  /** Used in the commit message, so the history reads like a changelog. */
+  projectName?: string;
 }
 
 function bad(message: string, status = 400) {
@@ -125,6 +129,42 @@ export async function DELETE(request: Request) {
   }
 }
 
+
+/**
+ * Commits the files publishing just wrote.
+ *
+ * Only those paths are staged, never everything, so whatever else is in
+ * progress in the working tree is left alone. Pushing is deliberately not done
+ * here: it needs credentials and a network, and a failed push halfway through a
+ * publish is far more confusing than a commit sitting locally.
+ *
+ * A failure to commit is reported, not thrown: the files are already written and
+ * correct, and committing by hand is a one-liner.
+ */
+async function commitFiles(paths: string[], message: string) {
+  const run = promisify(execFile);
+
+  try {
+    await run("git", ["add", "--", ...paths], { cwd: ROOT });
+
+    // Nothing staged means the publish changed nothing — not an error.
+    const { stdout: staged } = await run("git", ["diff", "--cached", "--name-only"], {
+      cwd: ROOT,
+    });
+    if (!staged.trim()) return { committed: null as string | null };
+
+    await run("git", ["commit", "-m", message], { cwd: ROOT });
+    const { stdout: hash } = await run("git", ["rev-parse", "--short", "HEAD"], { cwd: ROOT });
+
+    return { committed: hash.trim() };
+  } catch (cause) {
+    return {
+      committed: null as string | null,
+      commitError: cause instanceof Error ? cause.message.split(String.fromCharCode(10))[0] : "git failed",
+    };
+  }
+}
+
 export async function POST(request: Request) {
   if (process.env.NODE_ENV !== "development") {
     return bad("Publishing is only available on a development machine.", 403);
@@ -132,6 +172,7 @@ export async function POST(request: Request) {
 
   const body = (await request.json()) as Partial<PublishRequest>;
   const { fileName, exportName, bundleSource, projectSource, projectId, password } = body;
+  const projectName = typeof body.projectName === "string" ? body.projectName : projectId;
 
   const expected = process.env.STUDIO_PASSWORD;
   if (!expected) {
@@ -206,7 +247,11 @@ export async function POST(request: Request) {
       written.push(path.relative(ROOT, REGISTER));
     }
 
-    return Response.json({ ok: true, written });
+    // Committing here is the point of the button: the analyst never opens a
+    // terminal, and the history records the project rather than a file list.
+    const git = await commitFiles(written, `Add ${projectName} to the workspace`);
+
+    return Response.json({ ok: true, written, ...git });
   } catch (cause) {
     return bad(cause instanceof Error ? cause.message : "The files could not be written.", 500);
   }
