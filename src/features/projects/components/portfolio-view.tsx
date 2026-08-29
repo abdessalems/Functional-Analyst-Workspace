@@ -242,23 +242,32 @@ export function PortfolioView() {
                   <Stat label="Test cases" value={item.metrics.testCases} />
                 </dl>
 
-                <div className="space-y-2">
-                  <div className="flex items-baseline justify-between text-xs">
-                    <span className="text-muted-foreground">Completion</span>
-                    <span className="font-medium tabular-nums">{item.completion}%</span>
+                {/*
+                  A project that never reported a completion figure is not a
+                  project that is 0% done. An empty bar beside a colleague at
+                  65% reads as abandoned, so nothing is drawn instead.
+                */}
+                {item.completion > 0 && (
+                  <div className="space-y-2">
+                    <div className="flex items-baseline justify-between text-xs">
+                      <span className="text-muted-foreground">Completion</span>
+                      <span className="font-medium tabular-nums">{item.completion}%</span>
+                    </div>
+                    <Progress value={item.completion} />
                   </div>
-                  <Progress value={item.completion} />
-                </div>
+                )}
 
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
                   <span className="flex items-center gap-1.5">
                     <UserRound className="size-3.5" />
                     {item.owner.name}
                   </span>
-                  <span className="flex items-center gap-1.5">
-                    <CalendarDays className="size-3.5" />
-                    {formatDate(item.targetDate)}
-                  </span>
+                  {item.targetDate && (
+                    <span className="flex items-center gap-1.5">
+                      <CalendarDays className="size-3.5" />
+                      {formatDate(item.targetDate)}
+                    </span>
+                  )}
                 </div>
 
                 <div className="flex flex-wrap gap-1.5">
