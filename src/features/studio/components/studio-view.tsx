@@ -357,6 +357,15 @@ function Studio() {
             message?: string;
           };
           if (!result.ok) throw new Error(result.message ?? "Publishing failed.");
+
+          /*
+           * The draft has become a real project, so it stops being a draft.
+           * Leaving it in storage showed the project twice — once from the
+           * source and once from this browser — under the same id.
+           */
+          deleteDraft(draft.project.id);
+          refreshDrafts();
+
           setDraftPublished(
             result.committed
               ? `${draft.project.name} published and committed as ${result.committed}. Push to put it on the site.`
@@ -368,7 +377,7 @@ function Studio() {
         .catch((cause: Error) => setError(cause.message))
         .finally(() => setPublishingDraft(null));
     },
-    [password],
+    [password, refreshDrafts],
   );
 
   const previewBundle: ProjectDataBundle | null = React.useMemo(() => {
@@ -615,6 +624,10 @@ function Studio() {
                             message?: string;
                           };
                           if (!result.ok) throw new Error(result.message ?? "Publishing failed.");
+                          // Same reason as the drafts list: once published, it
+                          // is a project, not a draft, and must not be both.
+                          deleteDraft(projectId);
+                          refreshDrafts();
                           setPublished(result.written ?? []);
                         })
                         .catch((cause: Error) => setError(cause.message))

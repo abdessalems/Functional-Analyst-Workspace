@@ -77,9 +77,23 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const value = React.useMemo<WorkspaceContextValue>(() => {
-    const all = [...projects, ...drafts.map((draft) => draft.project)];
+    /*
+     * A project that has been published still has its draft in this browser, so
+     * it would appear twice — once from the source, once from storage — with the
+     * same id, which React reports as a duplicate key and a reader reports as a
+     * duplicate project. The committed copy wins: it is the one everyone else
+     * can see.
+     */
+    const committed = new Set(projects.map((project) => project.id));
+    const all = [
+      ...projects,
+      ...drafts.filter((draft) => !committed.has(draft.project.id)).map((draft) => draft.project),
+    ];
+
     const project = all.find((item) => item.id === projectId) ?? all[0];
-    const draft = drafts.find((item) => item.project.id === project.id);
+    const draft = committed.has(project.id)
+      ? undefined
+      : drafts.find((item) => item.project.id === project.id);
 
     return {
       projects: all,
