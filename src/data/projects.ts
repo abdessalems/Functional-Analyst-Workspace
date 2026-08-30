@@ -1031,7 +1031,7 @@ export const projects: Project[] = [
     "businessOwner": "",
     "programme": "",
     "summary": "Portfolio case study, not client work. An end-to-end analysis of a risk management platform for the energy market, carried by one analyst through the whole lifecycle: stakeholder elicitation and business requirements, AS-IS and TO-BE process analysis, functional specifications with acceptance criteria and business rules, API and data design, and a test catalogue covering functional, regression, integration and negative scenarios — traced back to the requirement each one proves.",
-    "businessObjective": "Show the working method of a Business Analyst / Functional Analyst who also tests: every requirement elicited from a stakeholder, specified precisely enough to build, and matched to the test that would prove it was delivered. The domain — exposure calculation, risk limits and breach handling on the energy market — is modelled realistically; the organisation and the people in it are not real.",
+    "businessObjective": "Show the working method of a Business Analyst / Functional Analyst who also tests: every requirement elicited from a stakeholder, specified precisely enough to build, and matched to the test that would prove it was delivered. The domain — exposure calculation, risk limits and breach handling on the energy market — is modelled realistically; the platform itself is a case study rather than a delivered client system.",
     "inScope": [
       "Portfolio exposure calculation",
       "Risk limit and threshold configuration",
@@ -1062,99 +1062,35 @@ export const projects: Project[] = [
     "stakeholders": [
       {
         "id": "STK-001",
-        "name": "Sophie Martin",
-        "role": "Risk Manager",
-        "email": "sophie.martin@example.com",
-        "department": "Risk Management",
-        "raci": "Consulted"
+        "name": "Elsa Carvalho",
+        "role": "Business Analyst",
+        "email": "",
+        "department": "Business Analysis",
+        "raci": "Accountable"
       },
       {
         "id": "STK-002",
-        "name": "Lucas Bernard",
-        "role": "Business Owner",
-        "email": "lucas.bernard@example.com",
-        "department": "Energy Trading",
-        "raci": "Consulted"
+        "name": "Teresa Gomes",
+        "role": "Functional Analyst",
+        "email": "",
+        "department": "Functional Analysis",
+        "raci": "Responsible"
       },
       {
         "id": "STK-003",
-        "name": "Nadia Karim",
-        "role": "Senior Risk Analyst",
-        "email": "nadia.karim@example.com",
+        "name": "Risk Manager",
+        "role": "Risk Management — business owner of exposure limits and breach handling",
+        "email": "",
         "department": "Risk Management",
         "raci": "Consulted"
       },
       {
         "id": "STK-004",
-        "name": "Thomas Leroy",
-        "role": "Product Owner",
-        "email": "thomas.leroy@example.com",
-        "department": "Digital Products",
-        "raci": "Consulted"
-      },
-      {
-        "id": "STK-005",
-        "name": "Amine Haddad",
-        "role": "Developer",
-        "email": "amine.haddad@example.com",
-        "department": "IT Delivery",
-        "raci": "Consulted"
-      },
-      {
-        "id": "STK-006",
-        "name": "Emma Rossi",
-        "role": "QA/Test Lead",
-        "email": "emma.rossi@example.com",
+        "name": "QA / Test Lead",
+        "role": "Owns the test strategy and the defect process",
+        "email": "",
         "department": "Quality Assurance",
-        "raci": "Consulted"
-      },
-      {
-        "id": "STK-007",
-        "name": "Marc Dupont",
-        "role": "Operations Manager",
-        "email": "marc.dupont@example.com",
-        "department": "Operations",
-        "raci": "Consulted"
-      },
-      {
-        "id": "STK-008",
-        "name": "IT Support Team",
-        "role": "Application Support",
-        "email": "support@example.com",
-        "department": "IT Operations",
-        "raci": "Consulted"
-      },
-      {
-        "id": "STK-009",
-        "name": "Scrum Master",
-        "role": "Scrum Master",
-        "email": "scrum.master@example.com",
-        "department": "Digital Products",
-        "raci": "Consulted"
-      },
-      {
-        "id": "STK-010",
-        "name": "Security Architect",
-        "role": "Security Architect",
-        "email": "security@example.com",
-        "department": "Security",
-        "raci": "Consulted"
-      },
-      {
-        "id": "STK-011",
-        "name": "Data Engineer",
-        "role": "Data Engineer",
-        "email": "data@example.com",
-        "department": "Data Platform",
-        "raci": "Consulted"
-      },
-      {
-        "id": "STK-012",
-        "name": "Business Tester",
-        "role": "UAT Lead",
-        "email": "uat@example.com",
-        "department": "Risk Management",
-        "raci": "Consulted"
+        "raci": "Informed"
       }
     ],
     "timeline": [

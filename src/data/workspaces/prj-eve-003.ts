@@ -1036,7 +1036,7 @@ const businessRules: BusinessRule[] = [
   ];
 
 const testCases: TestCase[] = [
-    {
+  {
       "id": "TC-001",
       "scenario": "Calculate exposure for approved positions",
       "suite": "Exposure",
@@ -1061,14 +1061,14 @@ const testCases: TestCase[] = [
         }
       ],
       "expectedResult": "Exposure equals approved position sum and response contains utilization and data timestamp.",
-      "status": "Not Run",
+      "status": "Passed",
       "priority": "Critical",
       "type": "Functional",
       "linkedRequirement": "BR-001",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
+      "lastRun": "2026-07-24",
+      "executedBy": "Saadaoui Abdessalem"
     },
-    {
+  {
       "id": "TC-002",
       "scenario": "Exclude non-approved position",
       "suite": "Exposure",
@@ -1088,14 +1088,14 @@ const testCases: TestCase[] = [
         }
       ],
       "expectedResult": "PENDING position is excluded from calculation.",
-      "status": "Not Run",
+      "status": "Passed",
       "priority": "High",
       "type": "Functional",
       "linkedRequirement": "BR-001",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
+      "lastRun": "2026-07-24",
+      "executedBy": "Saadaoui Abdessalem"
     },
-    {
+  {
       "id": "TC-003",
       "scenario": "Calculate utilization correctly",
       "suite": "Threshold",
@@ -1120,14 +1120,14 @@ const testCases: TestCase[] = [
         }
       ],
       "expectedResult": "Utilization is 80.00%.",
-      "status": "Not Run",
+      "status": "Passed",
       "priority": "High",
       "type": "Functional",
       "linkedRequirement": "BR-002",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
+      "lastRun": "2026-07-24",
+      "executedBy": "Saadaoui Abdessalem"
     },
-    {
+  {
       "id": "TC-004",
       "scenario": "Create breach at threshold",
       "suite": "Breach",
@@ -1148,14 +1148,14 @@ const testCases: TestCase[] = [
         }
       ],
       "expectedResult": "Exactly one CRITICAL breach is created.",
-      "status": "Not Run",
+      "status": "Passed",
       "priority": "Critical",
       "type": "Integration",
       "linkedRequirement": "BR-003",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
+      "lastRun": "2026-07-24",
+      "executedBy": "Saadaoui Abdessalem"
     },
-    {
+  {
       "id": "TC-005",
       "scenario": "Prevent duplicate breach",
       "suite": "Breach",
@@ -1175,14 +1175,14 @@ const testCases: TestCase[] = [
         }
       ],
       "expectedResult": "Only one breach record exists.",
-      "status": "Not Run",
+      "status": "Passed",
       "priority": "Critical",
       "type": "Integration",
       "linkedRequirement": "BR-003",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
+      "lastRun": "2026-07-24",
+      "executedBy": "Saadaoui Abdessalem"
     },
-    {
+  {
       "id": "TC-006",
       "scenario": "Risk Manager acknowledges breach",
       "suite": "Breach Review",
@@ -1208,14 +1208,14 @@ const testCases: TestCase[] = [
         }
       ],
       "expectedResult": "Status becomes ACKNOWLEDGED and audit entry contains actor, timestamp, old/new status and comment.",
-      "status": "Not Run",
+      "status": "Passed",
       "priority": "High",
       "type": "Functional",
       "linkedRequirement": "BR-004",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
+      "lastRun": "2026-07-24",
+      "executedBy": "Saadaoui Abdessalem"
     },
-    {
+  {
       "id": "TC-007",
       "scenario": "Search positions with filters",
       "suite": "Position Search",
@@ -1235,14 +1235,14 @@ const testCases: TestCase[] = [
         }
       ],
       "expectedResult": "All returned records match both filters.",
-      "status": "Not Run",
+      "status": "Passed",
       "priority": "Medium",
       "type": "Functional",
       "linkedRequirement": "BR-005",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
+      "lastRun": "2026-07-24",
+      "executedBy": "Saadaoui Abdessalem"
     },
-    {
+  {
       "id": "TC-008",
       "scenario": "Reject unauthorized breach update",
       "suite": "Authorization",
@@ -1263,14 +1263,14 @@ const testCases: TestCase[] = [
         }
       ],
       "expectedResult": "403 FORBIDDEN; breach remains OPEN.",
-      "status": "Not Run",
+      "status": "Passed",
       "priority": "High",
       "type": "Functional",
       "linkedRequirement": "BR-006",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
+      "lastRun": "2026-07-24",
+      "executedBy": "Saadaoui Abdessalem"
     },
-    {
+  {
       "id": "TC-009",
       "scenario": "Reject stale market data",
       "suite": "Validation",
@@ -1290,14 +1290,14 @@ const testCases: TestCase[] = [
         }
       ],
       "expectedResult": "Calculation is rejected with MARKET_DATA_STALE; no successful exposure result is published.",
-      "status": "Not Run",
+      "status": "Passed",
       "priority": "Critical",
       "type": "Negative",
       "linkedRequirement": "BR-007",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
+      "lastRun": "2026-07-24",
+      "executedBy": "Saadaoui Abdessalem"
     },
-    {
+  {
       "id": "TC-010",
       "scenario": "Audit every status transition",
       "suite": "Audit",
@@ -1317,14 +1317,14 @@ const testCases: TestCase[] = [
         }
       ],
       "expectedResult": "Audit record contains actor, timestamp, previous status, new status and comment.",
-      "status": "Not Run",
+      "status": "Passed",
       "priority": "High",
       "type": "Integration",
       "linkedRequirement": "BR-008",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
+      "lastRun": "2026-07-24",
+      "executedBy": "Saadaoui Abdessalem"
     },
-    {
+  {
       "id": "TC-011",
       "scenario": "Filter breaches by severity and status",
       "suite": "Breach Search",
@@ -1344,14 +1344,14 @@ const testCases: TestCase[] = [
         }
       ],
       "expectedResult": "Every returned record is CRITICAL and OPEN.",
-      "status": "Not Run",
+      "status": "Passed",
       "priority": "High",
       "type": "Functional",
       "linkedRequirement": "BR-009",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
+      "lastRun": "2026-07-24",
+      "executedBy": "Saadaoui Abdessalem"
     },
-    {
+  {
       "id": "TC-012",
       "scenario": "Filter breaches by date range",
       "suite": "Breach Search",
@@ -1371,14 +1371,14 @@ const testCases: TestCase[] = [
         }
       ],
       "expectedResult": "Only breaches inside the inclusive range are returned.",
-      "status": "Not Run",
+      "status": "Passed",
       "priority": "Medium",
       "type": "Functional",
       "linkedRequirement": "BR-009",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
+      "lastRun": "2026-07-24",
+      "executedBy": "Saadaoui Abdessalem"
     },
-    {
+  {
       "id": "TC-013",
       "scenario": "Export filtered breach results",
       "suite": "Reporting",
@@ -1403,14 +1403,14 @@ const testCases: TestCase[] = [
         }
       ],
       "expectedResult": "CSV contains exactly the filtered records and export timestamp.",
-      "status": "Not Run",
+      "status": "Passed",
       "priority": "Medium",
       "type": "Functional",
       "linkedRequirement": "BR-010",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
+      "lastRun": "2026-07-24",
+      "executedBy": "Saadaoui Abdessalem"
     },
-    {
+  {
       "id": "TC-014",
       "scenario": "Return controlled error when Market Data API is unavailable",
       "suite": "Failure Handling",
@@ -1430,14 +1430,15 @@ const testCases: TestCase[] = [
         }
       ],
       "expectedResult": "503 DEPENDENCY_UNAVAILABLE with referenceId; no successful exposure is created.",
-      "status": "Not Run",
+      "status": "Failed",
       "priority": "Critical",
       "type": "Integration",
       "linkedRequirement": "BR-011",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
+      "lastRun": "2026-07-24",
+      "executedBy": "Saadaoui Abdessalem",
+      "defect": "DEF-118"
     },
-    {
+  {
       "id": "TC-015",
       "scenario": "Do not expose partial calculation after dependency timeout",
       "suite": "Failure Handling",
@@ -1457,14 +1458,14 @@ const testCases: TestCase[] = [
         }
       ],
       "expectedResult": "Calculation is FAILED; partial values are not presented as valid.",
-      "status": "Not Run",
+      "status": "Passed",
       "priority": "Critical",
       "type": "Negative",
       "linkedRequirement": "BR-011",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
+      "lastRun": "2026-07-24",
+      "executedBy": "Saadaoui Abdessalem"
     },
-    {
+  {
       "id": "TC-016",
       "scenario": "Return exposure history",
       "suite": "History",
@@ -1484,14 +1485,14 @@ const testCases: TestCase[] = [
         }
       ],
       "expectedResult": "Historical results are returned chronologically with immutable values.",
-      "status": "Not Run",
+      "status": "Passed",
       "priority": "Medium",
       "type": "Functional",
       "linkedRequirement": "BR-012",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
+      "lastRun": "2026-07-24",
+      "executedBy": "Saadaoui Abdessalem"
     },
-    {
+  {
       "id": "TC-017",
       "scenario": "Create notification for critical breach",
       "suite": "Notifications",
@@ -1516,14 +1517,14 @@ const testCases: TestCase[] = [
         }
       ],
       "expectedResult": "Exactly one notification is created for the new critical breach.",
-      "status": "Not Run",
+      "status": "Passed",
       "priority": "High",
       "type": "Integration",
       "linkedRequirement": "BR-013",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
+      "lastRun": "2026-07-24",
+      "executedBy": "Saadaoui Abdessalem"
     },
-    {
+  {
       "id": "TC-018",
       "scenario": "Do not duplicate notification for repeated event",
       "suite": "Notifications",
@@ -1543,14 +1544,15 @@ const testCases: TestCase[] = [
         }
       ],
       "expectedResult": "One business notification exists for the breach.",
-      "status": "Not Run",
+      "status": "Failed",
       "priority": "High",
       "type": "Integration",
       "linkedRequirement": "BR-013",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
+      "lastRun": "2026-07-24",
+      "executedBy": "Saadaoui Abdessalem",
+      "defect": "DEF-119"
     },
-    {
+  {
       "id": "TC-019",
       "scenario": "Paginate position results",
       "suite": "Pagination",
@@ -1570,14 +1572,14 @@ const testCases: TestCase[] = [
         }
       ],
       "expectedResult": "Each page has at most 50 records and totalCount remains consistent.",
-      "status": "Not Run",
+      "status": "Passed",
       "priority": "Medium",
       "type": "Functional",
       "linkedRequirement": "BR-014",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
+      "lastRun": "2026-07-24",
+      "executedBy": "Saadaoui Abdessalem"
     },
-    {
+  {
       "id": "TC-020",
       "scenario": "Propagate correlation ID",
       "suite": "Traceability",
@@ -1597,275 +1599,14 @@ const testCases: TestCase[] = [
         }
       ],
       "expectedResult": "CORR-123 is available throughout the request chain.",
-      "status": "Not Run",
+      "status": "Passed",
       "priority": "Medium",
       "type": "Integration",
       "linkedRequirement": "BR-015",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
+      "lastRun": "2026-07-24",
+      "executedBy": "Saadaoui Abdessalem"
     },
-    {
-      "id": "TC-021",
-      "scenario": "Reject page size above maximum",
-      "suite": "Pagination",
-      "preconditions": [
-        "API supports maximum pageSize=100."
-      ],
-      "steps": [
-        {
-          "step": 1,
-          "action": "GET /positions?pageSize=101.",
-          "expected": ""
-        }
-      ],
-      "expectedResult": "400 INVALID_PAGE_SIZE; no query is executed.",
-      "status": "Not Run",
-      "priority": "Medium",
-      "type": "Negative",
-      "linkedRequirement": "BR-014",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
-    },
-    {
-      "id": "TC-022",
-      "scenario": "Reject invalid date range",
-      "suite": "Breach Search",
-      "preconditions": [
-        "fromDate is later than toDate."
-      ],
-      "steps": [
-        {
-          "step": 1,
-          "action": "GET /breaches?fromDate=2026-09-20&toDate=2026-09-15.",
-          "expected": ""
-        }
-      ],
-      "expectedResult": "400 INVALID_DATE_RANGE.",
-      "status": "Not Run",
-      "priority": "Medium",
-      "type": "Negative",
-      "linkedRequirement": "BR-009",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
-    },
-    {
-      "id": "TC-023",
-      "scenario": "Risk Analyst cannot change risk limit",
-      "suite": "Security",
-      "preconditions": [
-        "User has RISK_ANALYST role."
-      ],
-      "steps": [
-        {
-          "step": 1,
-          "action": "Attempt risk-limit update.",
-          "expected": ""
-        },
-        {
-          "step": 2,
-          "action": "Inspect response.",
-          "expected": ""
-        }
-      ],
-      "expectedResult": "403 FORBIDDEN; risk limit remains unchanged.",
-      "status": "Not Run",
-      "priority": "High",
-      "type": "Functional",
-      "linkedRequirement": "BR-006",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
-    },
-    {
-      "id": "TC-024",
-      "scenario": "Risk Manager can escalate breach",
-      "suite": "Workflow",
-      "preconditions": [
-        "OPEN breach exists",
-        "user is Risk Manager."
-      ],
-      "steps": [
-        {
-          "step": 1,
-          "action": "PATCH breach to ESCALATED with comment.",
-          "expected": ""
-        },
-        {
-          "step": 2,
-          "action": "Read breach and audit.",
-          "expected": ""
-        }
-      ],
-      "expectedResult": "Status is ESCALATED and audit entry exists.",
-      "status": "Not Run",
-      "priority": "High",
-      "type": "Functional",
-      "linkedRequirement": "BR-004",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
-    },
-    {
-      "id": "TC-025",
-      "scenario": "Regression - existing exposure endpoint after breach feature",
-      "suite": "Regression",
-      "preconditions": [
-        "Baseline exposure test suite passes."
-      ],
-      "steps": [
-        {
-          "step": 1,
-          "action": "Execute exposure endpoint regression suite.",
-          "expected": ""
-        },
-        {
-          "step": 2,
-          "action": "Compare results with baseline.",
-          "expected": ""
-        }
-      ],
-      "expectedResult": "All existing exposure tests continue to pass.",
-      "status": "Not Run",
-      "priority": "High",
-      "type": "Regression",
-      "linkedRequirement": "BR-001",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
-    },
-    {
-      "id": "TC-026",
-      "scenario": "API contract - missing required correlation ID",
-      "suite": "API Contract",
-      "preconditions": [
-        "API contract requires correlationId."
-      ],
-      "steps": [
-        {
-          "step": 1,
-          "action": "Send request without correlationId.",
-          "expected": ""
-        },
-        {
-          "step": 2,
-          "action": "Inspect response.",
-          "expected": ""
-        }
-      ],
-      "expectedResult": "400 INVALID_CORRELATION_ID or gateway-generated ID according to approved contract.",
-      "status": "Not Run",
-      "priority": "Medium",
-      "type": "Functional",
-      "linkedRequirement": "BR-015",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
-    },
-    {
-      "id": "TC-027",
-      "scenario": "Boundary - utilization exactly at threshold",
-      "suite": "Threshold",
-      "preconditions": [
-        "Risk limit=10m and exposure=10m."
-      ],
-      "steps": [
-        {
-          "step": 1,
-          "action": "Calculate exposure.",
-          "expected": ""
-        },
-        {
-          "step": 2,
-          "action": "Inspect breach state.",
-          "expected": ""
-        }
-      ],
-      "expectedResult": "Utilization is 100.00% and a breach is created.",
-      "status": "Not Run",
-      "priority": "Critical",
-      "type": "Functional",
-      "linkedRequirement": "BR-003",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
-    },
-    {
-      "id": "TC-028",
-      "scenario": "Boundary - utilization just below threshold",
-      "suite": "Threshold",
-      "preconditions": [
-        "Risk limit=10m and exposure=9.999m."
-      ],
-      "steps": [
-        {
-          "step": 1,
-          "action": "Calculate exposure.",
-          "expected": ""
-        },
-        {
-          "step": 2,
-          "action": "Inspect breach state.",
-          "expected": ""
-        }
-      ],
-      "expectedResult": "Utilization is below 100%; no breach is created.",
-      "status": "Not Run",
-      "priority": "High",
-      "type": "Functional",
-      "linkedRequirement": "BR-003",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
-    },
-    {
-      "id": "TC-029",
-      "scenario": "API authorization - unauthenticated request",
-      "suite": "Security",
-      "preconditions": [
-        "No valid OAuth2 token is supplied."
-      ],
-      "steps": [
-        {
-          "step": 1,
-          "action": "Call protected exposure endpoint.",
-          "expected": ""
-        },
-        {
-          "step": 2,
-          "action": "Inspect response.",
-          "expected": ""
-        }
-      ],
-      "expectedResult": "401 Unauthorized; business processing is not executed.",
-      "status": "Not Run",
-      "priority": "High",
-      "type": "Functional",
-      "linkedRequirement": "BR-006",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
-    },
-    {
-      "id": "TC-030",
-      "scenario": "Search returns no results",
-      "suite": "Position Search",
-      "preconditions": [
-        "No position matches the selected filters."
-      ],
-      "steps": [
-        {
-          "step": 1,
-          "action": "Search for a nonexistent portfolio.",
-          "expected": ""
-        },
-        {
-          "step": 2,
-          "action": "Inspect response.",
-          "expected": ""
-        }
-      ],
-      "expectedResult": "200 response with empty data array and totalCount=0.",
-      "status": "Not Run",
-      "priority": "Low",
-      "type": "Functional",
-      "linkedRequirement": "BR-005",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
-    },
-    {
+  {
       "id": "TC-031",
       "scenario": "UAT - end-to-end critical breach journey",
       "suite": "UAT",
@@ -1901,14 +1642,14 @@ const testCases: TestCase[] = [
         }
       ],
       "expectedResult": "Complete journey succeeds and evidence is available.",
-      "status": "Not Run",
+      "status": "Passed",
       "priority": "Critical",
       "type": "Functional",
       "linkedRequirement": "BR-016",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
+      "lastRun": "2026-07-24",
+      "executedBy": "Saadaoui Abdessalem"
     },
-    {
+  {
       "id": "TC-032",
       "scenario": "UAT - unauthorized user journey",
       "suite": "UAT",
@@ -1933,14 +1674,14 @@ const testCases: TestCase[] = [
         }
       ],
       "expectedResult": "User can view but cannot perform unauthorized action.",
-      "status": "Not Run",
+      "status": "Passed",
       "priority": "Critical",
       "type": "Functional",
       "linkedRequirement": "BR-016",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
+      "lastRun": "2026-07-24",
+      "executedBy": "Saadaoui Abdessalem"
     },
-    {
+  {
       "id": "TC-033",
       "scenario": "Defect data completeness",
       "suite": "Quality",
@@ -1960,14 +1701,14 @@ const testCases: TestCase[] = [
         }
       ],
       "expectedResult": "Incomplete defect is rejected; complete defect enters triage.",
-      "status": "Not Run",
+      "status": "Passed",
       "priority": "Medium",
       "type": "Functional",
       "linkedRequirement": "BR-017",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
+      "lastRun": "2026-07-24",
+      "executedBy": "Saadaoui Abdessalem"
     },
-    {
+  {
       "id": "TC-034",
       "scenario": "Critical regression - exposure calculation",
       "suite": "Regression",
@@ -1987,14 +1728,15 @@ const testCases: TestCase[] = [
         }
       ],
       "expectedResult": "Exposure result remains within agreed tolerance and API contract is unchanged.",
-      "status": "Not Run",
+      "status": "Failed",
       "priority": "Critical",
       "type": "Regression",
       "linkedRequirement": "BR-018",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
+      "lastRun": "2026-07-24",
+      "executedBy": "Saadaoui Abdessalem",
+      "defect": "DEF-120"
     },
-    {
+  {
       "id": "TC-035",
       "scenario": "Critical regression - breach authorization",
       "suite": "Regression",
@@ -2014,14 +1756,14 @@ const testCases: TestCase[] = [
         }
       ],
       "expectedResult": "Manager succeeds; Analyst receives 403.",
-      "status": "Not Run",
+      "status": "Passed",
       "priority": "Critical",
       "type": "Regression",
       "linkedRequirement": "BR-018",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
+      "lastRun": "2026-07-24",
+      "executedBy": "Saadaoui Abdessalem"
     },
-    {
+  {
       "id": "TC-036",
       "scenario": "API performance acceptance",
       "suite": "Performance",
@@ -2041,14 +1783,14 @@ const testCases: TestCase[] = [
         }
       ],
       "expectedResult": "p95 is below 2 seconds or approved exception exists.",
-      "status": "Not Run",
+      "status": "Blocked",
       "priority": "High",
       "type": "Performance",
       "linkedRequirement": "BR-019",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
+      "lastRun": "2026-07-24",
+      "executedBy": "Saadaoui Abdessalem"
     },
-    {
+  {
       "id": "TC-037",
       "scenario": "UAT sign-off validation",
       "suite": "UAT",
@@ -2073,358 +1815,14 @@ const testCases: TestCase[] = [
         }
       ],
       "expectedResult": "UAT is Passed only if critical scenarios are accepted or waived.",
-      "status": "Not Run",
+      "status": "Passed",
       "priority": "Critical",
       "type": "Functional",
       "linkedRequirement": "BR-020",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
-    },
-    {
-      "id": "TC-038",
-      "scenario": "Expired token rejected",
-      "suite": "Security",
-      "preconditions": [
-        "Protected endpoint exists."
-      ],
-      "steps": [
-        {
-          "step": 1,
-          "action": "Call endpoint with expired token.",
-          "expected": ""
-        }
-      ],
-      "expectedResult": "401 Unauthorized; no business processing.",
-      "status": "Not Run",
-      "priority": "High",
-      "type": "Functional",
-      "linkedRequirement": "BR-006",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
-    },
-    {
-      "id": "TC-039",
-      "scenario": "Unsupported HTTP method",
-      "suite": "API Contract",
-      "preconditions": [
-        "GET endpoint exists."
-      ],
-      "steps": [
-        {
-          "step": 1,
-          "action": "Send POST to GET-only endpoint.",
-          "expected": ""
-        }
-      ],
-      "expectedResult": "405 Method Not Allowed.",
-      "status": "Not Run",
-      "priority": "Medium",
-      "type": "Functional",
-      "linkedRequirement": "BR-001",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
-    },
-    {
-      "id": "TC-040",
-      "scenario": "Zero exposure boundary",
-      "suite": "Boundary",
-      "preconditions": [
-        "Portfolio has zero approved exposure."
-      ],
-      "steps": [
-        {
-          "step": 1,
-          "action": "Calculate exposure.",
-          "expected": ""
-        }
-      ],
-      "expectedResult": "Exposure 0; utilization 0%; no breach.",
-      "status": "Not Run",
-      "priority": "Medium",
-      "type": "Functional",
-      "linkedRequirement": "BR-001",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
-    },
-    {
-      "id": "TC-041",
-      "scenario": "Minimum valid risk limit",
-      "suite": "Boundary",
-      "preconditions": [
-        "Smallest allowed positive risk limit is configured."
-      ],
-      "steps": [
-        {
-          "step": 1,
-          "action": "Calculate utilization.",
-          "expected": ""
-        }
-      ],
-      "expectedResult": "No division-by-zero; valid result.",
-      "status": "Not Run",
-      "priority": "Medium",
-      "type": "Functional",
-      "linkedRequirement": "BR-002",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
-    },
-    {
-      "id": "TC-042",
-      "scenario": "Notification retry after outage",
-      "suite": "Integration",
-      "preconditions": [
-        "Critical breach exists",
-        "notification service unavailable."
-      ],
-      "steps": [
-        {
-          "step": 1,
-          "action": "Create breach.",
-          "expected": ""
-        },
-        {
-          "step": 2,
-          "action": "Simulate notification failure.",
-          "expected": ""
-        },
-        {
-          "step": 3,
-          "action": "Restore service.",
-          "expected": ""
-        },
-        {
-          "step": 4,
-          "action": "Retry.",
-          "expected": ""
-        }
-      ],
-      "expectedResult": "Breach remains committed; one notification eventually delivered.",
-      "status": "Not Run",
-      "priority": "High",
-      "type": "Integration",
-      "linkedRequirement": "BR-013",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
-    },
-    {
-      "id": "TC-043",
-      "scenario": "Correlation ID across services",
-      "suite": "Integration",
-      "preconditions": [
-        "Services are available."
-      ],
-      "steps": [
-        {
-          "step": 1,
-          "action": "Call exposure API with correlationId.",
-          "expected": ""
-        },
-        {
-          "step": 2,
-          "action": "Trace logs.",
-          "expected": ""
-        }
-      ],
-      "expectedResult": "Same correlation ID is traceable across services.",
-      "status": "Not Run",
-      "priority": "Medium",
-      "type": "Integration",
-      "linkedRequirement": "BR-015",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
-    },
-    {
-      "id": "TC-044",
-      "scenario": "Invalid portfolio identifier",
-      "suite": "Negative",
-      "preconditions": [
-        "Portfolio does not exist."
-      ],
-      "steps": [
-        {
-          "step": 1,
-          "action": "GET exposure for invalid ID.",
-          "expected": ""
-        }
-      ],
-      "expectedResult": "404 PORTFOLIO_NOT_FOUND; no calculation starts.",
-      "status": "Not Run",
-      "priority": "Medium",
-      "type": "Negative",
-      "linkedRequirement": "BR-001",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
-    },
-    {
-      "id": "TC-045",
-      "scenario": "Acknowledge without comment",
-      "suite": "Negative",
-      "preconditions": [
-        "OPEN breach",
-        "Risk Manager authenticated."
-      ],
-      "steps": [
-        {
-          "step": 1,
-          "action": "PATCH ACKNOWLEDGED with empty comment.",
-          "expected": ""
-        }
-      ],
-      "expectedResult": "400 COMMENT_REQUIRED; breach remains OPEN.",
-      "status": "Not Run",
-      "priority": "High",
-      "type": "Negative",
-      "linkedRequirement": "BR-004",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
-    },
-    {
-      "id": "TC-046",
-      "scenario": "Stale data during calculation",
-      "suite": "Negative",
-      "preconditions": [
-        "Market data becomes stale."
-      ],
-      "steps": [
-        {
-          "step": 1,
-          "action": "Start calculation.",
-          "expected": ""
-        },
-        {
-          "step": 2,
-          "action": "Simulate stale timestamp.",
-          "expected": ""
-        }
-      ],
-      "expectedResult": "Calculation is not successful; controlled error/status returned.",
-      "status": "Not Run",
-      "priority": "Critical",
-      "type": "Negative",
-      "linkedRequirement": "BR-007",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
-    },
-    {
-      "id": "TC-047",
-      "scenario": "Failed calculation retry",
-      "suite": "Recovery",
-      "preconditions": [
-        "First dependency call fails",
-        "second succeeds."
-      ],
-      "steps": [
-        {
-          "step": 1,
-          "action": "Trigger calculation.",
-          "expected": ""
-        },
-        {
-          "step": 2,
-          "action": "Simulate transient failure.",
-          "expected": ""
-        },
-        {
-          "step": 3,
-          "action": "Retry.",
-          "expected": ""
-        }
-      ],
-      "expectedResult": "Retry succeeds and exactly one successful result is recorded.",
-      "status": "Not Run",
-      "priority": "High",
-      "type": "Functional",
-      "linkedRequirement": "BR-011",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
-    },
-    {
-      "id": "TC-048",
-      "scenario": "Regression - pagination after export",
-      "suite": "Regression",
-      "preconditions": [
-        "More than 100 breach records exist."
-      ],
-      "steps": [
-        {
-          "step": 1,
-          "action": "Run paginated search.",
-          "expected": ""
-        },
-        {
-          "step": 2,
-          "action": "Run export.",
-          "expected": ""
-        },
-        {
-          "step": 3,
-          "action": "Compare record set.",
-          "expected": ""
-        }
-      ],
-      "expectedResult": "Pagination and export return consistent filtered records.",
-      "status": "Not Run",
-      "priority": "Medium",
-      "type": "Regression",
-      "linkedRequirement": "BR-014",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
-    },
-    {
-      "id": "TC-049",
-      "scenario": "Restricted screen direct URL",
-      "suite": "Security",
-      "preconditions": [
-        "Risk Analyst lacks risk-limit permission."
-      ],
-      "steps": [
-        {
-          "step": 1,
-          "action": "Navigate directly to restricted URL.",
-          "expected": ""
-        },
-        {
-          "step": 2,
-          "action": "Inspect UI/API.",
-          "expected": ""
-        }
-      ],
-      "expectedResult": "Restricted action unavailable; API enforces authorization.",
-      "status": "Not Run",
-      "priority": "High",
-      "type": "Functional",
-      "linkedRequirement": "BR-006",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
-    },
-    {
-      "id": "TC-050",
-      "scenario": "Audit unauthorized action",
-      "suite": "Security",
-      "preconditions": [
-        "Risk Analyst attempts breach update."
-      ],
-      "steps": [
-        {
-          "step": 1,
-          "action": "Attempt update.",
-          "expected": ""
-        },
-        {
-          "step": 2,
-          "action": "Inspect security log and state.",
-          "expected": ""
-        }
-      ],
-      "expectedResult": "Action rejected, traceable, and business state unchanged.",
-      "status": "Not Run",
-      "priority": "Medium",
-      "type": "Functional",
-      "linkedRequirement": "BR-006",
-      "lastRun": "2026-08-29",
-      "executedBy": "Candidate"
+      "lastRun": "2026-07-24",
+      "executedBy": "Saadaoui Abdessalem"
     }
-  ];
+];
 
 const actors: Actor[] = [
     {
@@ -2769,21 +2167,6 @@ const diagrams: Diagram[] = [
         "BR-003",
         "BR-004",
         "BR-018"
-      ]
-    },
-    {
-      "id": "DGM-017",
-      "title": "Breach state machine",
-      "type": "State",
-      "description": "Allowed lifecycle for an identified risk breach.",
-      "source": "@startuml\n[*] --> OPEN\nOPEN --> ACKNOWLEDGED : comment\nOPEN --> ESCALATED : comment\nACKNOWLEDGED --> ESCALATED : escalation\nESCALATED --> ACKNOWLEDGED : resolution\nACKNOWLEDGED --> [*]\n@enduml",
-      "version": "1.0",
-      "author": "Candidate",
-      "lastUpdated": "2026-08-29",
-      "relatedRequirements": [
-        "BR-003",
-        "BR-004",
-        "BR-008"
       ]
     },
     {
