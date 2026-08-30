@@ -34,28 +34,45 @@ function ProjectUrlSync() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { project, projects, isProjectOpen, openProject } = useWorkspace();
+  const { project, projects, isProjectOpen, openProject, restored } = useWorkspace();
 
   const requested = searchParams.get("project");
 
-  // A link that names a project opens it, so the page a visitor lands on is the
-  // page the sender meant. An unknown id is ignored rather than obeyed.
-  React.useEffect(() => {
-    if (!requested || requested === project.id) return;
-    if (!projects.some((item) => item.id === requested)) return;
-    openProject(requested);
-  }, [requested, project.id, projects, openProject]);
+  /*
+   * The link wins on arrival; the selector wins from then on.
+   *
+   * Both directions ran as plain effects at first, and they fought: the reader
+   * applied the id from the URL, the provider then restored the id from the last
+   * visit — child effects run before their parent's — and finally the mirror
+   * wrote that stale id back over the link. Following a link to the TO-BE
+   * project landed on whichever project had been open before.
+   *
+   * So the reader waits for `restored`, applies the requested id exactly once,
+   * and only after that does the mirror start writing.
+   */
+  const claimed = React.useRef<string | null>(null);
 
-  // Switching project rewrites the address, so the link in the bar is always
-  // the link to what is on screen. `replace` keeps the back button meaning
-  // "the previous page" rather than "the previous project".
   React.useEffect(() => {
-    if (!isProjectOpen || requested === project.id) return;
+    if (!restored || claimed.current !== null) return;
+
+    const known = requested && projects.some((item) => item.id === requested);
+    // Claimed either way: an unknown id must not leave the mirror waiting.
+    claimed.current = known ? requested : "";
+
+    if (known && requested !== project.id) openProject(requested);
+  }, [restored, requested, projects, project.id, openProject]);
+
+  React.useEffect(() => {
+    if (!restored || claimed.current === null) return;
+    if (!isProjectOpen) return;
+    if (searchParams.get("project") === project.id) return;
 
     const params = new URLSearchParams(searchParams.toString());
     params.set("project", project.id);
+    // `replace`, so the back button means "the previous page" rather than
+    // "the previous project".
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-  }, [isProjectOpen, project.id, requested, pathname, router, searchParams]);
+  }, [restored, isProjectOpen, project.id, pathname, router, searchParams]);
 
   return null;
 }

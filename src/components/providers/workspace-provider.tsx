@@ -31,6 +31,8 @@ interface WorkspaceContextValue {
   drafts: DraftProject[];
   /** Re-reads the drafts after the studio adds or removes one. */
   refreshDrafts: () => void;
+  /** False until the stored project has been restored after hydration. */
+  restored: boolean;
 }
 
 const WorkspaceContext = React.createContext<WorkspaceContextValue | null>(null);
@@ -41,6 +43,8 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   // Drafts exist only in this browser, so they load after hydration like the
   // rest of the stored context — the server has no way to know about them.
   const [drafts, setDrafts] = React.useState<DraftProject[]>([]);
+  /** True once the stored context has been read, so a URL reader can wait. */
+  const [restored, setRestored] = React.useState(false);
 
   const refreshDrafts = React.useCallback(() => setDrafts(readDrafts()), []);
 
@@ -55,6 +59,16 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       setProjectId(storedProject);
     }
     setIsProjectOpen(readSetting(OPEN_KEY) === "true");
+
+    /*
+     * Announced last, and it matters.
+     *
+     * React runs a child's effects before its parent's, so anything reading the
+     * URL below this provider acted first and was then overwritten by the value
+     * restored here — a link naming a project opened the project from the last
+     * visit instead. `restored` lets that reader wait until this has run.
+     */
+    setRestored(true);
   }, []);
 
   const selectProject = React.useCallback((next: string) => {
@@ -106,8 +120,9 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       draftBundle: draft?.bundle ?? null,
       drafts,
       refreshDrafts,
+      restored,
     };
-  }, [projectId, isProjectOpen, openProject, closeProject, selectProject, drafts, refreshDrafts]);
+  }, [projectId, isProjectOpen, openProject, closeProject, selectProject, drafts, refreshDrafts, restored]);
 
   return <WorkspaceContext.Provider value={value}>{children}</WorkspaceContext.Provider>;
 }
