@@ -134,7 +134,7 @@ export const navigationSections: NavSection[] = [
         description: "Rule catalogue governing the payment decision path",
       },
       {
-        label: "Actors",
+        label: "Stakeholders",
         href: "/actors",
         countKey: "actors",
         icon: Users,
@@ -149,7 +149,7 @@ export const navigationSections: NavSection[] = [
     scope: "project",
     items: [
       {
-        label: "Process Flow",
+        label: "Process Analysis",
         href: "/process-flow",
         countKey: "processFlows",
         icon: Workflow,
@@ -185,7 +185,7 @@ export const navigationSections: NavSection[] = [
     scope: "project",
     items: [
       {
-        label: "Swagger API",
+        label: "API Contracts",
         href: "/swagger-api",
         countKey: "apis",
         icon: FileCode2,
@@ -221,7 +221,7 @@ export const navigationSections: NavSection[] = [
         description: "Controlled document register with versions and owners",
       },
       {
-        label: "Traceability Matrix",
+        label: "Traceability",
         href: "/traceability",
         icon: Table2,
         description: "Requirement to rule, design, API, data, test and document chain",

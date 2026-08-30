@@ -128,7 +128,7 @@ export function TraceabilityView() {
     <div className="space-y-6">
       {marker}
       <PageHeader
-        title="Traceability Matrix"
+        title="Requirements Traceability Matrix"
         brands={["excel", "jira"]}
         description="End-to-end chain from business requirement through rules, design, interfaces, data, validation evidence, tests and documents. Every reference is clickable and resolves to the artefact it points at."
         meta={[

@@ -127,7 +127,7 @@ export function TestCasesView() {
     <div className="space-y-6">
       {marker}
       <PageHeader
-        title="Test Cases"
+        title="Test Plan & Test Cases"
         brands={["junit"]}
         description="SIT and UAT catalogue for the release. Every case is linked to the requirement it verifies and records its latest execution result."
         meta={[

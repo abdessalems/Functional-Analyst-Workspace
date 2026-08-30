@@ -68,7 +68,7 @@ export function SwaggerView() {
     <div className="space-y-6">
       {marker}
       <PageHeader
-        title="Swagger API"
+        title="API & Web Service Contracts"
         brands={["swagger", "openapi", "postman"]}
         description="REST contract documentation for the services supporting the payment journey. Each operation lists its headers, request body, responses and the requirements it satisfies."
         meta={[

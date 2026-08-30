@@ -2807,7 +2807,7 @@ const diagrams: Diagram[] = [
       "title": "Core risk data model",
       "type": "ER",
       "description": "Logical relationships between portfolio, position, calculation, risk limit and breach.",
-      "source": "@startuml\nentity Portfolio { *portfolioId : UUID }\nentity Position { *positionId : UUID; portfolioId : UUID }\nentity ExposureCalculation { *calculationId : UUID; portfolioId : UUID }\nentity RiskLimit { *riskLimitId : UUID; portfolioId : UUID }\nentity Breach { *breachId : UUID; calculationId : UUID }\nPortfolio ||--o{ Position\nPortfolio ||--o{ ExposureCalculation\nPortfolio ||--|| RiskLimit\nExposureCalculation ||--o{ Breach\n@enduml",
+      "source": "@startuml\nentity Portfolio {\n  * portfolioId : UUID\n}\nentity Position {\n  * positionId : UUID\n  --\n  portfolioId : UUID\n}\nentity ExposureCalculation {\n  * calculationId : UUID\n  --\n  portfolioId : UUID\n}\nentity RiskLimit {\n  * riskLimitId : UUID\n  --\n  portfolioId : UUID\n}\nentity Breach {\n  * breachId : UUID\n  --\n  calculationId : UUID\n}\nPortfolio ||--o{ Position\nPortfolio ||--o{ ExposureCalculation\nPortfolio ||--|| RiskLimit\nExposureCalculation ||--o{ Breach\n@enduml",
       "version": "1.0",
       "author": "Candidate",
       "lastUpdated": "2026-08-29",

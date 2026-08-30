@@ -1014,7 +1014,7 @@ export const projects: Project[] = [
   },
   {
     "code": "EVE-1.0",
-    "name": "Energy Risk Management — Functional Analysis & Testing",
+    "name": "Energy Risk Management — Business & Functional Analysis with Testing",
     "shortName": "Energy Risk Management",
     "domain": "Banking",
     "subDomain": "Risk & Compliance",
@@ -1030,8 +1030,8 @@ export const projects: Project[] = [
     },
     "businessOwner": "",
     "programme": "",
-    "summary": "Functional analysis and testing of risk management applications for the energy market. Requirements were elicited with the risk stakeholders and written up as functional specifications with acceptance criteria; the delivered web applications and services were then validated through functional, regression, integration and end-to-end testing, with defects tracked through to resolution.",
-    "businessObjective": "Keep the risk applications aligned with the business as they change: specify each request precisely enough to build, and prove through testing that what was delivered matches what was specified.",
+    "summary": "Portfolio case study, not client work. An end-to-end analysis of a risk management platform for the energy market, carried by one analyst through the whole lifecycle: stakeholder elicitation and business requirements, AS-IS and TO-BE process analysis, functional specifications with acceptance criteria and business rules, API and data design, and a test catalogue covering functional, regression, integration and negative scenarios — traced back to the requirement each one proves.",
+    "businessObjective": "Show the working method of a Business Analyst / Functional Analyst who also tests: every requirement elicited from a stakeholder, specified precisely enough to build, and matched to the test that would prove it was delivered. The domain — exposure calculation, risk limits and breach handling on the energy market — is modelled realistically; the organisation and the people in it are not real.",
     "inScope": [
       "Portfolio exposure calculation",
       "Risk limit and threshold configuration",
@@ -1399,7 +1399,7 @@ export const projects: Project[] = [
         "owner": "Business Analyst"
       }
     ],
-    "tags": ["Risk Management","Energy","Agile","Scrum","Functional specification","UAT","Regression testing","Integration testing","API testing","Test automation","Defect management"],
+    "tags": ["Portfolio case study", "Risk Management","Energy","Agile","Scrum","Functional specification","UAT","Regression testing","Integration testing","API testing","Test automation","Defect management"],
     "startDate": "2026-08-29",
     "targetDate": "",
     "lastUpdated": "2026-08-29",

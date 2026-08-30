@@ -74,7 +74,7 @@ export function ProcessFlowView() {
     return (
       <div className="space-y-6">
         <PageHeader
-          title="Process Flow"
+          title="Process Analysis"
         brands={["bpmn"]}
           description="Swimlane decomposition of the end-to-end process."
         />

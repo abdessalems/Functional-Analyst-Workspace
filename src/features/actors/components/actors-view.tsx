@@ -92,7 +92,7 @@ export function ActorsView() {
     <div className="space-y-6">
       {marker}
       <PageHeader
-        title="Actors"
+        title="Stakeholders & Actors"
         brands={["confluence"]}
         description="Human, internal system and external actors participating in the process, with their responsibilities, permissions and the systems they operate."
         meta={[

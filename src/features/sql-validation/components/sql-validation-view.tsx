@@ -53,7 +53,7 @@ export function SqlValidationView() {
     <div className="space-y-6">
       {marker}
       <PageHeader
-        title="SQL Validation"
+        title="SQL & Database Validation"
         brands={["postgresql"]}
         description="Validation queries used to evidence that the delivered solution behaves as specified. Each query records its purpose, result set and the analyst's conclusions."
         meta={[

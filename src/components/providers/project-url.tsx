@@ -55,11 +55,22 @@ function ProjectUrlSync() {
   React.useEffect(() => {
     if (!restored || claimed.current !== null) return;
 
-    const known = requested && projects.some((item) => item.id === requested);
-    // Claimed either way: an unknown id must not leave the mirror waiting.
-    claimed.current = known ? requested : "";
+    /*
+     * A link may name the project by its id or by its code — PRJ-EVE-003 or
+     * EVE-1.0. The code is the one written on the card and the one an analyst
+     * says out loud, so a link built from it has to work.
+     */
+    const wanted = requested?.trim().toLowerCase();
+    const match = wanted
+      ? projects.find(
+          (item) => item.id.toLowerCase() === wanted || item.code.toLowerCase() === wanted,
+        )
+      : undefined;
 
-    if (known && requested !== project.id) openProject(requested);
+    // Claimed either way: an unknown id must not leave the mirror waiting.
+    claimed.current = match ? match.id : "";
+
+    if (match && match.id !== project.id) openProject(match.id);
   }, [restored, requested, projects, project.id, openProject]);
 
   React.useEffect(() => {

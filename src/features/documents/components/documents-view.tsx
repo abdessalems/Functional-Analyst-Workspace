@@ -125,7 +125,7 @@ export function DocumentsView() {
     <div className="space-y-6">
       {marker}
       <PageHeader
-        title="Documents"
+        title="Deliverables & Documents"
         brands={["jira", "confluence", "postman", "excel"]}
         description="Controlled document register for the release. Every artefact carries its version, owner, classification and the requirements it evidences."
         meta={[
