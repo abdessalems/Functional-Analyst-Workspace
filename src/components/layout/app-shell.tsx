@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
+import { ProjectUrl } from "@/components/providers/project-url";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { readSetting, writeSetting } from "@/lib/safe-storage";
 
@@ -25,6 +26,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <TooltipProvider delayDuration={200}>
+      {/* Keeps ?project= and the open project agreeing, in both directions. */}
+      <ProjectUrl />
       <a href="#main-content" className="skip-link">
         Skip to main content
       </a>
