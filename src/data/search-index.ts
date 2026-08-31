@@ -27,6 +27,27 @@ export function buildSearchIndex(
       keywords: `${requirement.businessNeed} ${requirement.description} ${requirement.owner}`,
       href: `/requirements?highlight=${requirement.id}`,
     })),
+    /*
+     * Acceptance criteria are indexed in their own right, not folded into the
+     * requirement that owns them.
+     *
+     * They are the most exacting thing in the workspace — a hundred and three
+     * Given/When/Then statements — and none of them could be found: they live
+     * inside a requirement, so searching "AC-006", "risk manager permission" or
+     * the wording of a condition returned nothing at all. The result carries
+     * the parent requirement so a criterion is never read out of context, and
+     * the link opens that requirement.
+     */
+    ...bundle.requirements.flatMap<SearchRecord>((requirement) =>
+      requirement.acceptanceCriteria.map((criterion) => ({
+        id: criterion.id,
+        type: "Acceptance Criterion" as const,
+        title: `${criterion.id} — ${criterion.then}`,
+        subtitle: `${requirement.id} ${requirement.title}`,
+        keywords: `${criterion.given} ${criterion.when} ${criterion.then} ${requirement.title} ${requirement.category}`,
+        href: `/requirements?highlight=${requirement.id}`,
+      })),
+    ),
     ...bundle.businessRules.map<SearchRecord>((rule) => ({
       id: rule.id,
       type: "Business Rule",

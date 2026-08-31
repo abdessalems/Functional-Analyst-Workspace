@@ -4,6 +4,7 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import {
   Boxes,
+  CircleCheckBig,
   ClipboardCheck,
   Database,
   FileCode2,
@@ -31,6 +32,7 @@ import {
 
 const TYPE_ICON: Record<SearchEntityType, React.ComponentType<{ className?: string }>> = {
   Requirement: ListChecks,
+  "Acceptance Criterion": CircleCheckBig,
   "Business Rule": ShieldCheck,
   Actor: Users,
   API: FileCode2,
@@ -44,6 +46,8 @@ const TYPE_ICON: Record<SearchEntityType, React.ComponentType<{ className?: stri
 /** Order groups the way an analyst scans results, not alphabetically. */
 const GROUP_ORDER: SearchEntityType[] = [
   "Requirement",
+  // Directly under the requirements they belong to, above everything else.
+  "Acceptance Criterion",
   "Business Rule",
   "Test Case",
   "API",

@@ -439,6 +439,7 @@ export interface NotificationItem {
 /** Entity kinds that participate in global search. */
 export type SearchEntityType =
   | "Requirement"
+  | "Acceptance Criterion"
   | "Business Rule"
   | "Actor"
   | "API"
