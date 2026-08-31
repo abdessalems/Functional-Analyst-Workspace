@@ -111,9 +111,24 @@ export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
                   "group relative flex items-center gap-2.5 rounded-md px-2 py-1.5 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                   collapsed && "justify-center px-0 py-2",
                   isActive
-                    ? "bg-accent font-medium text-accent-foreground"
+                    ? "font-medium"
                     : "text-muted-foreground hover:bg-accent/50 hover:text-foreground",
                 )}
+                /*
+                  The whole row takes the section's colour, not just the marker
+                  beside it. A neutral grey highlight said "you are somewhere";
+                  a blue row under a blue Analysis heading, or a violet one under
+                  Design & Modelling, says which part of the work you are in
+                  without reading a word.
+                */
+                style={
+                  isActive
+                    ? {
+                        color: section.accent,
+                        backgroundColor: `color-mix(in srgb, ${section.accent} 14%, transparent)`,
+                      }
+                    : undefined
+                }
               >
                 {/*
                   The marker takes the section's colour, not the brand's. Every
@@ -143,7 +158,7 @@ export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
                       // Lighter than the label and never bold: this is the
                       // quietest thing in the row, so it cannot be mistaken for
                       // the count on the right.
-                      isActive ? "text-foreground/70" : "text-muted-foreground/50",
+                      isActive ? "opacity-70" : "text-muted-foreground/50",
                     )}
                   >
                     {step ?? ""}
