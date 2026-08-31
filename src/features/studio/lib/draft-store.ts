@@ -101,8 +101,17 @@ export function draftProjectRecord(
     code,
     name,
     shortName: (meaningful.length >= 2 ? meaningful : words).slice(0, 4).join(" ") || name,
-    domain: "Banking",
-    subDomain: "Imported",
+    /*
+     * Blank, not guessed.
+     *
+     * These were "Banking" and "Imported", so a risk platform for the energy
+     * market and a public-sector tax service were both filed under banking, and
+     * the Area filter offered "Imported" as though that named a business
+     * domain. The Project sheet carries Domain and Sub Domain; where it does
+     * not, saying nothing is the honest answer.
+     */
+    domain: "",
+    subDomain: "",
     status: "In Progress",
     version: "1.0",
     release: "—",

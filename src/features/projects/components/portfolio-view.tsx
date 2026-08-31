@@ -193,7 +193,9 @@ export function PortfolioView() {
             key: "subDomain",
             label: "Area",
             value: filters.subDomain,
-            options: Array.from(new Set(projects.map((item) => item.subDomain))).sort(),
+            options: Array.from(new Set(projects.map((item) => item.subDomain)))
+              .filter(Boolean)
+              .sort(),
           },
         ]}
         onFilterChange={setFilter}
@@ -225,7 +227,7 @@ export function PortfolioView() {
                     {item.code}
                   </Badge>
                   <StatusBadge status={item.status} />
-                  <Badge variant="neutral">{item.subDomain}</Badge>
+                  {item.subDomain && <Badge variant="neutral">{item.subDomain}</Badge>}
                 </div>
 
                 <div className="space-y-1.5">
