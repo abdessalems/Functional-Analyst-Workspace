@@ -441,11 +441,18 @@ export type SearchEntityType =
   | "Requirement"
   | "Acceptance Criterion"
   | "Business Rule"
+  | "Spec Section"
+  | "Edge Case"
   | "Actor"
+  | "Process Flow"
+  | "BPMN Model"
+  | "Wireframe"
+  | "API Service"
   | "API"
   | "Test Case"
   | "Document"
   | "SQL"
+  | "Data Table"
   | "Diagram"
   | "Page";
 

@@ -9,11 +9,16 @@ import {
   Database,
   FileCode2,
   FileText,
+  LayoutPanelLeft,
   ListChecks,
   Search,
+  Server,
   ShieldCheck,
   SquareArrowOutUpRight,
+  Table2,
+  TriangleAlert,
   Users,
+  Workflow,
 } from "lucide-react";
 
 import type { SearchEntityType } from "@/lib/types";
@@ -34,8 +39,15 @@ const TYPE_ICON: Record<SearchEntityType, React.ComponentType<{ className?: stri
   Requirement: ListChecks,
   "Acceptance Criterion": CircleCheckBig,
   "Business Rule": ShieldCheck,
+  "Spec Section": FileText,
+  "Edge Case": TriangleAlert,
   Actor: Users,
+  "Process Flow": Workflow,
+  "BPMN Model": Workflow,
+  Wireframe: LayoutPanelLeft,
+  "API Service": Server,
   API: FileCode2,
+  "Data Table": Table2,
   "Test Case": ClipboardCheck,
   Document: FileText,
   SQL: Database,
@@ -45,15 +57,23 @@ const TYPE_ICON: Record<SearchEntityType, React.ComponentType<{ className?: stri
 
 /** Order groups the way an analyst scans results, not alphabetically. */
 const GROUP_ORDER: SearchEntityType[] = [
+  // The order of the analysis itself: what was asked for, what proves it is
+  // done, the rules, the specification, then design, interfaces, data, tests.
   "Requirement",
-  // Directly under the requirements they belong to, above everything else.
   "Acceptance Criterion",
   "Business Rule",
-  "Test Case",
-  "API",
-  "SQL",
-  "Document",
+  "Spec Section",
+  "Edge Case",
+  "Process Flow",
+  "BPMN Model",
+  "Wireframe",
   "Diagram",
+  "API Service",
+  "API",
+  "Data Table",
+  "SQL",
+  "Test Case",
+  "Document",
   "Actor",
   "Page",
 ];

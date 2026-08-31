@@ -64,6 +64,92 @@ export function buildSearchIndex(
       keywords: `${actor.description} ${actor.responsibilities.join(" ")} ${actor.systemsUsed.join(" ")}`,
       href: `/actors?highlight=${actor.id}`,
     })),
+    /*
+     * The functional specification, which the index did not reach at all.
+     *
+     * A section's validations, error codes and field names are folded into its
+     * keywords rather than indexed apart: an error code is looked up to find
+     * the rule that raises it, so it should return the section, not a bare
+     * code with nowhere to go.
+     */
+    ...bundle.functionalSpecSections.map<SearchRecord>((section) => ({
+      id: section.id,
+      type: "Spec Section",
+      title: `${section.id} — ${section.title}`,
+      subtitle: section.summary,
+      keywords: [
+        section.businessLogic.join(" "),
+        section.requirementRefs.join(" "),
+        section.validations.map((rule) => `${rule.field} ${rule.rule} ${rule.errorCode}`).join(" "),
+        section.errors.map((error) => `${error.code} ${error.message} ${error.handling}`).join(" "),
+        section.fields.map((field) => `${field.name} ${field.description}`).join(" "),
+      ].join(" "),
+      href: `/functional-specification?highlight=${section.id}`,
+    })),
+    /*
+     * Edge cases, which is where an analyst's thinking actually shows: the
+     * awkward path nobody asked about. Twenty-three of them were reachable
+     * only by opening the section that happened to hold them, so "EC-004"
+     * found nothing anywhere in the workspace.
+     */
+    ...bundle.functionalSpecSections.flatMap<SearchRecord>((section) =>
+      section.edgeCases.map((edgeCase) => ({
+        id: edgeCase.id,
+        type: "Edge Case" as const,
+        title: `${edgeCase.id} — ${edgeCase.scenario}`,
+        subtitle: `${section.id} ${section.title}`,
+        keywords: `${edgeCase.expectedBehaviour} ${section.title}`,
+        href: `/functional-specification?highlight=${section.id}`,
+      })),
+    ),
+    ...bundle.processFlows.map<SearchRecord>((flow) => ({
+      id: flow.id,
+      type: "Process Flow",
+      title: `${flow.id} — ${flow.name}`,
+      subtitle: `${flow.trigger} → ${flow.outcome}`,
+      keywords: `${flow.description} ${flow.slaTarget} ${flow.steps.map((step) => `${step.name} ${step.description}`).join(" ")} ${flow.lanes.map((lane) => lane.name).join(" ")}`,
+      href: `/process-flow?highlight=${flow.id}`,
+    })),
+    ...bundle.bpmnModels.map<SearchRecord>((model) => ({
+      id: model.id,
+      type: "BPMN Model",
+      title: `${model.id} — ${model.title}`,
+      subtitle: `${model.notation} · ${model.version}`,
+      keywords: `${model.description} ${model.author} ${model.processFlowId}`,
+      href: `/bpmn?highlight=${model.id}`,
+    })),
+    ...bundle.wireframes.map<SearchRecord>((wireframe) => ({
+      id: wireframe.id,
+      type: "Wireframe",
+      title: `${wireframe.id} — ${wireframe.title}`,
+      subtitle: `${wireframe.channel} · ${wireframe.screenId} · ${wireframe.status}`,
+      keywords: `${wireframe.description} ${wireframe.annotations.join(" ")} ${wireframe.relatedRequirements.join(" ")}`,
+      href: `/wireframes?highlight=${wireframe.id}`,
+    })),
+    /*
+     * The service, not only its endpoints. "SVC-1" and "Declaration API" found
+     * nothing while every operation inside them was indexed.
+     */
+    ...bundle.apiServices.map<SearchRecord>((service) => ({
+      id: service.id,
+      type: "API Service",
+      title: `${service.id} — ${service.name}`,
+      subtitle: `${service.basePath} · v${service.version} · ${service.status}`,
+      keywords: `${service.description} ${service.owner} ${service.endpoints.map((endpoint) => endpoint.path).join(" ")}`,
+      href: `/swagger-api?highlight=${service.id}`,
+    })),
+    /*
+     * Tables are named, not numbered, so the name is the identifier: someone
+     * looking for where a column lives searches "DECLARATION" or the column.
+     */
+    ...bundle.sqlTables.map<SearchRecord>((table) => ({
+      id: table.name,
+      type: "Data Table",
+      title: `${table.schema}.${table.name}`,
+      subtitle: table.description,
+      keywords: table.columns.map((column) => `${column.name} ${column.type}`).join(" "),
+      href: `/sql-validation?highlight=${table.name}`,
+    })),
     ...bundle.apiServices
       .flatMap((service) => service.endpoints)
       .map<SearchRecord>((endpoint) => ({
