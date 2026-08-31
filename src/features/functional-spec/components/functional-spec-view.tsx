@@ -38,16 +38,35 @@ import { SecureLinkDialog } from "@/components/common/secure-link-dialog";
 import { NoResultsState } from "@/components/common/states";
 import { useArtifactFilters } from "@/hooks/use-artifact-filters";
 import { useDownload } from "@/hooks/use-download";
+import { useHighlight } from "@/hooks/use-highlight";
 
 export function FunctionalSpecView() {
   const download = useDownload();
   const { functionalSpecSections } = useProjectData();
   const [openSections, setOpenSections] = React.useState<string[]>([]);
+  /*
+   * This page was the only list that ignored ?highlight=. Search could send a
+   * reader here for FS-004 or for the edge case EC-004 inside it, and they
+   * arrived at the top of six collapsed sections with nothing opened and
+   * nothing scrolled to — the artefact was found and then lost again.
+   */
+  const { highlight, marker } = useHighlight();
 
   // Open the first section whenever the active project changes.
   React.useEffect(() => {
     setOpenSections(functionalSpecSections[0] ? [functionalSpecSections[0].id] : []);
   }, [functionalSpecSections]);
+
+  // A highlight wins over that default, and an edge case opens the section
+  // that owns it, since EC-004 is only visible once FS-004 is expanded.
+  React.useEffect(() => {
+    if (!highlight) return;
+    const owner = functionalSpecSections.find(
+      (section) =>
+        section.id === highlight || section.edgeCases.some((edge) => edge.id === highlight),
+    );
+    if (owner) setOpenSections((current) => (current.includes(owner.id) ? current : [...current, owner.id]));
+  }, [highlight, functionalSpecSections]);
 
   const predicate = React.useCallback((item: FunctionalSpecSection, query: string) => {
     return matchesQuery(
@@ -137,6 +156,8 @@ export function FunctionalSpecView() {
         }
       />
 
+      {marker}
+
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <SummaryTile label="Validation rules" value={totals.validations} icon={ShieldAlert} />
         <SummaryTile label="Error definitions" value={totals.errors} icon={AlertOctagon} />
@@ -191,7 +212,7 @@ export function FunctionalSpecView() {
                   </div>
                 </AccordionTrigger>
                 <AccordionContent>
-                  <SectionDetail section={section} />
+                  <SectionDetail section={section} highlight={highlight} />
                 </AccordionContent>
               </AccordionItem>
             ))}
@@ -210,7 +231,14 @@ export function FunctionalSpecView() {
   );
 }
 
-function SectionDetail({ section }: { section: FunctionalSpecSection }) {
+function SectionDetail({
+  section,
+  highlight,
+}: {
+  section: FunctionalSpecSection;
+  /** The deep-linked artefact, so an edge case can mark itself. */
+  highlight: string | null;
+}) {
   return (
     <div className="space-y-6 border-t border-border pt-5">
       <div className="flex flex-wrap items-center gap-2">
@@ -316,7 +344,16 @@ function SectionDetail({ section }: { section: FunctionalSpecSection }) {
       <Block title="Edge cases" icon={GitBranch}>
         <div className="grid gap-3 lg:grid-cols-2">
           {section.edgeCases.map((edge) => (
-            <div key={edge.id} className="rounded-lg border border-border p-3.5">
+            <div
+              key={edge.id}
+              // Addressable in its own right, so ?highlight=EC-004 scrolls to
+              // the edge case rather than to the section that contains it.
+              id={edge.id}
+              className={cn(
+                "scroll-mt-24 rounded-lg border p-3.5 transition-colors",
+                highlight === edge.id ? "border-primary/50 bg-primary/[0.06]" : "border-border",
+              )}
+            >
               <p className="font-mono text-micro text-muted-foreground">{edge.id}</p>
               <p className="mt-1.5 text-sm font-medium leading-relaxed">{edge.scenario}</p>
               <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">

@@ -956,7 +956,7 @@ const diagrams: Diagram[] = [
       "id": "DGM-008",
       "title": "System context and components (EJB/WebLogic/DB2)",
       "type": "Component",
-      "description": "The AS-IS system context: one WebLogic domain, three tightly-coupled EJBs and a shared DB2 schema.",
+      "description": "The AS-IS system context: one WebLogic domain, five tightly-coupled EJBs and a shared DB2 schema.",
       "source": "@startuml\nskinparam componentStyle rectangle\n\nactor Taxpayer\ncomponent \"Legacy Portal\" as Portal\nnode \"WebLogic Domain\" {\n  component \"DeclarationEJB\" as DEJB\n  component \"ValidationEJB\" as VEJB\n  component \"TaxCalculationEJB\" as CEJB\n  component \"RefundEJB\" as REJB\n  component \"PaymentEJB\" as PEJB\n}\ndatabase \"DB2\" as DB\ncomponent \"External Tax Reference System\" as ETRS\ncomponent \"External Payment System\" as EPS\n\nTaxpayer --> Portal\nPortal --> DEJB\nDEJB --> VEJB\nDEJB --> CEJB\nCEJB --> ETRS\nDEJB --> REJB\nREJB --> PEJB\nPEJB --> EPS\nDEJB --> DB\nVEJB --> DB\nCEJB --> DB\nREJB --> DB\nPEJB --> DB\n@enduml",
       "version": "1.1",
       "author": "Saadaoui Abdessalem",

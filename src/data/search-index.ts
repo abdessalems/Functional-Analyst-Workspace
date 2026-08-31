@@ -99,7 +99,9 @@ export function buildSearchIndex(
         title: `${edgeCase.id} — ${edgeCase.scenario}`,
         subtitle: `${section.id} ${section.title}`,
         keywords: `${edgeCase.expectedBehaviour} ${section.title}`,
-        href: `/functional-specification?highlight=${section.id}`,
+        // The criterion itself, not the section holding it: landing on a page
+        // of six collapsed sections and hunting for EC-004 is not finding it.
+        href: `/functional-specification?highlight=${edgeCase.id}`,
       })),
     ),
     ...bundle.processFlows.map<SearchRecord>((flow) => ({

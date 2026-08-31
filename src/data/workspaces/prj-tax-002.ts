@@ -1533,11 +1533,47 @@ const apiServices: ApiService[] = [
           "tag": "Declaration",
           "operationId": "createDeclaration",
           "auth": "OAuth2, scope declarations.write",
-          "parameters": [],
-          "responses": [],
+          "parameters": [
+            {
+              "name": "X-Correlation-Id",
+              "in": "header",
+              "type": "uuid",
+              "required": false,
+              "description": "Trace identifier propagated unchanged across services and Artemis messages. The API Gateway assigns one when the caller does not supply it.",
+              "example": "c2a7e1b4-6f3d-4a9e-8b0c-1d5f7e2a4c9b"
+            }
+          ],
+          "responses": [
+            {
+              "status": 202,
+              "description": "Accepted. The declaration is persisted and DeclarationSubmitted is published to Artemis; validation continues asynchronously.",
+              "body": "{ \"declarationId\": \"b41f2c88-9a17-4d33-9f0e-77c0c6a2b910\", \"status\": \"SUBMITTED\", \"submittedAt\": \"2026-03-14T09:21:44Z\" }"
+            },
+            {
+              "status": 400,
+              "description": "MISSING_FIELD — a required field is absent or the payload shape is invalid.",
+              "body": "{ \"code\": \"MISSING_FIELD\", \"message\": \"Required information is missing.\", \"correlationId\": \"c2a7e1b4-6f3d-4a9e-8b0c-1d5f7e2a4c9b\", \"timestamp\": \"2026-03-14T09:21:44Z\", \"details\": [ { \"field\": \"taxYear\", \"issue\": \"required\" } ] }"
+            },
+            {
+              "status": 401,
+              "description": "The access token is missing, expired or lacks the required scope.",
+              "body": "{ \"code\": \"UNAUTHORIZED\", \"message\": \"Authentication required.\", \"correlationId\": \"…\", \"timestamp\": \"…\" }"
+            },
+            {
+              "status": 409,
+              "description": "DECLARATION_EXISTS — a declaration already exists for this taxpayer and tax year. The unique constraint on (taxpayerNumber, taxYear) holds even across pods (EC-001).",
+              "body": "{ \"code\": \"DECLARATION_EXISTS\", \"message\": \"A declaration already exists for this taxpayer and year.\", \"correlationId\": \"…\", \"timestamp\": \"…\" }"
+            },
+            {
+              "status": 422,
+              "description": "TAXPAYER_NOT_ACTIVE or YEAR_NOT_SUPPORTED — the payload is well formed but business rules reject it. No event is published.",
+              "body": "{ \"code\": \"TAXPAYER_NOT_ACTIVE\", \"message\": \"This taxpayer is not active.\", \"correlationId\": \"…\", \"timestamp\": \"…\" }"
+            }
+          ],
           "relatedRequirements": [
             "BR-001"
-          ]
+          ],
+          "requestBody": "{ \"taxpayerNumber\": \"85073003328\", \"taxYear\": 2025, \"income\": 48250.00, \"deductions\": 3120.00, \"externalReference\": \"PORTAL-2026-004417\" }"
         },
         {
           "id": "API-002",
@@ -1548,8 +1584,41 @@ const apiServices: ApiService[] = [
           "tag": "Declaration",
           "operationId": "getDeclaration",
           "auth": "OAuth2, scope declarations.read",
-          "parameters": [],
-          "responses": [],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "type": "uuid",
+              "required": true,
+              "description": "Declaration identifier returned by POST /v1/declarations.",
+              "example": "b41f2c88-9a17-4d33-9f0e-77c0c6a2b910"
+            },
+            {
+              "name": "X-Correlation-Id",
+              "in": "header",
+              "type": "uuid",
+              "required": false,
+              "description": "Trace identifier propagated unchanged across services and Artemis messages. The API Gateway assigns one when the caller does not supply it.",
+              "example": "c2a7e1b4-6f3d-4a9e-8b0c-1d5f7e2a4c9b"
+            }
+          ],
+          "responses": [
+            {
+              "status": 200,
+              "description": "The declaration and its current status.",
+              "body": "{ \"declarationId\": \"b41f2c88-…\", \"taxpayerNumber\": \"85073003328\", \"taxYear\": 2025, \"status\": \"VALIDATED\", \"taxDue\": 0.00, \"refundAmount\": 1284.50 }"
+            },
+            {
+              "status": 401,
+              "description": "The access token is missing, expired or lacks the required scope.",
+              "body": "{ \"code\": \"UNAUTHORIZED\", \"message\": \"Authentication required.\", \"correlationId\": \"…\", \"timestamp\": \"…\" }"
+            },
+            {
+              "status": 404,
+              "description": "No declaration exists for the supplied identifier.",
+              "body": "{ \"code\": \"NOT_FOUND\", \"message\": \"Declaration not found.\", \"correlationId\": \"…\", \"timestamp\": \"…\" }"
+            }
+          ],
           "relatedRequirements": [
             "BR-006"
           ]
@@ -1563,8 +1632,65 @@ const apiServices: ApiService[] = [
           "tag": "Declaration",
           "operationId": "listDeclarations",
           "auth": "OAuth2, scope declarations.read",
-          "parameters": [],
-          "responses": [],
+          "parameters": [
+            {
+              "name": "taxpayerNumber",
+              "in": "query",
+              "type": "string",
+              "required": false,
+              "description": "Filter to one taxpayer.",
+              "example": "85073003328"
+            },
+            {
+              "name": "taxYear",
+              "in": "query",
+              "type": "int",
+              "required": false,
+              "description": "Filter to one tax year.",
+              "example": "2025"
+            },
+            {
+              "name": "page",
+              "in": "query",
+              "type": "int",
+              "required": false,
+              "description": "Zero-based page index.",
+              "example": "0"
+            },
+            {
+              "name": "size",
+              "in": "query",
+              "type": "int",
+              "required": false,
+              "description": "Page size, maximum 100.",
+              "example": "20"
+            },
+            {
+              "name": "X-Correlation-Id",
+              "in": "header",
+              "type": "uuid",
+              "required": false,
+              "description": "Trace identifier propagated unchanged across services and Artemis messages. The API Gateway assigns one when the caller does not supply it.",
+              "example": "c2a7e1b4-6f3d-4a9e-8b0c-1d5f7e2a4c9b"
+            }
+          ],
+          "responses": [
+            {
+              "status": 200,
+              "description": "A page of declarations matching the filters.",
+              "body": "{ \"items\": [ … ], \"page\": 0, \"size\": 20, \"totalElements\": 134 }"
+            },
+            {
+              "status": 400,
+              "description": "INVALID_PAGE_SIZE — size exceeds the maximum of 100.",
+              "body": "{ \"code\": \"MISSING_FIELD\", \"message\": \"Required information is missing.\", \"correlationId\": \"c2a7e1b4-6f3d-4a9e-8b0c-1d5f7e2a4c9b\", \"timestamp\": \"2026-03-14T09:21:44Z\", \"details\": [ { \"field\": \"taxYear\", \"issue\": \"required\" } ] }"
+            },
+            {
+              "status": 401,
+              "description": "The access token is missing, expired or lacks the required scope.",
+              "body": "{ \"code\": \"UNAUTHORIZED\", \"message\": \"Authentication required.\", \"correlationId\": \"…\", \"timestamp\": \"…\" }"
+            }
+          ],
           "relatedRequirements": [
             "BR-006"
           ]
@@ -1589,8 +1715,41 @@ const apiServices: ApiService[] = [
           "tag": "Refund",
           "operationId": "getRefund",
           "auth": "OAuth2, scope refunds.read",
-          "parameters": [],
-          "responses": [],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "type": "uuid",
+              "required": true,
+              "description": "Refund identifier.",
+              "example": "3f77a1de-52c4-4b90-b7e2-9d1a6f0c5b31"
+            },
+            {
+              "name": "X-Correlation-Id",
+              "in": "header",
+              "type": "uuid",
+              "required": false,
+              "description": "Trace identifier propagated unchanged across services and Artemis messages. The API Gateway assigns one when the caller does not supply it.",
+              "example": "c2a7e1b4-6f3d-4a9e-8b0c-1d5f7e2a4c9b"
+            }
+          ],
+          "responses": [
+            {
+              "status": 200,
+              "description": "The refund and the saga state driving it.",
+              "body": "{ \"refundId\": \"3f77a1de-…\", \"declarationId\": \"b41f2c88-…\", \"amount\": 1284.50, \"sagaState\": \"PAYMENT_COMPLETED\" }"
+            },
+            {
+              "status": 401,
+              "description": "The access token is missing, expired or lacks the required scope.",
+              "body": "{ \"code\": \"UNAUTHORIZED\", \"message\": \"Authentication required.\", \"correlationId\": \"…\", \"timestamp\": \"…\" }"
+            },
+            {
+              "status": 404,
+              "description": "No refund exists for the supplied identifier.",
+              "body": "{ \"code\": \"NOT_FOUND\", \"message\": \"Refund not found.\", \"correlationId\": \"…\", \"timestamp\": \"…\" }"
+            }
+          ],
           "relatedRequirements": [
             "BR-006"
           ]
@@ -1604,8 +1763,41 @@ const apiServices: ApiService[] = [
           "tag": "Refund",
           "operationId": "getSagaState",
           "auth": "OAuth2, scope refunds.read",
-          "parameters": [],
-          "responses": [],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "type": "uuid",
+              "required": true,
+              "description": "Refund identifier whose saga history is requested.",
+              "example": "3f77a1de-52c4-4b90-b7e2-9d1a6f0c5b31"
+            },
+            {
+              "name": "X-Correlation-Id",
+              "in": "header",
+              "type": "uuid",
+              "required": false,
+              "description": "Trace identifier propagated unchanged across services and Artemis messages. The API Gateway assigns one when the caller does not supply it.",
+              "example": "c2a7e1b4-6f3d-4a9e-8b0c-1d5f7e2a4c9b"
+            }
+          ],
+          "responses": [
+            {
+              "status": 200,
+              "description": "Every state the saga passed through, in order, with the timestamp of each transition (DGM-008).",
+              "body": "{ \"refundId\": \"3f77a1de-…\", \"history\": [ { \"state\": \"INITIATED\", \"at\": \"…\" }, { \"state\": \"PAYMENT_PENDING\", \"at\": \"…\" }, { \"state\": \"PAYMENT_COMPLETED\", \"at\": \"…\" } ] }"
+            },
+            {
+              "status": 401,
+              "description": "The access token is missing, expired or lacks the required scope.",
+              "body": "{ \"code\": \"UNAUTHORIZED\", \"message\": \"Authentication required.\", \"correlationId\": \"…\", \"timestamp\": \"…\" }"
+            },
+            {
+              "status": 404,
+              "description": "No refund exists for the supplied identifier.",
+              "body": "{ \"code\": \"NOT_FOUND\", \"message\": \"Refund not found.\", \"correlationId\": \"…\", \"timestamp\": \"…\" }"
+            }
+          ],
           "relatedRequirements": [
             "BR-004"
           ]
@@ -1630,11 +1822,55 @@ const apiServices: ApiService[] = [
           "tag": "Payment",
           "operationId": "createPayment",
           "auth": "OAuth2, scope payments.write (service-to-service)",
-          "parameters": [],
-          "responses": [],
+          "parameters": [
+            {
+              "name": "Idempotency-Key",
+              "in": "header",
+              "type": "uuid",
+              "required": true,
+              "description": "Client-generated key. A repeated key returns the stored result instead of paying twice (RULE-007, EC-004).",
+              "example": "9d4c0a12-7b6e-4f58-8a31-2c5e9b7d0f44"
+            },
+            {
+              "name": "X-Correlation-Id",
+              "in": "header",
+              "type": "uuid",
+              "required": false,
+              "description": "Trace identifier propagated unchanged across services and Artemis messages. The API Gateway assigns one when the caller does not supply it.",
+              "example": "c2a7e1b4-6f3d-4a9e-8b0c-1d5f7e2a4c9b"
+            }
+          ],
+          "responses": [
+            {
+              "status": 201,
+              "description": "The payment was executed and the result stored against the Idempotency-Key.",
+              "body": "{ \"paymentId\": \"7c2b91a0-…\", \"status\": \"COMPLETED\", \"externalReference\": \"EPS-2026-77120\", \"executedAt\": \"2026-03-14T09:24:02Z\" }"
+            },
+            {
+              "status": 200,
+              "description": "The same Idempotency-Key was already processed: the stored result is returned and the external payment system is never called again (EC-004).",
+              "body": "{ \"paymentId\": \"7c2b91a0-…\", \"status\": \"COMPLETED\", \"externalReference\": \"EPS-2026-77120\", \"replayed\": true }"
+            },
+            {
+              "status": 400,
+              "description": "MISSING_IDEMPOTENCY_KEY — the header is absent. Non-retryable: the caller must not retry unchanged (RULE-006).",
+              "body": "{ \"code\": \"MISSING_FIELD\", \"message\": \"Required information is missing.\", \"correlationId\": \"c2a7e1b4-6f3d-4a9e-8b0c-1d5f7e2a4c9b\", \"timestamp\": \"2026-03-14T09:21:44Z\", \"details\": [ { \"field\": \"taxYear\", \"issue\": \"required\" } ] }"
+            },
+            {
+              "status": 401,
+              "description": "The access token is missing, expired or lacks the required scope.",
+              "body": "{ \"code\": \"UNAUTHORIZED\", \"message\": \"Authentication required.\", \"correlationId\": \"…\", \"timestamp\": \"…\" }"
+            },
+            {
+              "status": 503,
+              "description": "PAYMENT_PROVIDER_UNAVAILABLE — retryable. The Payment Service retries 3 times with 2s/4s/8s backoff before routing to the DLQ (RULE-006, DGM-005, DGM-007).",
+              "body": "{ \"code\": \"PAYMENT_PROVIDER_UNAVAILABLE\", \"message\": \"The external payment system is unavailable.\", \"correlationId\": \"…\", \"timestamp\": \"…\" }"
+            }
+          ],
           "relatedRequirements": [
             "BR-005"
-          ]
+          ],
+          "requestBody": "{ \"refundId\": \"3f77a1de-52c4-4b90-b7e2-9d1a6f0c5b31\", \"amount\": 1284.50, \"iban\": \"BE68539007547034\" }"
         },
         {
           "id": "API-006",
@@ -1645,8 +1881,54 @@ const apiServices: ApiService[] = [
           "tag": "Payment",
           "operationId": "retryPayment",
           "auth": "OAuth2, scope payments.write",
-          "parameters": [],
-          "responses": [],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "type": "uuid",
+              "required": true,
+              "description": "Payment attempt to retry.",
+              "example": "7c2b91a0-4e6d-4a13-9f77-0b2c8e5a1d63"
+            },
+            {
+              "name": "Idempotency-Key",
+              "in": "header",
+              "type": "uuid",
+              "required": true,
+              "description": "The original key, so a manual retry cannot pay twice either (RULE-007).",
+              "example": "9d4c0a12-7b6e-4f58-8a31-2c5e9b7d0f44"
+            },
+            {
+              "name": "X-Correlation-Id",
+              "in": "header",
+              "type": "uuid",
+              "required": false,
+              "description": "Trace identifier propagated unchanged across services and Artemis messages. The API Gateway assigns one when the caller does not supply it.",
+              "example": "c2a7e1b4-6f3d-4a9e-8b0c-1d5f7e2a4c9b"
+            }
+          ],
+          "responses": [
+            {
+              "status": 202,
+              "description": "The retry was accepted and the saga resumes from PAYMENT_PENDING.",
+              "body": "{ \"paymentId\": \"7c2b91a0-…\", \"status\": \"RETRY_SCHEDULED\", \"attempt\": 2 }"
+            },
+            {
+              "status": 401,
+              "description": "The access token is missing, expired or lacks the required scope.",
+              "body": "{ \"code\": \"UNAUTHORIZED\", \"message\": \"Authentication required.\", \"correlationId\": \"…\", \"timestamp\": \"…\" }"
+            },
+            {
+              "status": 404,
+              "description": "No payment exists for the supplied identifier.",
+              "body": "{ \"code\": \"NOT_FOUND\", \"message\": \"Payment not found.\", \"correlationId\": \"…\", \"timestamp\": \"…\" }"
+            },
+            {
+              "status": 409,
+              "description": "PAYMENT_ALREADY_COMPLETED — the payment succeeded; a manual retry is refused rather than repeated.",
+              "body": "{ \"code\": \"PAYMENT_ALREADY_COMPLETED\", \"message\": \"This payment has already completed.\", \"correlationId\": \"…\", \"timestamp\": \"…\" }"
+            }
+          ],
           "relatedRequirements": [
             "BR-009"
           ]
@@ -1660,8 +1942,41 @@ const apiServices: ApiService[] = [
           "tag": "Payment",
           "operationId": "getPayment",
           "auth": "OAuth2, scope payments.read",
-          "parameters": [],
-          "responses": [],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "type": "uuid",
+              "required": true,
+              "description": "Payment attempt identifier.",
+              "example": "7c2b91a0-4e6d-4a13-9f77-0b2c8e5a1d63"
+            },
+            {
+              "name": "X-Correlation-Id",
+              "in": "header",
+              "type": "uuid",
+              "required": false,
+              "description": "Trace identifier propagated unchanged across services and Artemis messages. The API Gateway assigns one when the caller does not supply it.",
+              "example": "c2a7e1b4-6f3d-4a9e-8b0c-1d5f7e2a4c9b"
+            }
+          ],
+          "responses": [
+            {
+              "status": 200,
+              "description": "The payment attempt, its status and how many retries it has used.",
+              "body": "{ \"paymentId\": \"7c2b91a0-…\", \"status\": \"FAILED\", \"attempts\": 3, \"lastError\": \"PAYMENT_PROVIDER_UNAVAILABLE\" }"
+            },
+            {
+              "status": 401,
+              "description": "The access token is missing, expired or lacks the required scope.",
+              "body": "{ \"code\": \"UNAUTHORIZED\", \"message\": \"Authentication required.\", \"correlationId\": \"…\", \"timestamp\": \"…\" }"
+            },
+            {
+              "status": 404,
+              "description": "No payment exists for the supplied identifier.",
+              "body": "{ \"code\": \"NOT_FOUND\", \"message\": \"Payment not found.\", \"correlationId\": \"…\", \"timestamp\": \"…\" }"
+            }
+          ],
           "relatedRequirements": [
             "BR-006"
           ]
@@ -1686,8 +2001,49 @@ const apiServices: ApiService[] = [
           "tag": "Operations",
           "operationId": "listDlqMessages",
           "auth": "OAuth2, scope ops.dlq.read",
-          "parameters": [],
-          "responses": [],
+          "parameters": [
+            {
+              "name": "queue",
+              "in": "query",
+              "type": "string",
+              "required": false,
+              "description": "Restrict to one dead letter queue.",
+              "example": "payment.command.DLQ"
+            },
+            {
+              "name": "size",
+              "in": "query",
+              "type": "int",
+              "required": false,
+              "description": "Page size, maximum 100.",
+              "example": "20"
+            },
+            {
+              "name": "X-Correlation-Id",
+              "in": "header",
+              "type": "uuid",
+              "required": false,
+              "description": "Trace identifier propagated unchanged across services and Artemis messages. The API Gateway assigns one when the caller does not supply it.",
+              "example": "c2a7e1b4-6f3d-4a9e-8b0c-1d5f7e2a4c9b"
+            }
+          ],
+          "responses": [
+            {
+              "status": 200,
+              "description": "Messages awaiting a human decision after the retry policy was exhausted (DGM-007).",
+              "body": "{ \"items\": [ { \"messageId\": \"a91c…\", \"queue\": \"payment.command.DLQ\", \"failedAt\": \"…\", \"attempts\": 3, \"lastError\": \"PAYMENT_PROVIDER_UNAVAILABLE\" } ], \"totalElements\": 4 }"
+            },
+            {
+              "status": 401,
+              "description": "The access token is missing, expired or lacks the required scope.",
+              "body": "{ \"code\": \"UNAUTHORIZED\", \"message\": \"Authentication required.\", \"correlationId\": \"…\", \"timestamp\": \"…\" }"
+            },
+            {
+              "status": 403,
+              "description": "FORBIDDEN — the caller lacks the ops.dlq.read scope.",
+              "body": "{ \"code\": \"FORBIDDEN\", \"message\": \"Insufficient scope.\", \"correlationId\": \"…\", \"timestamp\": \"…\" }"
+            }
+          ],
           "relatedRequirements": [
             "BR-009"
           ]
@@ -1701,8 +2057,46 @@ const apiServices: ApiService[] = [
           "tag": "Operations",
           "operationId": "replayDlqMessage",
           "auth": "OAuth2, scope ops.dlq.write",
-          "parameters": [],
-          "responses": [],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "type": "string",
+              "required": true,
+              "description": "Identifier of the dead-lettered message to replay.",
+              "example": "a91c7f30-2d84-4c66-b019-5e7a3f1c8b42"
+            },
+            {
+              "name": "X-Correlation-Id",
+              "in": "header",
+              "type": "uuid",
+              "required": false,
+              "description": "Trace identifier propagated unchanged across services and Artemis messages. The API Gateway assigns one when the caller does not supply it.",
+              "example": "c2a7e1b4-6f3d-4a9e-8b0c-1d5f7e2a4c9b"
+            }
+          ],
+          "responses": [
+            {
+              "status": 202,
+              "description": "The message is republished to its original queue with the original correlationId and Idempotency-Key, so a replay cannot double-pay.",
+              "body": "{ \"messageId\": \"a91c…\", \"status\": \"REPLAYED\", \"replayedAt\": \"2026-03-14T11:02:19Z\" }"
+            },
+            {
+              "status": 401,
+              "description": "The access token is missing, expired or lacks the required scope.",
+              "body": "{ \"code\": \"UNAUTHORIZED\", \"message\": \"Authentication required.\", \"correlationId\": \"…\", \"timestamp\": \"…\" }"
+            },
+            {
+              "status": 403,
+              "description": "FORBIDDEN — the caller lacks the ops.dlq.write scope.",
+              "body": "{ \"code\": \"FORBIDDEN\", \"message\": \"Insufficient scope.\", \"correlationId\": \"…\", \"timestamp\": \"…\" }"
+            },
+            {
+              "status": 404,
+              "description": "No dead-lettered message exists for the supplied identifier.",
+              "body": "{ \"code\": \"NOT_FOUND\", \"message\": \"Dead-lettered message not found.\", \"correlationId\": \"…\", \"timestamp\": \"…\" }"
+            }
+          ],
           "relatedRequirements": [
             "BR-009"
           ]
