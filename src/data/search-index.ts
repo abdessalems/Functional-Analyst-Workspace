@@ -3,11 +3,22 @@ import type { ProjectDataBundle } from "@/data/workspaces/types";
 import { navigationSections } from "@/config/navigation";
 
 /**
- * Flattened index powering the global search palette, built from the open
- * project's artefacts so a result always belongs to what you are reading.
+ * Flattened index powering the global search palette.
+ *
+ * Built per project and then concatenated, so a search reaches the whole
+ * portfolio: with five projects, indexing only the open one left four fifths of
+ * the work unsearchable, and a query typed on the landing page searched
+ * whichever project happened to have been open last.
+ *
+ * Passing the project stamps each record with its code and rewrites the link to
+ * carry it, so choosing a result from another project opens that project rather
+ * than showing its artefact under the current one.
  */
-export function buildSearchIndex(bundle: ProjectDataBundle): SearchRecord[] {
-  return [
+export function buildSearchIndex(
+  bundle: ProjectDataBundle,
+  project?: { code: string; shortName: string },
+): SearchRecord[] {
+  const records: SearchRecord[] = [
     ...bundle.requirements.map<SearchRecord>((requirement) => ({
       id: requirement.id,
       type: "Requirement",
@@ -85,28 +96,58 @@ export function buildSearchIndex(bundle: ProjectDataBundle): SearchRecord[] {
         href: item.href,
       })),
   ];
+
+  if (!project) return records;
+
+  return records.map((record) => ({
+    ...record,
+    projectCode: project.code,
+    projectName: project.shortName,
+    href: record.href + (record.href.includes("?") ? "&" : "?") + "project=" + project.code,
+  }));
 }
 
-/** Simple relevance search: exact id first, then title, then keyword body. */
+/**
+ * Relevance search over the whole portfolio.
+ *
+ * Every word of the query has to appear somewhere in the record, in any order —
+ * the previous rule needed the query to be one contiguous run of characters, so
+ * "exposure breach" found a requirement that "breach exposure" did not. Nobody
+ * types the words in the order the title happens to use them.
+ */
 export function searchWorkspace(
   index: SearchRecord[],
   query: string,
   limit = 40,
+  /** Results from the project being read come first. */
+  currentProject?: string,
 ): SearchRecord[] {
-  const q = query.trim().toLowerCase();
-  if (!q) return [];
+  const words = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  if (words.length === 0) return [];
 
   return index
     .map((record) => {
       const id = record.id.toLowerCase();
       const title = record.title.toLowerCase();
-      let score = 0;
+      const subtitle = record.subtitle.toLowerCase();
+      const keywords = record.keywords.toLowerCase();
 
-      if (id === q) score = 100;
-      else if (id.startsWith(q)) score = 80;
-      else if (title.includes(q)) score = 60;
-      else if (record.subtitle.toLowerCase().includes(q)) score = 40;
-      else if (record.keywords.toLowerCase().includes(q)) score = 20;
+      let score = 0;
+      for (const word of words) {
+        // An id typed in full is the strongest signal there is.
+        if (id === word) score += 100;
+        else if (id.startsWith(word)) score += 60;
+        else if (title.includes(word)) score += 30;
+        else if (subtitle.includes(word)) score += 15;
+        else if (keywords.includes(word)) score += 8;
+        // A word that appears nowhere disqualifies the record: a search for two
+        // words means both, not either.
+        else return { record, score: 0 };
+      }
+
+      // Whole query as one phrase, and the project in hand, both rank higher.
+      if (title.includes(query.trim().toLowerCase())) score += 25;
+      if (currentProject && record.projectCode === currentProject) score += 20;
 
       return { record, score };
     })

@@ -455,4 +455,7 @@ export interface SearchRecord {
   subtitle: string;
   keywords: string;
   href: string;
+  /** Which project the record belongs to — search spans all of them. */
+  projectCode?: string;
+  projectName?: string;
 }

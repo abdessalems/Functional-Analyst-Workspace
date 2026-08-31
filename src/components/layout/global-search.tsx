@@ -17,7 +17,8 @@ import {
 
 import type { SearchEntityType } from "@/lib/types";
 import { buildSearchIndex, searchWorkspace } from "@/data/search-index";
-import { useProjectData } from "@/hooks/use-project-data";
+import { useWorkspace } from "@/components/providers/workspace-provider";
+import { getProjectBundle } from "@/data/workspaces";
 import { Button } from "@/components/ui/button";
 import {
   CommandDialog,
@@ -74,9 +75,27 @@ export function GlobalSearch() {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, []);
 
-  const bundle = useProjectData();
-  const index = React.useMemo(() => buildSearchIndex(bundle), [bundle]);
-  const results = React.useMemo(() => searchWorkspace(index, query), [index, query]);
+  const { projects, project, drafts } = useWorkspace();
+
+  /*
+   * The whole portfolio, not just the project in hand. A palette that could only
+   * find the open project made four projects in five invisible, and on the
+   * landing page it searched whichever one had been open last.
+   */
+  const index = React.useMemo(
+    () =>
+      projects.flatMap((item) => {
+        const bundle =
+          drafts.find((draft) => draft.project.id === item.id)?.bundle ?? getProjectBundle(item.id);
+        return buildSearchIndex(bundle, item);
+      }),
+    [projects, drafts],
+  );
+
+  const results = React.useMemo(
+    () => searchWorkspace(index, query, 40, project.code),
+    [index, query, project.code],
+  );
 
   const grouped = React.useMemo(() => {
     return GROUP_ORDER.map((type) => ({
@@ -132,17 +151,26 @@ export function GlobalSearch() {
               <CommandGroup key={group.type} heading={`${group.type} (${group.records.length})`}>
                 {group.records.map((record) => (
                   <CommandItem
-                    key={record.id}
-                    value={`${record.id} ${record.title} ${record.subtitle}`}
+                    /* Ids repeat across projects — every analysis numbers its
+                       requirements from BR-001 — so the key carries the project. */
+                    key={`${record.projectCode ?? ""}-${record.id}`}
+                    value={`${record.id} ${record.title} ${record.subtitle} ${record.projectName ?? ""}`}
                     onSelect={() => onSelect(record.href)}
                   >
                     <Icon className="size-4 shrink-0 text-muted-foreground" />
-                    <span className="flex min-w-0 flex-col">
+                    <span className="flex min-w-0 flex-1 flex-col">
                       <span className="truncate">{record.title}</span>
                       <span className="truncate text-xs text-muted-foreground">
                         {record.subtitle}
                       </span>
                     </span>
+                    {/* Which project this belongs to: without it a result from
+                        another project looks like one from this one. */}
+                    {record.projectCode && (
+                      <span className="ml-auto shrink-0 rounded border border-border px-1.5 py-0.5 font-mono text-micro text-muted-foreground">
+                        {record.projectCode}
+                      </span>
+                    )}
                   </CommandItem>
                 ))}
               </CommandGroup>
