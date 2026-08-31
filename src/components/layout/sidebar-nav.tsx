@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 
-import { cn } from "@/lib/utils";
+import { cn, normalisePath } from "@/lib/utils";
 import { navigationSections } from "@/config/navigation";
 import { READING_PATH } from "@/config/reading-path";
 import { useWorkspace } from "@/components/providers/workspace-provider";
@@ -23,7 +23,9 @@ interface SidebarNavProps {
  * analyst opens a project; from then on the sidebar belongs to that project.
  */
 export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
-  const pathname = usePathname();
+  // Normalised: the export serves /requirements/ while the menu declares
+  // /requirements, so comparing them raw matched nothing on the live site.
+  const pathname = normalisePath(usePathname());
   const { project, isProjectOpen, closeProject } = useWorkspace();
   const counts = useProjectCounts();
 
@@ -111,7 +113,11 @@ export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
                   "group relative flex items-center gap-2.5 rounded-md px-2 py-1.5 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                   collapsed && "justify-center px-0 py-2",
                   isActive
-                    ? "font-medium"
+                    ? // bg-accent is the floor, not the finish: the tinted
+                      // background below replaces it wherever color-mix is
+                      // understood, and where it is not the row still reads as
+                      // the selected one instead of losing its highlight.
+                      "bg-accent font-medium"
                     : "text-muted-foreground hover:bg-accent/50 hover:text-foreground",
                 )}
                 /*
@@ -153,13 +159,18 @@ export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
                 {!collapsed && (
                   <span
                     aria-hidden={step === undefined}
-                    className={cn(
-                      "w-4 shrink-0 text-right text-micro tabular-nums",
-                      // Lighter than the label and never bold: this is the
-                      // quietest thing in the row, so it cannot be mistaken for
-                      // the count on the right.
-                      isActive ? "opacity-70" : "text-muted-foreground/50",
-                    )}
+                    className="w-4 shrink-0 text-right text-micro tabular-nums"
+                    /*
+                      The numbers run down the sidebar in their section colour,
+                      so the five groups are legible as a column even before a
+                      label is read. Kept well under the label in strength —
+                      this is the quietest thing in the row, and it must never
+                      be mistaken for the count on the right.
+                    */
+                    style={{
+                      color: section.accent,
+                      opacity: isActive ? 0.85 : 0.5,
+                    }}
                   >
                     {step ?? ""}
                   </span>

@@ -8,6 +8,9 @@
  * page a next and previous step, and the whole story can be read by pressing
  * Next.
  */
+
+import { normalisePath } from "@/lib/utils";
+
 export interface ReadingStep {
   href: string;
   label: string;
@@ -111,7 +114,7 @@ export const READING_PATH: ReadingStep[] = [
 const BY_HREF = new Map(READING_PATH.map((step, index) => [step.href, index]));
 
 export function getReadingStep(href: string): ReadingStep | undefined {
-  const index = BY_HREF.get(href);
+  const index = BY_HREF.get(normalisePath(href));
   return index === undefined ? undefined : READING_PATH[index];
 }
 
@@ -120,7 +123,7 @@ export function getNeighbours(href: string): {
   next?: ReadingStep;
   position?: { step: number; total: number };
 } {
-  const index = BY_HREF.get(href);
+  const index = BY_HREF.get(normalisePath(href));
   if (index === undefined) return {};
   return {
     previous: index > 0 ? READING_PATH[index - 1] : undefined,

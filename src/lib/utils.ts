@@ -52,3 +52,17 @@ export function matchesQuery(query: string, ...fields: (string | undefined | nul
   if (!q) return true;
   return fields.some((field) => field?.toLowerCase().includes(q));
 }
+
+/**
+ * The pathname as the navigation declares it, without the trailing slash.
+ *
+ * The site is exported with `trailingSlash: true`, so a page published at
+ * `/requirements/` reports that path while every href in the menu is written
+ * `/requirements`. Comparing the two directly meant nothing ever matched on the
+ * live site: the sidebar highlighted no row, the breadcrumb named no section
+ * and the previous/next step links disappeared — all of it working in
+ * development, where the slash is not added, which is why it went unseen.
+ */
+export function normalisePath(pathname: string): string {
+  return pathname.length > 1 && pathname.endsWith("/") ? pathname.slice(0, -1) : pathname;
+}

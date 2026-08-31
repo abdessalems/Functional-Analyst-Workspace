@@ -1,4 +1,6 @@
 import type { LucideIcon } from "lucide-react";
+
+import { normalisePath } from "@/lib/utils";
 import {
   BookOpen,
   Boxes,
@@ -239,9 +241,11 @@ export const navigationSections: NavSection[] = [
 export const navigationItems: NavItem[] = navigationSections.flatMap((section) => section.items);
 
 export function findNavItem(pathname: string): NavItem | undefined {
-  return navigationItems.find((item) => item.href === pathname);
+  const path = normalisePath(pathname);
+  return navigationItems.find((item) => item.href === path);
 }
 
 export function findNavSection(pathname: string): NavSection | undefined {
-  return navigationSections.find((section) => section.items.some((item) => item.href === pathname));
+  const path = normalisePath(pathname);
+  return navigationSections.find((section) => section.items.some((item) => item.href === path));
 }
